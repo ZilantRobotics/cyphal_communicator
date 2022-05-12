@@ -1,0 +1,28 @@
+name: catkin_build
+
+on: [push]
+
+defaults:
+  run:
+    shell: bash
+jobs:
+  catkin_build:
+    runs-on: ubuntu-18.04
+    container:
+      image: ros:melodic
+    steps:
+      - run: apt-get update && apt-get install -y git
+      - run: apt-get install -y python-catkin-tools python-pip python3-pip
+      - run: apt-get install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-catkin-tools
+
+      - uses: actions/checkout@v2
+        with:
+          path: catkin_ws/src/cyphal_communicator
+
+      - name: Install requirements
+        run: |
+          ./catkin_ws/src/cyphal_communicator/install_requirements.sh
+
+      - name: Catkin build
+        run: |
+          source /opt/ros/melodic/setup.bash && cd catkin_ws && catkin build
