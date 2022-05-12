@@ -11,13 +11,14 @@ from sensor_msgs.msg import Imu, Joy, MagneticField, NavSatFix
 
 
 try:
-    compiled_dsdl_dir = pathlib.Path(__file__).resolve().parent / "compile_output"
+    compiled_dsdl_dir = pathlib.Path(__file__).resolve().parent.parent / "compile_output"
     sys.path.insert(0, str(compiled_dsdl_dir))
     import pyuavcan.application
     import uavcan.node
     from reg.udral.service.actuator.common.sp import Vector4_0_1
     from reg.udral.service.common import Readiness_0_1
 except (ImportError, AttributeError):
+    rospy.logerr(f"Can't find compiled DSDL here {compiled_dsdl_dir}!")
     sys.exit()
 REGISTER_FILE = "allocation_table.db"
 

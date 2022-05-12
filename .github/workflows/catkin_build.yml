@@ -28,7 +28,7 @@ jobs:
 
       - name: Compile DSDL
         run: |
-          ./catkin_ws/src/cyphal_communicator/./compile_dsdl.sh
+          ./catkin_ws/src/cyphal_communicator/compile_dsdl.sh
 
       - name: Catkin build
         run: |

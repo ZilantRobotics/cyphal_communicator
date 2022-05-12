@@ -16,6 +16,7 @@ RUN ./install_requirements.sh
 
 # 3. Compile DSDL
 COPY compile_dsdl.sh compile_dsdl.sh
+COPY scripts/config.sh scripts/config.sh
 RUN ./compile_dsdl.sh
 
 # 3. Copy the source files
@@ -34,5 +35,6 @@ COPY launch/ launch/
 CMD echo "main process has been started"                                        &&  \
     source /opt/ros/$ROS_DISTRO/setup.bash                                      &&  \
     source /catkin_ws/devel/setup.bash                                          &&  \
+    source scripts/config.sh                                                    &&  \
     roslaunch cyphal_communicator cyphal_communicator.launch                    &&  \
     echo "container has been finished"
