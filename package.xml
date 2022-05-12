@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>cyphal_communicator</name>
+  <version>0.0.0</version>
+  <description>The cyphal_communicator package</description>
+
+  <maintainer email="ponomarevda96@gmail.com">dmitry ponomarev</maintainer>
+  <license>GPLv3</license>
+
+  <!-- Message types used -->
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rospy</exec_depend>
+
+  <export>
+  </export>
+</package>

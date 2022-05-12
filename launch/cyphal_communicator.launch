@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="cyphal_communicator" type="cyphal_communicator.py" name="cyphal_communicator" required="true" />
+</launch>
