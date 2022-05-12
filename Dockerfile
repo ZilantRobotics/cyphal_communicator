@@ -7,14 +7,16 @@ WORKDIR /catkin_ws/src/cyphal_communicator
 
 
 # 1. Install basic requirements
-RUN apt-get update                                                              &&  \
-    apt-get upgrade -y                                                          &&  \
-    apt-get install -y  git ros-$ROS_DISTRO-catkin python3-pip python3-catkin-tools
+RUN apt-get update && apt-get upgrade -y && apt-get install -y git ros-$ROS_DISTRO-catkin python3-pip python3-catkin-tools
 RUN if [[ "$ROS_DISTRO" = "melodic" ]] ; then apt-get install -y python-pip python-catkin-tools ; fi
 
 # 2. Install requirements
 COPY install_requirements.sh install_requirements.sh
 RUN ./install_requirements.sh
+
+# 3. Compile DSDL
+COPY compile_dsdl.sh compile_dsdl.sh
+RUN ./compile_dsdl.sh
 
 # 3. Copy the source files
 COPY CMakeLists.txt     CMakeLists.txt
@@ -28,6 +30,7 @@ COPY scripts/ scripts/
 COPY launch/ launch/
 
 
+# source /opt/ros/$ROS_DISTRO/setup.bash && source /catkin_ws/devel/setup.bash && roslaunch cyphal_communicator cyphal_communicator.launch
 CMD echo "main process has been started"                                        &&  \
     source /opt/ros/$ROS_DISTRO/setup.bash                                      &&  \
     source /catkin_ws/devel/setup.bash                                          &&  \

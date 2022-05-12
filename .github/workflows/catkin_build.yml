@@ -2,18 +2,21 @@ name: catkin_build
 
 on: [push]
 
+env:
+  ROS_DISTRO: noetic
+
 defaults:
   run:
     shell: bash
 jobs:
   catkin_build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     container:
-      image: ros:melodic
+      image: ros:noetic
     steps:
       - run: apt-get update && apt-get install -y git
-      - run: apt-get install -y python-catkin-tools python-pip python3-pip
-      - run: apt-get install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-catkin-tools
+      - run: if [[ "$ROS_DISTRO" = "noetic" ]] ;  then apt-get install -y python3-pip ros-noetic-catkin python3-catkin-tools ; fi
+      - run: if [[ "$ROS_DISTRO" = "melodic" ]] ; then apt-get install -y python-catkin-tools python-pip python3-pip python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-catkin-tools ; fi
 
       - uses: actions/checkout@v2
         with:
@@ -23,6 +26,10 @@ jobs:
         run: |
           ./catkin_ws/src/cyphal_communicator/install_requirements.sh
 
+      - name: Compile DSDL
+        run: |
+          ./catkin_ws/src/cyphal_communicator/./compile_dsdl.sh
+
       - name: Catkin build
         run: |
-          source /opt/ros/melodic/setup.bash && cd catkin_ws && catkin build
+          source /opt/ros/noetic/setup.bash && cd catkin_ws && catkin build
