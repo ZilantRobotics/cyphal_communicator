@@ -18,7 +18,7 @@ try:
     from reg.udral.service.actuator.common.sp import Vector4_0_1
     from reg.udral.service.common import Readiness_0_1
 except (ImportError, AttributeError):
-    rospy.logerr(f"Can't find compiled DSDL here {compiled_dsdl_dir}!")
+    rospy.logerr(f"Cyphal communicator. Can't find compiled DSDL here {compiled_dsdl_dir}! Exit.")
     sys.exit()
 REGISTER_FILE = "allocation_table.db"
 
@@ -31,24 +31,36 @@ class CyphalCommunicator:
         self._actuators_msg = Joy()
         self._arm_msg = Bool()
         self._sp_sub = None
+        self._msg_counter = 0
+        self._log_ts_ms = rospy.get_time()
 
     async def sp_cb(self, msg, _):
         self._actuators_msg.axes = msg.value
         self._ros_setpoint_pub.publish(self._actuators_msg)
+        self._msg_counter += 1
 
     async def readiness_cb(self, msg, _):
         ENGAGED = 3
         self._arm_msg.data = msg.value == ENGAGED
         self._ros_readiness_pub.publish(self._arm_msg)
+        self._msg_counter += 1
+
+    def log(self):
+        if self._log_ts_ms + 1.0 < rospy.get_time():
+            self._log_ts_ms = rospy.get_time()
+            rospy.logwarn(f"Cyphal communicator: recv {self._msg_counter} msgs for last second.")
+            self._msg_counter = 0
 
     async def main(self):
-        rospy.init_node('vehicle_ros', anonymous=True)
-
         node_info = uavcan.node.GetInfo_1_0.Response(
                     software_version=uavcan.node.Version_1_0(major=1, minor=0),
                     name="vehicle_mock",
                 )
-        self._node = pyuavcan.application.make_node(node_info, REGISTER_FILE)
+        try:
+            self._node = pyuavcan.application.make_node(node_info)
+        except OSError as err:
+            rospy.logerr("Cyphal communicator. SLCAN not found. Exit.")
+            sys.exit()
         self._node.heartbeat_publisher.mode = uavcan.node.Mode_1_0.OPERATIONAL
         self._node.heartbeat_publisher.vendor_specific_status_code = 50
         self._node.start()
@@ -62,8 +74,13 @@ class CyphalCommunicator:
         while not rospy.is_shutdown():
             rospy.sleep(0.001)
             await asyncio.sleep(0.001)
+            self.log()
 
 
 if __name__ == "__main__":
+    rospy.init_node('vehicle_ros', anonymous=True)
     communicator = CyphalCommunicator()
-    asyncio.run(communicator.main())
+    try:
+        asyncio.run(communicator.main())
+    except pyuavcan.application._node_factory.MissingTransportConfigurationError as err:
+        rospy.logerr("Cyphal communicator. Registers not found. Did you source config.sh file? Exit.")
