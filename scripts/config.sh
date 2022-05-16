@@ -1,12 +1,12 @@
 #!/bin/bash
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-WS_DIR=$SCRIPT_DIR/..
+CYPHAL_PKG_DIR=$SCRIPT_DIR/..
 
 # specify your pathes here:
-export YAKUT_COMPILE_OUTPUT=$WS_DIR/compile_output
-REG_DATA_TYPE_PATH_UAVCAN=$WS_DIR/public_regulated_data_types/uavcan
-REG_DATA_TYPE_PATH_REG=$WS_DIR/public_regulated_data_types/reg
+export YAKUT_COMPILE_OUTPUT=$CYPHAL_PKG_DIR/compile_output
+REG_DATA_TYPE_PATH_UAVCAN=$CYPHAL_PKG_DIR/public_regulated_data_types/uavcan
+REG_DATA_TYPE_PATH_REG=$CYPHAL_PKG_DIR/public_regulated_data_types/reg
 
 export YAKUT_PATH="$YAKUT_COMPILE_OUTPUT"
 export REG_DATA_TYPE_PATH="$REG_DATA_TYPE_PATH_UAVCAN $REG_DATA_TYPE_PATH_REG"
@@ -17,8 +17,6 @@ export UAVCAN__NODE__ID=127
 
 export ALLOCATION_TABLE_PATH=allocation_table.db
 
-
-# Todo: identifiers should be defined dynamicly in future
 
 # Kotleta mock port id. Common for all ESC:
 export UAVCAN__SUB__NOTE_RESPONSE__ID=2341
