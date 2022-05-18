@@ -44,6 +44,9 @@ class CyphalCommunicator:
         self._sp_readiness = None
 
         rospy.Subscriber("/uav/imu", Imu, self._ros_imu_cb)
+        self._cyphal_imu_gyro_msg = uavcan.si.sample.angular_velocity.Vector3_1_0()
+        self._cyphal_imu_accel_msg = uavcan.si.sample.acceleration.Vector3_1_0()
+
         rospy.Subscriber("/uav/mag", MagneticField, self._ros_mag_cb)
         # rospy.Subscriber("/uav/static_temperature", Float32, self._ros_baro_temperature_cb)
         # rospy.Subscriber("/uav/static_pressure", Float32, self._ros_baro_pressure_cb)
@@ -66,13 +69,22 @@ class CyphalCommunicator:
         self._msg_counter += 1
 
     def _ros_imu_cb(self, msg):
-        if self._imu_gyro_pub is not None:
-            cyphal_imu_gyro_msg = uavcan.si.sample.angular_velocity.Vector3_1_0()
-            self._imu_gyro_pub.publish(cyphal_imu_gyro_msg)
+        self._cyphal_imu_gyro_msg.radian_per_second = [
+            msg.angular_velocity.x,
+            msg.angular_velocity.y,
+            msg.angular_velocity.z
+        ]
+        self._cyphal_imu_accel_msg.meter_per_second_per_second = [
+            msg.linear_acceleration.x,
+            msg.linear_acceleration.y,
+            msg.linear_acceleration.z
+        ]
+        if self.loop is not None:
+            self.loop.create_task(self.pub_imu())
 
-        if self._imu_accel_pub is not None:
-            cyphal_imu_accel_msg = uavcan.si.sample.acceleration.Vector3_1_0()
-            self._imu_accel_pub.publish(cyphal_imu_accel_msg)
+    async def pub_imu(self):
+        await self._imu_accel_pub.publish(self._cyphal_imu_accel_msg)
+        await self._imu_gyro_pub.publish(self._cyphal_imu_gyro_msg)
 
     def _ros_mag_cb(self, msg):
         pass
@@ -92,11 +104,13 @@ class CyphalCommunicator:
     def _ros_linear_velocity_cb(self, msg):
         pass
 
-    def log(self):
+    async def log(self):
         if self._log_ts_ms + 1.0 < rospy.get_time():
             self._log_ts_ms = rospy.get_time()
             rospy.loginfo(f"Cyphal communicator: recv {self._msg_counter} msgs for last second.")
             self._msg_counter = 0
+        # await self._imu_accel_pub.publish(self._cyphal_imu_accel_msg)
+        # await self._imu_gyro_pub.publish(self._cyphal_imu_gyro_msg)
 
     async def main(self):
         node_info = uavcan.node.GetInfo_1_0.Response(
@@ -146,10 +160,11 @@ class CyphalCommunicator:
         reg_name = "gps_point"
         self._gps_point_pub = self._node.make_publisher(cyphal_data_type, reg_name)
 
+        self.loop = asyncio.get_event_loop()
+
         while not rospy.is_shutdown():
-            rospy.sleep(0.001)
-            await asyncio.sleep(0.001)
-            self.log()
+            await asyncio.sleep(1)
+            await self.log()
 
 
 if __name__ == "__main__":
