@@ -44,7 +44,7 @@ class SetpointCyphalToRos:
     async def _sp_cb(self, msg, _):
         self._actuators_msg.axes = msg.value
         self._ros_setpoint_pub.publish(self._actuators_msg)
-        self._msg_counter += 1
+
 
 class ReadinessCyphalToRos:
     def __init__(self):
@@ -60,7 +60,6 @@ class ReadinessCyphalToRos:
         ENGAGED = 3
         self._arm_msg.data = msg.value == ENGAGED
         self._ros_readiness_pub.publish(self._arm_msg)
-        self._msg_counter += 1
 
 class ImuRosToCyphal:
     def __init__(self):
@@ -114,6 +113,11 @@ class MagRosToCyphal:
 
     def _ros_mag_cb(self, msg):
         self._cyphal_mag_msg = uavcan.si.sample.magnetic_field_strength.Vector3_1_0()
+        self._cyphal_mag_msg.tesla = [
+            msg.magnetic_field.x / 10000,
+            msg.magnetic_field.y / 10000,
+            msg.magnetic_field.z / 10000
+        ]
 
         if self._loop is not None:
             self._loop.create_task(self.pub_mag())
@@ -203,18 +207,15 @@ class CyphalCommunicator:
         self.setpoint = SetpointCyphalToRos()
         self.readiness = ReadinessCyphalToRos()
         self.imu = ImuRosToCyphal()
-        # self.mag = MagRosToCyphal()
+        self.mag = MagRosToCyphal()
         # self.baro = BaroRosToCyphal()
         # self.gps = GpsRosToCyphal()
 
-        self._msg_counter = 0
         self._log_ts_ms = rospy.get_time()
 
     async def log(self):
         if self._log_ts_ms + 1.0 < rospy.get_time():
             self._log_ts_ms = rospy.get_time()
-            rospy.loginfo(f"Cyphal communicator: recv {self._msg_counter} msgs for last second.")
-            self._msg_counter = 0
 
     async def main(self):
         node_info = uavcan.node.GetInfo_1_0.Response(
@@ -235,7 +236,7 @@ class CyphalCommunicator:
         self.setpoint.init(self._node)
         self.readiness.init(self._node)
         self.imu.init(self._node, self._loop)
-        # self.mag.init(self._node, self._loop)
+        self.mag.init(self._node, self._loop)
         # self.baro.init(self._node, self._loop)
         # self.gps.init(self._node, self._loop)
 
