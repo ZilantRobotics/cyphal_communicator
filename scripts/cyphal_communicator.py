@@ -127,10 +127,10 @@ class MagRosToCyphal:
 
 class BaroRosToCyphal:
     def __init__(self):
-        # rospy.Subscriber("/uav/static_temperature", Float32, self._ros_baro_temperature_cb)
-        # rospy.Subscriber("/uav/static_pressure", Float32, self._ros_baro_pressure_cb)
+        rospy.Subscriber("/uav/baro_temperature", Float32, self._ros_baro_temperature_cb)
+        rospy.Subscriber("/uav/baro_pressure", Float32, self._ros_baro_pressure_cb)
         self._cyphal_baro_temperature_msg = uavcan.si.sample.temperature.Scalar_1_0()
-        self._cyphal_baro_temperature_msg = uavcan.si.sample.pressure.Scalar_1_0()
+        self._cyphal_baro_pressure_msg = uavcan.si.sample.pressure.Scalar_1_0()
         self._loop = None
 
     def init(self, cyphal_node, loop):
@@ -146,14 +146,16 @@ class BaroRosToCyphal:
 
     def _ros_baro_temperature_cb(self, msg):
         self._cyphal_baro_temperature_msg = uavcan.si.sample.temperature.Scalar_1_0()
+        self._cyphal_baro_temperature_msg.kelvin = msg.data
 
         if self._loop is not None:
             self._loop.create_task(self.pub_baro_temperature())
 
     def _ros_baro_pressure_cb(self, msg):
-        self._cyphal_baro_temperature_msg = uavcan.si.sample.pressure.Scalar_1_0()
+        self._cyphal_baro_pressure_msg = uavcan.si.sample.pressure.Scalar_1_0()
+        self._cyphal_baro_pressure_msg.pascal = msg.data
         if self._loop is not None:
-            self._loop.create_task(self.pub_baro_temperature())
+            self._loop.create_task(self.pub_baro_pressure())
 
     async def pub_baro_temperature(self):
         await self._baro_temperature_pub.publish(self._cyphal_baro_temperature_msg)
@@ -208,7 +210,7 @@ class CyphalCommunicator:
         self.readiness = ReadinessCyphalToRos()
         self.imu = ImuRosToCyphal()
         self.mag = MagRosToCyphal()
-        # self.baro = BaroRosToCyphal()
+        self.baro = BaroRosToCyphal()
         # self.gps = GpsRosToCyphal()
 
         self._log_ts_ms = rospy.get_time()
@@ -237,7 +239,7 @@ class CyphalCommunicator:
         self.readiness.init(self._node)
         self.imu.init(self._node, self._loop)
         self.mag.init(self._node, self._loop)
-        # self.baro.init(self._node, self._loop)
+        self.baro.init(self._node, self._loop)
         # self.gps.init(self._node, self._loop)
 
         while not rospy.is_shutdown():
