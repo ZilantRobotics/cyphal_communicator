@@ -7,7 +7,7 @@ import sys
 import pathlib
 import rospy
 from std_msgs.msg import Bool, Float32
-from geometry_msgs.msg import Vector3
+from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Imu, Joy, MagneticField, NavSatFix
 
 
@@ -165,14 +165,13 @@ class BaroRosToCyphal:
 
 class GpsRosToCyphal:
     def __init__(self):
-        # rospy.Subscriber("/uav/gps_yaw", Float32, self._ros_gps_yaw_cb)
-        # rospy.Subscriber("/uav/gps_position", NavSatFix, self._ros_gps_position_cb)
-        # rospy.Subscriber("/uav/linear_velocity", Vector3, self._ros_linear_velocity_cb)
-        self._ros_gps_yaw_msg = Float32()
-        self._ros_gps_position_msg = NavSatFix()
-        self._ros_linear_velocity_msg = Vector3()
+        rospy.Subscriber("/uav/gps_point", NavSatFix, self._ros_gps_point_cb)
+        rospy.Subscriber("/uav/velocity", Twist, self._ros_velocity_cb)
+        # self._ros_gps_yaw_msg = Float32()
+        self._ros_gps_point_msg = NavSatFix()
+        self._ros_velocity_msg = Twist()
         self._cyphal_gps_yaw_msg = uavcan.si.sample.angle.Scalar_1_0()
-        self._cyphal_gps_poit_msg = reg.udral.physics.kinematics.geodetic.PointStateVarTs_0_1()
+        self._cyphal_gps_point_msg = reg.udral.physics.kinematics.geodetic.PointStateVarTs_0_1()
         self._loop = None
 
     def init(self, cyphal_node, loop):
@@ -186,17 +185,27 @@ class GpsRosToCyphal:
         reg_name = "gps_point"
         self._gps_point_pub = cyphal_node.make_publisher(cyphal_data_type, reg_name)
 
-    def _ros_gps_yaw_cb(self, msg):
-        self._ros_gps_yaw_msg = msg
+    # def _ros_gps_yaw_cb(self, msg):
+    #     self._ros_gps_yaw_msg = msg
 
-    def _ros_gps_position_cb(self, msg):
-        self._ros_gps_position_msg = msg
+    def _ros_gps_point_cb(self, msg):
+        self._ros_gps_point_msg = msg
+        if self._loop is not None:
+            self._cyphal_gps_point_msg.value.position.value.latitude = float(self._ros_gps_point_msg.latitude) / 100000000
+            self._cyphal_gps_point_msg.value.position.value.longitude = float(self._ros_gps_point_msg.longitude) / 100000000
+            self._cyphal_gps_point_msg.value.position.value.altitude.meter = float(self._ros_gps_point_msg.altitude) / 1000
+            self._cyphal_gps_point_msg.value.velocity.value.meter_per_second = [
+                self._ros_velocity_msg.linear.x,
+                self._ros_velocity_msg.linear.y,
+                self._ros_velocity_msg.linear.z,
+            ]
+            self._loop.create_task(self.pub_gps_point())
 
-    def _ros_linear_velocity_cb(self, msg):
-        self._ros_linear_velocity_msg = msg
+    def _ros_velocity_cb(self, msg):
+        self._ros_velocity_msg = msg
 
-    async def pub_gps_yaw(self):
-        await self._gps_yaw_pub.publish(self._cyphal_gps_yaw_msg)
+    # async def pub_gps_yaw(self):
+    #     await self._gps_yaw_pub.publish(self._cyphal_gps_yaw_msg)
 
     async def pub_gps_point(self):
         await self._gps_point_pub.publish(self._cyphal_gps_point_msg)
@@ -211,7 +220,7 @@ class CyphalCommunicator:
         self.imu = ImuRosToCyphal()
         self.mag = MagRosToCyphal()
         self.baro = BaroRosToCyphal()
-        # self.gps = GpsRosToCyphal()
+        self.gps = GpsRosToCyphal()
 
         self._log_ts_ms = rospy.get_time()
 
@@ -240,7 +249,7 @@ class CyphalCommunicator:
         self.imu.init(self._node, self._loop)
         self.mag.init(self._node, self._loop)
         self.baro.init(self._node, self._loop)
-        # self.gps.init(self._node, self._loop)
+        self.gps.init(self._node, self._loop)
 
         while not rospy.is_shutdown():
             await asyncio.sleep(1)
