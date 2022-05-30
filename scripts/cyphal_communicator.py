@@ -33,7 +33,7 @@ REGISTER_FILE = "allocation_table.db"
 
 class SetpointCyphalToRos:
     def __init__(self):
-        self._ros_setpoint_pub = rospy.Publisher("/uav/actuators", Joy, queue_size=10)
+        self._ros_setpoint_pub = rospy.Publisher("/uav/actuators_raw", Joy, queue_size=10)
         self._actuators_msg = Joy()
         self._sp_sub = None
 
@@ -43,6 +43,7 @@ class SetpointCyphalToRos:
 
     async def _sp_cb(self, msg, _):
         self._actuators_msg.axes = msg.value
+        self._actuators_msg.header.stamp = rospy.get_rostime()
         self._ros_setpoint_pub.publish(self._actuators_msg)
 
 
