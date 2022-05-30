@@ -1,8 +1,8 @@
 # Cyphal communicator
 
-Cyphal communicator is a bridge between Cyphal and ROS.
+Cyphal communicator converts Cyphal messages to ROS and vice versa.
 
-It covers a minimal set of sensors required for such applications as PX4 HITL simulation. This communicator can be used for other purposes as well.
+It covers a minimal set of sensors required for such applications as Ardupilot/PX4 Cyphal HITL simulation. This communicator can be used for other purposes as well.
 
 ## Content
   - [1. Conversions](#1-conversions)
@@ -18,7 +18,7 @@ The tables below represent the supported conversions:
 
 | № | ROS msg | ROS topic | Cyphal msg | Cyphal subject name |
 | - | ------- | --------- | ---------- | ------------------- |
-| 1 | [sensor_msgs/Joy](https://docs.ros.org/en/api/sensor_msgs/html/msg/Joy.html) | /uav/actuators | [reg.udral.service.actuator.common.sp.Scalar_0_1](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/actuator/common/sp/Vector4.0.1.dsdl) |setpoint |
+| 1 | [sensor_msgs/Joy](https://docs.ros.org/en/api/sensor_msgs/html/msg/Joy.html) | /uav/actuators_raw | [reg.udral.service.actuator.common.sp.Scalar_0_1](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/actuator/common/sp/Vector4.0.1.dsdl) |setpoint |
 | 2 | [std_msgs::Bool](http://docs.ros.org/en/noetic/api/std_msgs/html/msg/Bool.html) | /uav/arm | [reg.udral.service.common.Readiness_0_1](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/common/Readiness.0.1.dsdl) | readiness |
 
 **ROS->CYPHAL**
@@ -31,7 +31,12 @@ The tables below represent the supported conversions:
 |   | [std_msgs/Float32](http://docs.ros.org/en/melodic/api/std_msgs/html/msg/Float32.html) | /uav/static_pressure | [uavcan.si.sample.pressure.Scalar.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/pressure/Scalar.1.0.dsdl) | baro_pressure |
 | 4 | [std_msgs/Float32](http://docs.ros.org/en/melodic/api/std_msgs/html/msg/Float32.html) | /uav/yaw | [uavcan.si.sample.angle.Scalar.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/angle/Scalar.1.0.dsdl) | gps_yaw |
 |   | [sensor_msgs/NavSatFix](https://docs.ros.org/en/api/sensor_msgs/html/msg/NavSatFix.html) | /uav/gps_position | [reg.udral.physics.kinematics.geodetic.PointStateVarTs.0.1](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/physics/kinematics/geodetic/PointStateVarTs.0.1.dsdl) | gps_point |
-|   | [geometry_msgs/Vector3](http://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/Vector3.html) | /uav/linear_velocity | | |
+|   | [geometry_msgs/Twist](http://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/Twist.html) | /uav/velocity | | |
+
+```
+Gps yaw is not implemented yet because the yaw angle might be estimated from velocity.
+Satellites number and other fields are not implemented yet as well.
+```
 
 ## 2. Preparation
 
