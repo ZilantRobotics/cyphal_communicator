@@ -211,8 +211,8 @@ class GpsRosToCyphal:
         if self._loop is None:
             return
 
-        self._cyphal_point_msg.value.position.value.latitude = float(ros_point_msg.latitude) / 100000000
-        self._cyphal_point_msg.value.position.value.longitude = float(ros_point_msg.longitude) / 100000000
+        self._cyphal_point_msg.value.position.value.latitude = float(ros_point_msg.latitude) / 100000000 / 57.29577951308232
+        self._cyphal_point_msg.value.position.value.longitude = float(ros_point_msg.longitude) / 100000000 / 57.29577951308232
         self._cyphal_point_msg.value.position.value.altitude.meter = float(ros_point_msg.altitude) / 1000
         self._cyphal_point_msg.value.velocity.value.meter_per_second = [
             self._ros_velocity_msg.linear.x,
