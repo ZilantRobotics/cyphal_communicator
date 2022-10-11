@@ -22,21 +22,38 @@ The tables below represent the supported conversions:
 | 2 | [std_msgs::Bool](http://docs.ros.org/en/noetic/api/std_msgs/html/msg/Bool.html) | /uav/arm | [reg.udral.service.common.Readiness_0_1](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/common/Readiness.0.1.dsdl) | readiness |
 
 **ROS->CYPHAL**
-| № | ROS msg | ROS topic | Cyphal msg | Cyphal subject name |
-| - | ------- | --------- | ---------- | ------------------- |
-| 1 | [sensor_msgs/Imu](http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/Imu.html) | /uav/imu | [uavcan.si.sample.angular_velocity.Vector3.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/angular_velocity/Vector3.1.0.dsdl) | gyro |
-|   |  | | [uavcan.si.sample.acceleration.Vector3.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/acceleration/Vector3.1.0.dsdl) | accel |
-| 2 | [sensor_msgs/MagneticField](http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/MagneticField.html) | /uav/mag | [uavcan.si.sample.magnetic_field_strength.Vector3.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/magnetic_field_strength/Vector3.1.0.dsdl) | mag |
-| 3 | [std_msgs/Float32](http://docs.ros.org/en/melodic/api/std_msgs/html/msg/Float32.html) | /uav/static_temperature | [uavcan.si.sample.temperature.Scalar.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/temperature/Scalar.1.0.dsdl) | baro_temperature |
-|   | [std_msgs/Float32](http://docs.ros.org/en/melodic/api/std_msgs/html/msg/Float32.html) | /uav/static_pressure | [uavcan.si.sample.pressure.Scalar.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/pressure/Scalar.1.0.dsdl) | baro_pressure |
-| 4 | [std_msgs/Float32](http://docs.ros.org/en/melodic/api/std_msgs/html/msg/Float32.html) | /uav/yaw | [uavcan.si.sample.angle.Scalar.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/angle/Scalar.1.0.dsdl) | gps_yaw |
-|   | [sensor_msgs/NavSatFix](https://docs.ros.org/en/api/sensor_msgs/html/msg/NavSatFix.html) | /uav/gps_position | [reg.udral.physics.kinematics.geodetic.PointStateVarTs.0.1](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/physics/kinematics/geodetic/PointStateVarTs.0.1.dsdl) | gps_point |
-|   | [geometry_msgs/Twist](http://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/Twist.html) | /uav/velocity | | |
 
-```
-Gps yaw is not implemented yet because the yaw angle might be estimated from velocity.
-Satellites number and other fields are not implemented yet as well.
-```
+1. IMU
+
+| ROS sub msg | ROS sub topic | Cyphal pub msg | Cyphal pub subject name |
+| ------- | --------- | ---------- | ------------------- |
+| [sensor_msgs/Imu](http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/Imu.html) | /uav/imu | [uavcan.si.sample.angular_velocity.Vector3.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/angular_velocity/Vector3.1.0.dsdl) | gyro |
+|  | | [uavcan.si.sample.acceleration.Vector3.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/acceleration/Vector3.1.0.dsdl) | accel |
+
+2. Compass
+
+| ROS msg | ROS topic | Cyphal msg | Cyphal subject name |
+| ------- | --------- | ---------- | ------------------- |
+| [sensor_msgs/MagneticField](http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/MagneticField.html) | /uav/mag | [uavcan.si.sample.magnetic_field_strength.Vector3.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/magnetic_field_strength/Vector3.1.0.dsdl) | mag |
+
+3. Barometer
+
+| ROS msg | ROS topic | Cyphal msg | Cyphal subject name |
+| ------- | --------- | ---------- | ------------------- |
+| [std_msgs/Float32](http://docs.ros.org/en/melodic/api/std_msgs/html/msg/Float32.html) | /uav/static_temperature | [uavcan.si.sample.temperature.Scalar.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/temperature/Scalar.1.0.dsdl) | baro_temperature |
+| [std_msgs/Float32](http://docs.ros.org/en/melodic/api/std_msgs/html/msg/Float32.html) | /uav/static_pressure | [uavcan.si.sample.pressure.Scalar.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/pressure/Scalar.1.0.dsdl) | baro_pressure |
+
+4. Gps
+
+| ROS msg | ROS topic | Cyphal msg | Cyphal subject name |
+| ------- | --------- | ---------- | ------------------- |
+| [std_msgs/Float32](http://docs.ros.org/en/melodic/api/std_msgs/html/msg/Float32.html) | /uav/yaw | [uavcan.si.sample.angle.Scalar.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/angle/Scalar.1.0.dsdl) | gps_yaw |
+| [sensor_msgs/NavSatFix](https://docs.ros.org/en/api/sensor_msgs/html/msg/NavSatFix.html) | /uav/gps_position | [uavcan.primitive.scalar.Integer16](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/primitive/scalar/Integer16.1.0.dsdl) | gps_status |
+|  |  | [reg.udral.physics.kinematics.geodetic.PointStateVarTs.0.1](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/physics/kinematics/geodetic/PointStateVarTs.0.1.dsdl) | gps_point |
+| [geometry_msgs/Twist](http://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/Twist.html) | /uav/velocity | | |
+| - | - | [uavcan.primitive.scalar.Integer16](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/primitive/scalar/Integer16.1.0.dsdl) | gps_sats |
+| - | - | [uavcan.primitive.scalar.Integer16](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/primitive/scalar/Integer16.1.0.dsdl) | gps_pdop |
+
 
 ## 2. Preparation
 

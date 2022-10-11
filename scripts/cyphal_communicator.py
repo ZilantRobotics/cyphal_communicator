@@ -18,6 +18,7 @@ try:
     import uavcan.node
     from reg.udral.service.actuator.common.sp import Vector4_0_1
     from reg.udral.service.common import Readiness_0_1
+    from uavcan.primitive.scalar import Integer16_1_0 as Integer16
     import uavcan.si.sample.angular_velocity.Vector3_1_0
     import uavcan.si.sample.acceleration.Vector3_1_0
     import uavcan.si.sample.magnetic_field_strength.Vector3_1_0
@@ -167,12 +168,28 @@ class BaroRosToCyphal:
 class GpsRosToCyphal:
     def __init__(self):
         rospy.Subscriber("/uav/gps_point", NavSatFix, self._ros_gps_point_cb)
+
         rospy.Subscriber("/uav/velocity", Twist, self._ros_velocity_cb)
-        # self._ros_gps_yaw_msg = Float32()
-        self._ros_gps_point_msg = NavSatFix()
         self._ros_velocity_msg = Twist()
-        self._cyphal_gps_yaw_msg = uavcan.si.sample.angle.Scalar_1_0()
-        self._cyphal_gps_point_msg = reg.udral.physics.kinematics.geodetic.PointStateVarTs_0_1()
+
+        self._gps_yaw_pub = None
+        self._yaw_msg = uavcan.si.sample.angle.Scalar_1_0()
+
+        self._gps_point_pub = None
+        self._cyphal_point_msg = reg.udral.physics.kinematics.geodetic.PointStateVarTs_0_1()
+
+        self._sats_pub = None
+        self._cyphal_gps_sats_msg = Integer16()
+        self._cyphal_gps_sats_msg.value = 20
+
+        self._status_pub = None
+        self._cyphal_gps_status_msg = Integer16()
+        self._cyphal_gps_status_msg.value = 3  # STATUS_3D_FIX
+
+        self._pdop_pub = None
+        self._cyphal_gps_pdop_msg = Integer16()
+        self._cyphal_gps_pdop_msg.value = 100
+
         self._loop = None
 
     def init(self, cyphal_node, loop):
@@ -186,30 +203,32 @@ class GpsRosToCyphal:
         reg_name = "gps_point"
         self._gps_point_pub = cyphal_node.make_publisher(cyphal_data_type, reg_name)
 
-    # def _ros_gps_yaw_cb(self, msg):
-    #     self._ros_gps_yaw_msg = msg
+        self._sats_pub = cyphal_node.make_publisher(Integer16, "gps_sats")
+        self._status_pub = cyphal_node.make_publisher(Integer16, "gps_status")
+        self._pdop_pub = cyphal_node.make_publisher(Integer16, "gps_pdop")
 
-    def _ros_gps_point_cb(self, msg):
-        self._ros_gps_point_msg = msg
-        if self._loop is not None:
-            self._cyphal_gps_point_msg.value.position.value.latitude = float(self._ros_gps_point_msg.latitude) / 100000000
-            self._cyphal_gps_point_msg.value.position.value.longitude = float(self._ros_gps_point_msg.longitude) / 100000000
-            self._cyphal_gps_point_msg.value.position.value.altitude.meter = float(self._ros_gps_point_msg.altitude) / 1000
-            self._cyphal_gps_point_msg.value.velocity.value.meter_per_second = [
-                self._ros_velocity_msg.linear.x,
-                self._ros_velocity_msg.linear.y,
-                self._ros_velocity_msg.linear.z,
-            ]
-            self._loop.create_task(self.pub_gps_point())
+    def _ros_gps_point_cb(self, ros_point_msg):
+        if self._loop is None:
+            return
+
+        self._cyphal_point_msg.value.position.value.latitude = float(ros_point_msg.latitude) / 100000000 / 57.29577951308232
+        self._cyphal_point_msg.value.position.value.longitude = float(ros_point_msg.longitude) / 100000000 / 57.29577951308232
+        self._cyphal_point_msg.value.position.value.altitude.meter = float(ros_point_msg.altitude) / 1000
+        self._cyphal_point_msg.value.velocity.value.meter_per_second = [
+            self._ros_velocity_msg.linear.x,
+            self._ros_velocity_msg.linear.y,
+            self._ros_velocity_msg.linear.z,
+        ]
+        self._loop.create_task(self.pub_gps_point())
 
     def _ros_velocity_cb(self, msg):
         self._ros_velocity_msg = msg
 
-    # async def pub_gps_yaw(self):
-    #     await self._gps_yaw_pub.publish(self._cyphal_gps_yaw_msg)
-
     async def pub_gps_point(self):
-        await self._gps_point_pub.publish(self._cyphal_gps_point_msg)
+        await self._gps_point_pub.publish(self._cyphal_point_msg)
+        await self._sats_pub.publish(self._cyphal_gps_sats_msg)
+        await self._status_pub.publish(self._cyphal_gps_status_msg)
+        await self._pdop_pub.publish(self._cyphal_gps_pdop_msg)
 
 class CyphalCommunicator:
     def __init__(self):
