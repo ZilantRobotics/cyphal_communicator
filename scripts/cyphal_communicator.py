@@ -129,8 +129,8 @@ class MagRosToCyphal:
 
 class BaroRosToCyphal:
     def __init__(self):
-        rospy.Subscriber("/uav/baro_temperature", Float32, self._ros_baro_temperature_cb)
-        rospy.Subscriber("/uav/baro_pressure", Float32, self._ros_baro_pressure_cb)
+        rospy.Subscriber("/uav/static_temperature", Float32, self._ros_baro_temperature_cb)
+        rospy.Subscriber("/uav/static_pressure", Float32, self._ros_baro_pressure_cb)
         self._cyphal_baro_temperature_msg = uavcan.si.sample.temperature.Scalar_1_0()
         self._cyphal_baro_pressure_msg = uavcan.si.sample.pressure.Scalar_1_0()
         self._loop = None
