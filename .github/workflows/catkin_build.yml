@@ -23,13 +23,10 @@ jobs:
           path: catkin_ws/src/cyphal_communicator
 
       - name: Install requirements
-        run: |
-          ./catkin_ws/src/cyphal_communicator/install_requirements.sh
+        run: ./catkin_ws/src/cyphal_communicator/install_requirements.sh
 
       - name: Compile DSDL
-        run: |
-          ./catkin_ws/src/cyphal_communicator/compile_dsdl.sh
+        run: ./catkin_ws/src/cyphal_communicator/compile_dsdl.sh
 
       - name: Catkin build
-        run: |
-          source /opt/ros/noetic/setup.bash && cd catkin_ws && catkin build
+        run: source /opt/ros/noetic/setup.bash && cd catkin_ws && catkin build
