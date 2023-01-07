@@ -12,6 +12,7 @@ RUN if [[ "$ROS_DISTRO" = "melodic" ]] ; then apt-get install -y python-pip pyth
 
 # 2. Install requirements
 COPY install_requirements.sh install_requirements.sh
+COPY requirements.txt requirements.txt
 RUN ./install_requirements.sh
 
 # 3. Compile DSDL

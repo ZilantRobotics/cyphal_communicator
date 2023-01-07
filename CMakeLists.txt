@@ -5,7 +5,6 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  tf2_ros
 )
 
 catkin_package(
