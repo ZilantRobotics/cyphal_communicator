@@ -48,7 +48,7 @@ The tables below represent the supported conversions:
 | ROS msg | ROS topic | Cyphal msg | Cyphal subject name |
 | ------- | --------- | ---------- | ------------------- |
 | [std_msgs/Float32](http://docs.ros.org/en/melodic/api/std_msgs/html/msg/Float32.html) | /uav/yaw | [uavcan.si.sample.angle.Scalar.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/angle/Scalar.1.0.dsdl) | gps_yaw |
-| [sensor_msgs/NavSatFix](https://docs.ros.org/en/api/sensor_msgs/html/msg/NavSatFix.html) | /uav/gps_position | [uavcan.primitive.scalar.Integer16](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/primitive/scalar/Integer16.1.0.dsdl) | gps_status |
+| [sensor_msgs/NavSatFix](https://docs.ros.org/en/api/sensor_msgs/html/msg/NavSatFix.html) | /uav/gps_point | [uavcan.primitive.scalar.Integer16](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/primitive/scalar/Integer16.1.0.dsdl) | gps_status |
 |  |  | [reg.udral.physics.kinematics.geodetic.PointStateVarTs.0.1](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/physics/kinematics/geodetic/PointStateVarTs.0.1.dsdl) | gps_point |
 | [geometry_msgs/Twist](http://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/Twist.html) | /uav/velocity | | |
 | - | - | [uavcan.primitive.scalar.Integer16](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/primitive/scalar/Integer16.1.0.dsdl) | gps_sats |
