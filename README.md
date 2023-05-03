@@ -54,6 +54,11 @@ The tables below represent the supported conversions:
 | - | - | [uavcan.primitive.scalar.Integer16](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/primitive/scalar/Integer16.1.0.dsdl) | gps_sats |
 | - | - | [uavcan.primitive.scalar.Integer16](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/primitive/scalar/Integer16.1.0.dsdl) | gps_pdop |
 
+5. ESC
+
+| ROS msg | ROS topic | Cyphal msg | Cyphal subject name |
+| ------- | --------- | ---------- | ------------------- |
+[mavros_msgs::ESCTelemetryItem](http://docs.ros.org/en/api/mavros_msgs/html/msg/ESCTelemetryItem.html) | /uav/esc_status | zubax.telega.CompactFeedback | feedback |
 
 ## 2. Preparation
 

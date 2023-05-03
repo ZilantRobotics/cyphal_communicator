@@ -9,16 +9,17 @@ import rospy
 from std_msgs.msg import Bool, Float32
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Imu, Joy, MagneticField, NavSatFix
-
+from mavros_msgs.msg import ESCTelemetryItem
 
 try:
     compiled_dsdl_dir = pathlib.Path(__file__).resolve().parent.parent / "compile_output"
     sys.path.insert(0, str(compiled_dsdl_dir))
-    import pyuavcan.application
+    import pycyphal.application
     import uavcan.node
     from reg.udral.service.actuator.common.sp import Vector4_0_1
     from reg.udral.service.common import Readiness_0_1
     from uavcan.primitive.scalar import Integer16_1_0 as Integer16
+    import zubax.telega.CompactFeedback_1_0
     import uavcan.si.sample.angular_velocity.Vector3_1_0
     import uavcan.si.sample.acceleration.Vector3_1_0
     import uavcan.si.sample.magnetic_field_strength.Vector3_1_0
@@ -254,7 +255,7 @@ class CyphalCommunicator:
                     name="vehicle_mock",
                 )
         try:
-            self._node = pyuavcan.application.make_node(node_info)
+            self._node = pycyphal.application.make_node(node_info)
         except OSError as err:
             rospy.logerr("Cyphal communicator. SLCAN not found. Exit.")
             sys.exit()
@@ -281,5 +282,5 @@ if __name__ == "__main__":
     communicator = CyphalCommunicator()
     try:
         asyncio.run(communicator.main())
-    except pyuavcan.application._node_factory.MissingTransportConfigurationError as err:
+    except pycyphal.application._node_factory.MissingTransportConfigurationError as err:
         rospy.logerr("Cyphal communicator. Registers not found. Did you source config.sh file? Exit.")
