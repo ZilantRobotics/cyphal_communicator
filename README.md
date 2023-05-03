@@ -12,8 +12,6 @@ It covers a minimal set of sensors required for such applications as Ardupilot/P
 
 ## 1. Conversions
 
-The tables below represent the supported conversions:
-
 **CYPHAL->ROS**
 
 ```mermaid
@@ -25,8 +23,6 @@ readiness[ readiness, reg.udral.service.common.Readiness] --> R(ReadinessCyphalT
 
 **ROS->CYPHAL**
 
-1. IMU
-
 ```mermaid
 flowchart LR
 
@@ -35,51 +31,41 @@ F(ImuRosToCyphal) --> gyro[ gyro, uavcan.si.sample.angular_velocity.Vector3]
 F(ImuRosToCyphal) --> accel[ accel, uavcan.si.sample.acceleration.Vector3]
 ```
 
-2. Compass
-
 ```mermaid
 flowchart LR
 
 imu[ /uav/mag, sensor_msgs/MagneticField] --> F(MagRosToCyphal) --> mag[ mag, uavcan.si.sample.magnetic_field_strength.Vector3]
 ```
 
-3. Barometer
-
 ```mermaid
 flowchart LR
 
-static_temperature[ /uav/static_temperature, std_msgs/Float32] --> F(BaroRosToCyphal) --> baro_temperature[ baro_temperature, uavcan.si.sample.temperature.Scalar]
+static_temperature[ /uav/static_temperature, std_msgs/Float32] --> BaroRosToCyphal(BaroRosToCyphal) --> baro_temperature[ baro_temperature, uavcan.si.sample.temperature.Scalar]
 
-static_pressure[ /uav/static_pressure, std_msgs/Float32] --> F(BaroRosToCyphal) --> baro_pressure[ baro_pressure, uavcan.si.sample.pressure.Scalar]
+static_pressure[ /uav/static_pressure, std_msgs/Float32] --> BaroRosToCyphal --> baro_pressure[ baro_pressure, uavcan.si.sample.pressure.Scalar]
 ```
 
-4. Gps
-
 ```mermaid
 flowchart LR
+yaw[ /uav/yaw, std_msgs/Float32] --> GpsRosToCyphal(GpsRosToCyphal) --> gps_yaw[ gps_yaw, uavcan.si.sample.angle.Scalar]
 
-yaw[ /uav/yaw, std_msgs/Float32] --> F(GpsRosToCyphal) --> gps_yaw[ gps_yaw, uavcan.si.sample.angle.Scalar]
+point[ /uav/gps_point, sensor_msgs/NavSatFix] --> GpsRosToCyphal
+GpsRosToCyphal --> gps_status[ gps_status, uavcan.primitive.scalar.Integer16]
+GpsRosToCyphal --> gps_point[ gps_point, reg.udral.physics.kinematics.geodetic.PointStateVarTs]
 
-point[ /uav/gps_point, sensor_msgs/NavSatFix] --> F(GpsRosToCyphal)
-F(GpsRosToCyphal) --> gps_status[ gps_status, uavcan.primitive.scalar.Integer16]
-F(GpsRosToCyphal) --> gps_point[ gps_point, reg.udral.physics.kinematics.geodetic.PointStateVarTs]
+velocity[ /uav/velocity, geometry_msgs/Twist] --> GpsRosToCyphal --> gps_point[ gps_point, reg.udral.physics.kinematics.geodetic.PointStateVarTs]
 
-velocity[ /uav/velocity, geometry_msgs/Twist] --> F(GpsRosToCyphal) --> gps_point[ gps_point, reg.udral.physics.kinematics.geodetic.PointStateVarTs]
-
-F(GpsRosToCyphal) --> gps_sats[ gps_sats, uavcan.primitive.scalar.Integer16]
-F(GpsRosToCyphal) --> gps_pdop[ gps_pdop, uavcan.primitive.scalar.Integer16]
+GpsRosToCyphal --> gps_sats[ gps_sats, uavcan.primitive.scalar.Integer16]
+GpsRosToCyphal --> gps_pdop[ gps_pdop, uavcan.primitive.scalar.Integer16]
 ```
 
-5. ESC
-
 ```mermaid
 flowchart LR
-
-yaw[ /uav/esc_status, mavros_msgs::ESCTelemetryItem] --> F(EscStatusRosToCyphal)
-F(EscStatusRosToCyphal) --> esc_feedback_0[ esc_feedback_0, zubax.telega.CompactFeedback]
-F(EscStatusRosToCyphal) --> esc_feedback_1[ esc_feedback_1, zubax.telega.CompactFeedback]
-F(EscStatusRosToCyphal) --> esc_feedback_n[ ...]
-F(EscStatusRosToCyphal) --> esc_feedback_7[ esc_feedback_7, zubax.telega.CompactFeedback]
+esc_status[ /uav/esc_status, mavros_msgs/ESCTelemetryItem] --> EscStatusRosToCyphal(EscStatusRosToCyphal)
+EscStatusRosToCyphal --> esc_feedback_0[ esc_feedback_0, zubax.telega.CompactFeedback]
+EscStatusRosToCyphal --> esc_feedback_1[ esc_feedback_1, zubax.telega.CompactFeedback]
+EscStatusRosToCyphal --> esc_feedback_n[ ...]
+EscStatusRosToCyphal --> esc_feedback_7[ esc_feedback_7, zubax.telega.CompactFeedback]
 ```
 
 ## 2. Preparation
