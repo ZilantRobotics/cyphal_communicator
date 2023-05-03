@@ -128,6 +128,32 @@ class MagRosToCyphal:
     async def pub_mag(self):
         await self._mag_pub.publish(self._cyphal_mag_msg)
 
+class EscStatusRosToCyphal:
+    def __init__(self):
+        rospy.Subscriber("/uav/esc_status", ESCTelemetryItem, self._ros_cb)
+        self.number_of_esc = 8
+        self._cyphal_msgs = [zubax.telega.CompactFeedback_1_0() for _ in range(self.number_of_esc)]
+        self._loop = None
+
+    def init(self, cyphal_node, loop):
+        self._loop = loop
+
+        cyphal_data_type = zubax.telega.CompactFeedback_1_0
+        reg_name = "esc_status"
+        self._cyphal_pub = []
+        for esc_index in range(self.number_of_esc):
+            self._cyphal_pub.append(cyphal_node.make_publisher(cyphal_data_type, f"{reg_name}_{esc_index}"))
+
+    def _ros_cb(self, msg):
+        esc_index = msg.count
+        self._cyphal_msgs[esc_index].dc_voltage = 135 # 27 V
+        self._cyphal_msgs[esc_index].velocity = msg.rpm
+        if self._loop is not None:
+            self._loop.create_task(self.pub_cyphal(esc_index))
+
+    async def pub_cyphal(self, esc_index):
+        await self._cyphal_pub[esc_index].publish(self._cyphal_msgs[esc_index])
+
 class BaroRosToCyphal:
     def __init__(self):
         rospy.Subscriber("/uav/static_temperature", Float32, self._ros_baro_temperature_cb)
@@ -240,6 +266,7 @@ class CyphalCommunicator:
         self.readiness = ReadinessCyphalToRos()
         self.imu = ImuRosToCyphal()
         self.mag = MagRosToCyphal()
+        self.esc_status = EscStatusRosToCyphal()
         self.baro = BaroRosToCyphal()
         self.gps = GpsRosToCyphal()
 
@@ -269,6 +296,7 @@ class CyphalCommunicator:
         self.readiness.init(self._node)
         self.imu.init(self._node, self._loop)
         self.mag.init(self._node, self._loop)
+        self.esc_status.init(self._node, self._loop)
         self.baro.init(self._node, self._loop)
         self.gps.init(self._node, self._loop)
 
