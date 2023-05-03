@@ -1,5 +1,5 @@
 #!/bin/bash
 cython
 scipy
-pyuavcan
-yakut==0.8.1
+pycyphal
+yakut
