@@ -32,6 +32,8 @@ except (ImportError, AttributeError):
     sys.exit()
 REGISTER_FILE = "allocation_table.db"
 
+RPM_TO_RAD_PER_SEC = 0.1047198
+DEGREE_TO_RAD = 0.01745329251
 
 class SetpointCyphalToRos:
     def __init__(self):
@@ -129,6 +131,7 @@ class MagRosToCyphal:
         await self._mag_pub.publish(self._cyphal_mag_msg)
 
 class EscStatusRosToCyphal:
+    TO_COMPACT = 5
     def __init__(self):
         rospy.Subscriber("/uav/esc_status", ESCTelemetryItem, self._ros_cb)
         self.number_of_esc = 8
@@ -142,14 +145,16 @@ class EscStatusRosToCyphal:
         reg_name = "esc_status"
         self._cyphal_pub = []
         for esc_index in range(self.number_of_esc):
-            self._cyphal_pub.append(cyphal_node.make_publisher(cyphal_data_type, f"{reg_name}_{esc_index}"))
+            publisher = cyphal_node.make_publisher(cyphal_data_type, f"{reg_name}_{esc_index}")
+            self._cyphal_pub.append(publisher)
 
     def _ros_cb(self, msg):
-        esc_index = msg.count
-        self._cyphal_msgs[esc_index].dc_voltage = 135 # 27 V
-        self._cyphal_msgs[esc_index].velocity = msg.rpm
+        index = msg.count
+        self._cyphal_msgs[index].dc_voltage = int(msg.voltage * EscStatusRosToCyphal.TO_COMPACT)
+        self._cyphal_msgs[index].dc_current = int(msg.current * EscStatusRosToCyphal.TO_COMPACT)
+        self._cyphal_msgs[index].velocity = int(msg.rpm * RPM_TO_RAD_PER_SEC)
         if self._loop is not None:
-            self._loop.create_task(self.pub_cyphal(esc_index))
+            self._loop.create_task(self.pub_cyphal(index))
 
     async def pub_cyphal(self, esc_index):
         await self._cyphal_pub[esc_index].publish(self._cyphal_msgs[esc_index])
@@ -238,8 +243,8 @@ class GpsRosToCyphal:
         if self._loop is None:
             return
 
-        self._cyphal_point_msg.value.position.value.latitude = float(ros_point_msg.latitude) / 57.29577951308232
-        self._cyphal_point_msg.value.position.value.longitude = float(ros_point_msg.longitude) / 57.29577951308232
+        self._cyphal_point_msg.value.position.value.latitude = float(ros_point_msg.latitude) * DEGREE_TO_RAD
+        self._cyphal_point_msg.value.position.value.longitude = float(ros_point_msg.longitude) * DEGREE_TO_RAD
         self._cyphal_point_msg.value.position.value.altitude.meter = float(ros_point_msg.altitude)
         self._cyphal_point_msg.value.velocity.value.meter_per_second = [
             self._ros_velocity_msg.linear.x,
