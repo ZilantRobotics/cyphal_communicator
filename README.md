@@ -4,6 +4,21 @@ Cyphal communicator converts Cyphal messages to ROS and vice versa.
 
 It covers a minimal set of sensors required for such applications as Ardupilot/PX4 Cyphal HITL simulation. This communicator can be used for other purposes as well.
 
+For a quadrotor application we should have:
+- actuators (ESC),
+- gnss,
+- barometer,
+- magnetometer,
+- imu.
+
+For a VTOL application we should additionally have:
+- differential pressure sensor or airspeed,
+
+It would be nice to also have:
+- rangefinder,
+- BMS,
+- ESC feedback.
+
 ## Content
   - [1. Conversions](#1-conversions)
   - [2. Preparation](#2-preparation)
@@ -21,7 +36,11 @@ setpoint[ setpoint, reg.udral.service.actuator.common.sp.Vector8] --> F(Setpoint
 readiness[ readiness, reg.udral.service.common.Readiness] --> R(ReadinessCyphalToRos) --> arm[ /uav/arm, std_msgs::Bool]
 ```
 
+> On PX4 side actuators logic is implemented within [UavcanEscController and ReadinessPublisher drivers](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Actuators/EscClient.hpp).
+
 **ROS->CYPHAL**
+
+**1. IMU**
 
 ```mermaid
 flowchart LR
@@ -31,11 +50,19 @@ F(ImuRosToCyphal) --> gyro[ gyro, uavcan.si.sample.angular_velocity.Vector3]
 F(ImuRosToCyphal) --> accel[ accel, uavcan.si.sample.acceleration.Vector3]
 ```
 
+> On PX4 side IMU logic is implemented within [UavcanAccelerometerSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Accelerometer.hpp) and [UavcanGyroscopeSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Gyroscope.hpp) drivers.
+
+**2. Magnetometer**
+
 ```mermaid
 flowchart LR
 
 imu[ /uav/mag, sensor_msgs/MagneticField] --> F(MagRosToCyphal) --> mag[ mag, uavcan.si.sample.magnetic_field_strength.Vector3]
 ```
+
+> On PX4 side IMU logic is implemented within [UavcanMagnetometerSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Magnetometer.hpp) driver.
+
+**3. Barometer**
 
 ```mermaid
 flowchart LR
@@ -44,6 +71,10 @@ static_temperature[ /uav/static_temperature, std_msgs/Float32] --> BaroRosToCyph
 
 static_pressure[ /uav/static_pressure, std_msgs/Float32] --> BaroRosToCyphal --> baro_pressure[ baro_pressure, uavcan.si.sample.pressure.Scalar]
 ```
+
+> On PX4 side IMU logic is implemented within [UavcanBarometerSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Barometer.hpp) driver.
+
+**4. GNSS**
 
 ```mermaid
 flowchart LR
@@ -59,6 +90,10 @@ GpsRosToCyphal --> gps_sats[ gps_sats, uavcan.primitive.scalar.Integer16]
 GpsRosToCyphal --> gps_pdop[ gps_pdop, uavcan.primitive.scalar.Integer16]
 ```
 
+> On PX4 side GNSS logic is implemented within [UavcanGnssSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Gnss.hpp) driver.
+
+**5. ESC Feedback**
+
 ```mermaid
 flowchart LR
 esc_status[ /uav/esc_status, mavros_msgs/ESCTelemetryItem] --> EscStatusRosToCyphal(EscStatusRosToCyphal)
@@ -67,6 +102,9 @@ EscStatusRosToCyphal --> esc_feedback_1[ esc_feedback_1, zubax.telega.CompactFee
 EscStatusRosToCyphal --> esc_feedback_n[ ...]
 EscStatusRosToCyphal --> esc_feedback_7[ esc_feedback_7, zubax.telega.CompactFeedback]
 ```
+
+> On PX4 side GNSS logic is implemented within [UavcanEscFeedbackSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Actuators/EscClient.hpp) driver.
+
 
 ## 2. Preparation
 
