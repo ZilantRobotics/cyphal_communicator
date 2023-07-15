@@ -16,7 +16,7 @@ try:
     sys.path.insert(0, str(compiled_dsdl_dir))
     import pycyphal.application
     import uavcan.node
-    from reg.udral.service.actuator.common.sp import Vector4_0_1
+    from reg.udral.service.actuator.common.sp import Vector8_0_1
     from reg.udral.service.common import Readiness_0_1
     from uavcan.primitive.scalar import Integer16_1_0 as Integer16
     import zubax.telega.CompactFeedback_1_0
@@ -42,7 +42,7 @@ class SetpointCyphalToRos:
         self._sp_sub = None
 
     def init(self, cyphal_node):
-        self._sp_sub = cyphal_node.make_subscriber(Vector4_0_1, "setpoint")
+        self._sp_sub = cyphal_node.make_subscriber(Vector8_0_1, "setpoint")
         self._sp_sub.receive_in_background(self._sp_cb)
 
     async def _sp_cb(self, msg, _):
