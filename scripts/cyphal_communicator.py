@@ -20,8 +20,8 @@ try:
     from reg.udral.service.common import Readiness_0_1
     from uavcan.primitive.scalar import Integer16_1_0 as Integer16
     import zubax.telega.CompactFeedback_1_0
-    import uavcan.si.sample.angular_velocity.Vector3_1_0
-    import uavcan.si.sample.acceleration.Vector3_1_0
+    import uavcan.si.unit.angular_velocity.Vector3_1_0
+    import uavcan.si.unit.acceleration.Vector3_1_0
     import uavcan.si.sample.magnetic_field_strength.Vector3_1_0
     import uavcan.si.sample.temperature.Scalar_1_0
     import uavcan.si.sample.pressure.Scalar_1_0
@@ -69,18 +69,17 @@ class ReadinessCyphalToRos:
 class ImuRosToCyphal:
     def __init__(self):
         rospy.Subscriber("/uav/imu", Imu, self._ros_imu_cb)
-        self._cyphal_imu_gyro_msg = uavcan.si.sample.angular_velocity.Vector3_1_0()
-        self._cyphal_imu_accel_msg = uavcan.si.sample.acceleration.Vector3_1_0()
+        self._cyphal_imu_gyro_msg = uavcan.si.unit.angular_velocity.Vector3_1_0()
+        self._cyphal_imu_accel_msg = uavcan.si.unit.acceleration.Vector3_1_0()
         self._loop = None
 
     def init(self, cyphal_node, loop):
         self._loop = loop
-
-        cyphal_data_type = uavcan.si.sample.angular_velocity.Vector3_1_0
+        cyphal_data_type = uavcan.si.unit.angular_velocity.Vector3_1_0
         reg_name = "gyro"
         self._imu_gyro_pub = cyphal_node.make_publisher(cyphal_data_type, reg_name)
 
-        cyphal_data_type = uavcan.si.sample.acceleration.Vector3_1_0
+        cyphal_data_type = uavcan.si.unit.acceleration.Vector3_1_0
         reg_name = "accel"
         self._imu_accel_pub = cyphal_node.make_publisher(cyphal_data_type, reg_name)
 
@@ -275,12 +274,6 @@ class CyphalCommunicator:
         self.baro = BaroRosToCyphal()
         self.gps = GpsRosToCyphal()
 
-        self._log_ts_ms = rospy.get_time()
-
-    async def log(self):
-        if self._log_ts_ms + 1.0 < rospy.get_time():
-            self._log_ts_ms = rospy.get_time()
-
     async def main(self):
         node_info = uavcan.node.GetInfo_1_0.Response(
                     software_version=uavcan.node.Version_1_0(major=1, minor=0),
@@ -307,7 +300,6 @@ class CyphalCommunicator:
 
         while not rospy.is_shutdown():
             await asyncio.sleep(1)
-            await self.log()
 
 
 if __name__ == "__main__":
