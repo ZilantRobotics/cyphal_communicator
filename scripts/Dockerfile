@@ -23,6 +23,7 @@ RUN ./compile_dsdl.sh
 # 3. Copy the source files
 COPY CMakeLists.txt     CMakeLists.txt
 COPY package.xml        package.xml
+COPY src/ src/
 
 # 4. Build ROS
 RUN source /opt/ros/$ROS_DISTRO/setup.bash && cd ../../ && git config --global http.sslverify false && catkin build
@@ -33,9 +34,8 @@ COPY launch/ launch/
 
 
 # source /opt/ros/$ROS_DISTRO/setup.bash && source /catkin_ws/devel/setup.bash && roslaunch cyphal_communicator cyphal_communicator.launch
-CMD echo "main process has been started"                                        &&  \
-    source /opt/ros/$ROS_DISTRO/setup.bash                                      &&  \
-    source /catkin_ws/devel/setup.bash                                          &&  \
-    source scripts/config.sh                                                    &&  \
-    roslaunch cyphal_communicator cyphal_communicator.launch                    &&  \
+CMD echo "main process has been started"                                            &&  \
+    source /opt/ros/$ROS_DISTRO/setup.bash && source /catkin_ws/devel/setup.bash    &&  \
+    source scripts/config.sh                                                        &&  \
+    roslaunch cyphal_communicator cyphal_communicator.launch                        &&  \
     echo "container has been finished"

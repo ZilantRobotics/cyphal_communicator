@@ -4,7 +4,7 @@
   <version>0.0.0</version>
   <description>The cyphal_communicator package</description>
 
-  <maintainer email="ponomarevda96@gmail.com">dmitry ponomarev</maintainer>
+  <maintainer email="ponomarevda96@gmail.com">Dmitry Ponomarev</maintainer>
   <license>GPLv3</license>
 
   <!-- Message types used -->
