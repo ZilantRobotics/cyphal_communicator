@@ -31,3 +31,12 @@ target_link_libraries(${PROJECT_NAME}
     ${catkin_LIBRARIES}
     ${UAVCAN_LIB}
 )
+
+add_custom_target(
+  run ALL
+  COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/compile_dsdl.sh
+  BYPRODUCTS enums.h
+  COMMENT "Compile DSDL"
+)
+
+add_dependencies(${PROJECT_NAME} run)
