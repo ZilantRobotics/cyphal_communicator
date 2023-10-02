@@ -22,8 +22,10 @@ COPY CMakeLists.txt     CMakeLists.txt
 COPY package.xml        package.xml
 COPY src/ src/
 COPY compile_dsdl.sh compile_dsdl.sh
+COPY Libs/ Libs/
 
 # 4. Build ROS
+RUN ./Libs/cyphal_application/scripts/nnvg_generate_c_headers.sh
 RUN source /opt/ros/$ROS_DISTRO/setup.bash && cd ../../ && git config --global http.sslverify false && catkin build
 
 # 5. Copy other files
