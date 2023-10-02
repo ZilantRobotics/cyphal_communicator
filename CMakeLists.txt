@@ -22,7 +22,31 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+set(CYPHAL_REPO_DIR ${CMAKE_CURRENT_LIST_DIR}/Libs/cyphal_application)
+set(PLATFORM socketcan)
+set(libparamsPath ${CMAKE_CURRENT_LIST_DIR}/Libs/libparams)
+include(${CYPHAL_REPO_DIR}/CMakeLists.txt)
+
+include_directories(${CYPHAL_REPO_DIR})
+include_directories(${CYPHAL_REPO_DIR}/Udral)
+include_directories(src)
+
+add_executable(${PROJECT_NAME}
+  ${CYPHAL_REPO_DIR}/Udral/actuator.cpp
+  ${CYPHAL_REPO_DIR}/Udral/barometer.cpp
+  ${CYPHAL_REPO_DIR}/Udral/gnss.cpp
+  ${CYPHAL_REPO_DIR}/Udral/magnetometer.cpp
+  ${CYPHAL_REPO_DIR}/Udral/imu.cpp
+
+  src/main.cpp
+  src/math.cpp
+  src/simulator_interface/ap_json/ap_json.cpp
+  src/simulator_interface/ros_interface/ros_interface.cpp
+  src/autopilot_interface/cyphal_hitl.cpp
+  src/params.cpp
+  ${CYPHAL_SRC}
+)
+
 target_include_directories(${PROJECT_NAME}
   BEFORE PUBLIC
 )
@@ -33,10 +57,16 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 add_custom_target(
-  run ALL
+  compile_dsdl ALL
   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/compile_dsdl.sh
-  BYPRODUCTS enums.h
   COMMENT "Compile DSDL"
 )
 
-add_dependencies(${PROJECT_NAME} run)
+add_custom_target(
+  gen_headers ALL
+  COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/Libs/cyphal_application/scripts/nnvg_generate_c_headers.sh
+  COMMENT "Generate C headers"
+)
+
+add_dependencies(${PROJECT_NAME} compile_dsdl)
+add_dependencies(${PROJECT_NAME} gen_headers)

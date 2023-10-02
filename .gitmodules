@@ -1,0 +1,6 @@
+[submodule "Libs/libparams"]
+	path = Libs/libparams
+	url = https://github.com/PonomarevDA/libparams.git
+[submodule "Libs/cyphal_application"]
+	path = Libs/cyphal_application
+	url = https://github.com/RaccoonlabDev/cyphal_application.git
