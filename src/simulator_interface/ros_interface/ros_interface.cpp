@@ -15,13 +15,6 @@
 #include <sensor_msgs/Joy.h>
 
 
-// static uint32_t HAL_GetTick() {
-//     static auto time_start = std::chrono::steady_clock::now();
-//     auto time_now = std::chrono::steady_clock::now();
-//     auto elapsed_time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(time_now - time_start).count();
-//     return elapsed_time_ms;
-// }
-
 RosInterface::RosInterface(int argc, char** argv) {
     ros::init(argc, argv, "cyphal_communicator");
     ros_node = new ros::NodeHandle;
@@ -55,8 +48,6 @@ bool RosInterface::send_setpoint(const Setpoint16& setpoint) {
 void RosInterface::_imu_cb(const sensor_msgs::Imu& msg) {
     Vector3 accel{msg.linear_acceleration.x, msg.linear_acceleration.y, msg.linear_acceleration.z};
     Vector3 gyro{msg.angular_velocity.x, msg.angular_velocity.y, msg.angular_velocity.z};
-    // ROS_ERROR("get imu from ros");
-    // fflush(stdout);
     for (auto imu_cb : imu_callbacks) {
         imu_cb(accel, gyro);
     }
@@ -64,8 +55,6 @@ void RosInterface::_imu_cb(const sensor_msgs::Imu& msg) {
 
 void RosInterface::_mag_cb(const sensor_msgs::MagneticField& msg) {
     Vector3 magnetic_field_gauss{msg.magnetic_field.x, msg.magnetic_field.y, msg.magnetic_field.z};
-    // ROS_ERROR("get mag from ros");
-    // fflush(stdout);
     for (auto mag_cb : magnetometer_callbacks) {
         mag_cb(magnetic_field_gauss);
     }
@@ -82,8 +71,6 @@ void RosInterface::_baro_pres_cb(const std_msgs::Float32& msg) {
 }
 
 void RosInterface::_gps_point_cb(const sensor_msgs::NavSatFix& msg) {
-    // ROS_ERROR("get gps from ros");
-    // fflush(stdout);
     Vector3 global_pose{msg.latitude, msg.longitude, msg.altitude};
     for (auto gnss_cb : gnss_callbacks) {
         gnss_cb(global_pose, _velocity);

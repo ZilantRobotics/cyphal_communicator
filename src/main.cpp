@@ -19,8 +19,7 @@ static void print_log_info_periodically(uint32_t& json_sensors_recv_counter,
                                         CyphalHitlInterface& cyphal_hitl);
 
 
-std::unique_ptr<SimulatorBaseInterface> init_ardupilot_json_sim(CyphalHitlInterface& cyphal_hitl) {
-    (void)cyphal_hitl;
+std::unique_ptr<SimulatorBaseInterface> init_ardupilot_json_sim() {
     std::unique_ptr<ArdupilotJsonInterface> sim(new ArdupilotJsonInterface(-35.3632621, +149.1652374, 584.19));
     if (sim == nullptr || !sim->init()) {
         std::cout << "ArduPilot Initialization Error." << std::endl;
@@ -33,14 +32,13 @@ std::unique_ptr<SimulatorBaseInterface> init_ardupilot_json_sim(CyphalHitlInterf
     return sim;
 }
 
-std::unique_ptr<SimulatorBaseInterface> init_ros_sim(CyphalHitlInterface& cyphal_hitl, int argc, char** argv) {
-    (void)cyphal_hitl;
+std::unique_ptr<SimulatorBaseInterface> init_ros_sim(int argc, char** argv) {
     std::unique_ptr<RosInterface> sim(new RosInterface(argc, argv));
     sim->init();
 
     return sim;
 }
-#include <ros/ros.h>
+
 int main(int argc, char** argv) {
     CyphalHitlInterface cyphal_hitl;
     int init_res = cyphal_hitl.init();
@@ -51,15 +49,13 @@ int main(int argc, char** argv) {
     std::cout << "Hello, Cyphal HITL." << std::endl;
 
     uint32_t json_sensors_recv_counter = 0;
-    std::unique_ptr<SimulatorBaseInterface> simulator = init_ros_sim(cyphal_hitl, argc, argv);
+    std::unique_ptr<SimulatorBaseInterface> simulator = init_ros_sim(argc, argv);
 
     simulator->subscribe_baro([&cyphal_hitl](float pressure, float temperature) {
         cyphal_hitl.publish_barometer(pressure, temperature);
     });
 
     simulator->subscribe_gnss([&cyphal_hitl](Vector3& global_pose, Vector3& ned_velocity) {
-        // ROS_ERROR("pub gps to cyphal");
-        // fflush(stdout);
         cyphal_hitl.publish_gnss(global_pose, ned_velocity);
     });
 
@@ -68,8 +64,6 @@ int main(int argc, char** argv) {
     });
 
     simulator->subscribe_mag([&cyphal_hitl](Vector3& magnetic_field_gauss) {
-        // ROS_ERROR("pub mag to cyphal");
-        // fflush(stdout);
         cyphal_hitl.publish_magnetometer(magnetic_field_gauss);
     });
 
@@ -96,6 +90,7 @@ void print_log_info_periodically(uint32_t& json_sensors_recv_counter,
                                  uint32_t cyphal_servo_recv_counter,
                                  double crnt_ts,
                                  CyphalHitlInterface& cyphal_hitl) {
+    (void)cyphal_hitl;
     uint32_t crnt_time_ms = HAL_GetTick();
     static uint32_t last_hint_time_ms = 0;
     if (crnt_time_ms < last_hint_time_ms + 1000) {
@@ -126,8 +121,8 @@ void print_log_info_periodically(uint32_t& json_sensors_recv_counter,
                   << "\033[0m\n";
     }
 
-    cyphal_hitl.clear_servo_pwm_counter();
-    cyphal_hitl.set_time_factor(time_factor);
+    // cyphal_hitl.clear_servo_pwm_counter();
+    // cyphal_hitl.set_time_factor(time_factor);
     json_sensors_recv_counter = 0;
     prev_ts = crnt_ts;
 }
