@@ -33,7 +33,7 @@ public:
     bool init() override;
     bool send_setpoint(const Setpoint16& setpoint) override;
     void send_arming_status(bool arming_status) override;
-    bool receive_sensors() override;
+    bool spin_once() override;
 private:
     void _imu_cb(const sensor_msgs::Imu& msg);
     void _mag_cb(const sensor_msgs::MagneticField& msg);

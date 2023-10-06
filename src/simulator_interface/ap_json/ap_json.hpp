@@ -25,7 +25,7 @@ public:
     ArdupilotJsonInterface(double home_lat, double home_lon, double home_alt);
     bool init() override;
     bool send_setpoint(const Setpoint16& setpoint) override;
-    bool receive_sensors() override;
+    bool spin_once() override;
 
 private:
     bool parse_json(const char* buffer, int size);

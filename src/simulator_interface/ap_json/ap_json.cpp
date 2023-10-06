@@ -65,7 +65,7 @@ bool ArdupilotJsonInterface::send_setpoint(const Setpoint16& setpoint) {
     return true;
 }
 
-bool ArdupilotJsonInterface::receive_sensors() {
+bool ArdupilotJsonInterface::spin_once() {
     char buffer[1024];
     int buffer_size = read(_client_fd, buffer, 1024);
     if (buffer_size < 0) {

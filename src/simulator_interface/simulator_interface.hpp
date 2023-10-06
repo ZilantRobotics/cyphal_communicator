@@ -40,9 +40,9 @@ public:
 
     /**
      * @note The implementation can have a blocking call.
-     * @return true if there is a new data, false otherwise
+     * @return true if there is a new sensor data, false otherwise
      */
-    virtual bool receive_sensors() = 0;
+    virtual bool spin_once() = 0;
 
 
     void subscribe_baro(BaroCallback lambda) { baro_callbacks.push_back(lambda); }
