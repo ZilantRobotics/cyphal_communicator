@@ -36,6 +36,8 @@ public:
      */
     virtual bool send_setpoint(const Setpoint16& setpoint) = 0;
 
+    virtual void send_arming_status(bool armings_status) {(void)armings_status;}
+
     /**
      * @note The implementation can have a blocking call.
      * @return true if there is a new data, false otherwise

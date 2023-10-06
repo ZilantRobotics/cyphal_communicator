@@ -36,6 +36,7 @@ public:
     void publish_gnss(const Vector3& global_pose, const Vector3& ned_velocity);
 
     bool get_setpoint(Setpoint16& setpoint);
+    bool get_arming_status();
     uint32_t get_setpoint_recv_counter();
     void clear_servo_pwm_counter();
     void set_time_factor(double time_factor);

@@ -81,6 +81,13 @@ int main(int argc, char** argv) {
             simulator->send_setpoint(setpoint);
         }
 
+        uint32_t crnt_time_ms = HAL_GetTick();
+        static uint32_t last_arm_send_time_ms = 0;
+        if (crnt_time_ms > last_arm_send_time_ms + 100) {
+            last_arm_send_time_ms = crnt_time_ms;
+            simulator->send_arming_status(cyphal_hitl.get_arming_status());
+        }
+
         if (simulator->receive_sensors()) {
             json_sensors_recv_counter++;
         }

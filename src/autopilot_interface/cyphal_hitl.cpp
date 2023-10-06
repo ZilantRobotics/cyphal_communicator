@@ -107,6 +107,11 @@ bool CyphalHitlInterface::get_setpoint(Setpoint16& out_setpoint) {
     return true;
 }
 
+bool CyphalHitlInterface::get_arming_status() {
+    return readiness.get_readiness() == reg_udral_service_common_Readiness_0_1_ENGAGED;
+}
+
+
 uint32_t CyphalHitlInterface::get_setpoint_recv_counter() {
     return setpoint.get_recv_counter();
 }
