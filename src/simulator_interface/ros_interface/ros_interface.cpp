@@ -90,7 +90,7 @@ void RosInterface::_gps_velocity_cb(const geometry_msgs::Twist& msg) {
     _velocity[2] = msg.linear.z;
 }
 
-bool RosInterface::receive_sensors() {
+bool RosInterface::spin_once() {
     ros::spinOnce();
     return true;
 }

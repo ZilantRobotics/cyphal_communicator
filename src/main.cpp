@@ -38,13 +38,6 @@ static std::unique_ptr<SimulatorBaseInterface> init_sim_interface(int argc, char
 #endif
 
 
-static void print_log_info_periodically(uint32_t& json_sensors_recv_counter,
-                                        uint32_t cyphal_servo_recv_counter,
-                                        double crnt_ts,
-                                        CyphalHitlInterface& cyphal_hitl);
-
-
-
 int main(int argc, char** argv) {
     CyphalHitlInterface cyphal_hitl;
     int init_res = cyphal_hitl.init();
@@ -54,7 +47,6 @@ int main(int argc, char** argv) {
     }
     std::cout << "Hello, Cyphal HITL." << std::endl;
 
-    uint32_t json_sensors_recv_counter = 0;
     std::unique_ptr<SimulatorBaseInterface> simulator = init_sim_interface(argc, argv);
 
     simulator->subscribe_baro([&cyphal_hitl](float pressure, float temperature) {
@@ -88,54 +80,6 @@ int main(int argc, char** argv) {
             simulator->send_arming_status(cyphal_hitl.get_arming_status());
         }
 
-        if (simulator->receive_sensors()) {
-            json_sensors_recv_counter++;
-        }
-
-        print_log_info_periodically(json_sensors_recv_counter,
-                                    cyphal_hitl.get_setpoint_recv_counter(),
-                                    simulator->get_last_recv_timestamp(),
-                                    cyphal_hitl);
+        simulator->spin_once();
     }
-}
-
-void print_log_info_periodically(uint32_t& json_sensors_recv_counter,
-                                 uint32_t cyphal_servo_recv_counter,
-                                 double crnt_ts,
-                                 CyphalHitlInterface& cyphal_hitl) {
-    (void)cyphal_hitl;
-    uint32_t crnt_time_ms = HAL_GetTick();
-    static uint32_t last_hint_time_ms = 0;
-    if (crnt_time_ms < last_hint_time_ms + 1000) {
-        return;
-    }
-    last_hint_time_ms = crnt_time_ms;
-
-    static double prev_ts = crnt_ts - 1.0;
-    double time_factor = std::clamp(crnt_ts - prev_ts, 0.5, 2.0);
-    std::cout << "Status: "
-              << "gz time factor = " << (int)(100 * time_factor) << "%, "
-              << "cyphal input = " << (int)(0.5 * cyphal_servo_recv_counter) << "%, "
-              << "json input = " << (int)(0.1 * json_sensors_recv_counter) << "%."
-              << std::endl;
-
-    if (time_factor < 0.8 || time_factor > 1.1) {
-        std::cout << "\033[1;31m"
-                  << "Gazebo time factor should be ~ 1.0. "
-                  << "Now it is not enough for a stable flight. "
-                  << "Try headless-rendering for gazebo."
-                  << "\033[0m\n";
-    }
-
-    if (cyphal_servo_recv_counter < 180) {
-        std::cout << "\033[1;31m"
-                  << "Setpoint rate should be ~200 Hz. "
-                  << "Don't you have a problem with transport layer?"
-                  << "\033[0m\n";
-    }
-
-    // cyphal_hitl.clear_servo_pwm_counter();
-    // cyphal_hitl.set_time_factor(time_factor);
-    json_sensors_recv_counter = 0;
-    prev_ts = crnt_ts;
 }
