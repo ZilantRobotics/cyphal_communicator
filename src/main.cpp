@@ -10,16 +10,12 @@
 #include <thread>
 
 #include "autopilot_interface/cyphal_hitl.hpp"
+
+#ifdef ARDUPILOT_JSON_SIM_INTERFACE
 #include "simulator_interface/ap_json/ap_json.hpp"
-#include "simulator_interface/ros_interface/ros_interface.hpp"
-
-static void print_log_info_periodically(uint32_t& json_sensors_recv_counter,
-                                        uint32_t cyphal_servo_recv_counter,
-                                        double crnt_ts,
-                                        CyphalHitlInterface& cyphal_hitl);
-
-
-std::unique_ptr<SimulatorBaseInterface> init_ardupilot_json_sim() {
+static std::unique_ptr<SimulatorBaseInterface> init_sim_interface(int argc, char** argv) {
+    (void)argc;
+    (void)argv;
     std::unique_ptr<ArdupilotJsonInterface> sim(new ArdupilotJsonInterface(-35.3632621, +149.1652374, 584.19));
     if (sim == nullptr || !sim->init()) {
         std::cout << "ArduPilot Initialization Error." << std::endl;
@@ -31,13 +27,23 @@ std::unique_ptr<SimulatorBaseInterface> init_ardupilot_json_sim() {
 
     return sim;
 }
-
-std::unique_ptr<SimulatorBaseInterface> init_ros_sim(int argc, char** argv) {
+#else
+#include "simulator_interface/ros_interface/ros_interface.hpp"
+static std::unique_ptr<SimulatorBaseInterface> init_sim_interface(int argc, char** argv) {
     std::unique_ptr<RosInterface> sim(new RosInterface(argc, argv));
     sim->init();
 
     return sim;
 }
+#endif
+
+
+static void print_log_info_periodically(uint32_t& json_sensors_recv_counter,
+                                        uint32_t cyphal_servo_recv_counter,
+                                        double crnt_ts,
+                                        CyphalHitlInterface& cyphal_hitl);
+
+
 
 int main(int argc, char** argv) {
     CyphalHitlInterface cyphal_hitl;
@@ -49,7 +55,7 @@ int main(int argc, char** argv) {
     std::cout << "Hello, Cyphal HITL." << std::endl;
 
     uint32_t json_sensors_recv_counter = 0;
-    std::unique_ptr<SimulatorBaseInterface> simulator = init_ros_sim(argc, argv);
+    std::unique_ptr<SimulatorBaseInterface> simulator = init_sim_interface(argc, argv);
 
     simulator->subscribe_baro([&cyphal_hitl](float pressure, float temperature) {
         cyphal_hitl.publish_barometer(pressure, temperature);

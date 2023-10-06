@@ -1,27 +1,27 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(cyphal_communicator)
 
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  rospy
-  std_msgs
-)
+
+# By default build as ROS-package. If SIM_INTERFACE is specified, build as not ROS-package
+if(DEFINED ARDUPILOT_JSON_SIM_INTERFACE)
+  ADD_DEFINITIONS(-DARDUPILOT_JSON_SIM_INTERFACE)
+  set(SIM_INTERFACE_SRC src/simulator_interface/ap_json/ap_json.cpp)
+else()
+  set(SIM_INTERFACE_SRC src/simulator_interface/ros_interface/ros_interface.cpp)
+  find_package(catkin REQUIRED COMPONENTS
+    roscpp
+    std_msgs
+  )
+  catkin_package(
+    CATKIN_DEPENDS std_msgs
+  )
+
+  include_directories(
+    ${catkin_INCLUDE_DIRS}
+  )
+endif()
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Werror -std=c++17")
-
-catkin_package(
- CATKIN_DEPENDS std_msgs
-)
-
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-)
-
-include_directories(
-  include
-  ${catkin_INCLUDE_DIRS}
-)
-
 set(CYPHAL_REPO_DIR ${CMAKE_CURRENT_LIST_DIR}/Libs/cyphal_application)
 set(PLATFORM socketcan)
 set(libparamsPath ${CMAKE_CURRENT_LIST_DIR}/Libs/libparams)
@@ -40,8 +40,7 @@ add_executable(${PROJECT_NAME}
 
   src/main.cpp
   src/math.cpp
-  src/simulator_interface/ap_json/ap_json.cpp
-  src/simulator_interface/ros_interface/ros_interface.cpp
+  ${SIM_INTERFACE_SRC}
   src/autopilot_interface/cyphal_hitl.cpp
   src/params.cpp
   ${CYPHAL_SRC}
@@ -50,23 +49,25 @@ add_executable(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
   BEFORE PUBLIC
 )
-add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(${PROJECT_NAME}
-    ${catkin_LIBRARIES}
-    ${UAVCAN_LIB}
-)
 
+if(NOT DEFINED ARDUPILOT_JSON_SIM_INTERFACE)
+  add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+  target_link_libraries(${PROJECT_NAME}
+    ${catkin_LIBRARIES}
+  )
+endif()
+
+
+# Generate DSDL when build
 add_custom_target(
   compile_dsdl ALL
   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/compile_dsdl.sh
   COMMENT "Compile DSDL"
 )
-
 add_custom_target(
   gen_headers ALL
   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/Libs/cyphal_application/scripts/nnvg_generate_c_headers.sh
   COMMENT "Generate C headers"
 )
-
 add_dependencies(${PROJECT_NAME} compile_dsdl)
 add_dependencies(${PROJECT_NAME} gen_headers)
