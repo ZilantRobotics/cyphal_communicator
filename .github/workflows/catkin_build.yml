@@ -1,4 +1,4 @@
-name: catkin_build
+name: build
 
 on: [push]
 
@@ -9,14 +9,13 @@ defaults:
   run:
     shell: bash
 jobs:
-  catkin_build:
-    runs-on: ubuntu-20.04
+  ros_interface:
+    runs-on: ubuntu-22.04
     container:
       image: ros:noetic
     steps:
       - run: apt-get update && apt-get install -y git
       - run: if [[ "$ROS_DISTRO" = "noetic" ]] ;  then apt-get install -y python3-pip ros-noetic-catkin python3-catkin-tools ; fi
-      - run: if [[ "$ROS_DISTRO" = "melodic" ]] ; then apt-get install -y python-catkin-tools python-pip python3-pip python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-catkin-tools ; fi
 
       - uses: actions/checkout@v2
         with:
@@ -26,8 +25,26 @@ jobs:
       - name: Install requirements
         run: ./catkin_ws/src/cyphal_communicator/install_requirements.sh
 
-      - name: Compile DSDL
-        run: ./catkin_ws/src/cyphal_communicator/compile_dsdl.sh
-
       - name: Catkin build
         run: source /opt/ros/noetic/setup.bash && cd catkin_ws && catkin build
+
+  ap_json_interface:
+    runs-on: ubuntu-22.04
+    container:
+      image: ros:noetic
+    steps:
+      - run: apt-get update && apt-get install -y git python3-pip
+
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Install requirements
+        run: ./install_requirements.sh
+
+      - name: Catkin build
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DARDUPILOT_JSON_SIM_INTERFACE=1 .
+          make
