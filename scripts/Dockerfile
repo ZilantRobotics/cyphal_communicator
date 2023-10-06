@@ -36,6 +36,7 @@ COPY scripts/config.sh scripts/config.sh
 
 CMD echo "main process has been started"                                            &&  \
     source /opt/ros/$ROS_DISTRO/setup.bash && source /catkin_ws/devel/setup.bash    &&  \
+    ./scripts/create_slcan.sh -d $DEV_PATH -i slcan0                                &&  \
     source scripts/config.sh                                                        &&  \
     roslaunch cyphal_communicator cyphal_communicator.launch                        &&  \
     echo "container has been finished"
