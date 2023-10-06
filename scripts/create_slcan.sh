@@ -52,12 +52,13 @@ while [[ $# -gt 0 ]]; do
 
         -h|--help)
         echo "$HELP"
+        [[ "${BASH_SOURCE[0]}" -ef "$0" ]] && exit 0 || return 0
         ;;
 
         *)
         log_error "Unknown option: $1"
         echo "$HELP"
-        [[ "${BASH_SOURCE[0]}" -ef "$0" ]] && exit 0 || return
+        [[ "${BASH_SOURCE[0]}" -ef "$0" ]] && exit 0 || return 1
         ;;
     esac
     shift
@@ -85,6 +86,7 @@ function find_sniffer() {
 
 function create_slcan() {
     sudo slcand -o -c -f -s8 -t hw -S 1000000 $DEV_PATH $INTERFACE
+    sleep 1 # without sleep next commands may fail with 'Cannot find device "slcan0"'
     sudo ip link set up $INTERFACE
     sudo tc qdisc add dev $INTERFACE root handle 1: pfifo_head_drop limit 1000
 }
@@ -96,12 +98,12 @@ if [ -z $DEV_PATH ]; then
 
     if [ -z "$DEV_PATH" ]; then
         log_error "Can't find a sniffer"
-        [[ "${BASH_SOURCE[0]}" -ef "$0" ]] && exit 0 || return
+        [[ "${BASH_SOURCE[0]}" -ef "$0" ]] && exit 0 || return 1
     fi
 
     if [[ $ONLY_FIND == "yes" ]]; then
         echo "$DEV_PATH"
-        [[ "${BASH_SOURCE[0]}" -ef "$0" ]] && exit 0 || return
+        [[ "${BASH_SOURCE[0]}" -ef "$0" ]] && exit 0 || return 0
     fi
 fi
 
@@ -113,12 +115,12 @@ echo "SLCAN creator settings:
 
 if [[ $(ifconfig | grep $INTERFACE) ]]; then
     log_warn "specified interface already exist, skip"
-    [[ "${BASH_SOURCE[0]}" -ef "$0" ]] && exit 0 || return
+    [[ "${BASH_SOURCE[0]}" -ef "$0" ]] && exit 0 || return 1
 fi
 
 create_slcan
 
 if [[ -z $(ifconfig | grep $INTERFACE) ]]; then
     log_error "Interface '$INTERFACE' has not been successfully created"
-    [[ "${BASH_SOURCE[0]}" -ef "$0" ]] && exit 0 || return
+    [[ "${BASH_SOURCE[0]}" -ef "$0" ]] && exit 0 || return 1
 fi

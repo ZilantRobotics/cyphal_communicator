@@ -39,6 +39,12 @@ setup_config() {
     setup_image_name_and_version
     DOCKER_FLAGS="--net=host"
     DOCKER_FLAGS="$DOCKER_FLAGS -v "/tmp/.X11-unix:/tmp/.X11-unix:rw" -e DISPLAY=$DISPLAY -e QT_X11_NO_MITSHM=1)"
+
+    source ./create_slcan.sh --only-find
+    if [ ! -z $DEV_PATH ]; then
+        DOCKER_FLAGS="$DOCKER_FLAGS --privileged -v $DEV_PATH:$DEV_PATH"
+        DOCKER_FLAGS="$DOCKER_FLAGS -e DEV_PATH=$DEV_PATH"
+    fi
 }
 
 build_docker_image() {
