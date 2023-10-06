@@ -32,6 +32,7 @@ public:
     RosInterface(int argc, char** argv);
     bool init() override;
     bool send_setpoint(const Setpoint16& setpoint) override;
+    void send_arming_status(bool arming_status) override;
     bool receive_sensors() override;
 private:
     void _imu_cb(const sensor_msgs::Imu& msg);
@@ -43,6 +44,7 @@ private:
 
     ros::NodeHandle* ros_node;
     ros::Publisher _setpoint_pub;
+    ros::Publisher _arm_pub;
 
     Vector3 _velocity;
 };

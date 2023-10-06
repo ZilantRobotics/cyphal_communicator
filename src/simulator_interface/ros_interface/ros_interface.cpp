@@ -22,6 +22,7 @@ RosInterface::RosInterface(int argc, char** argv) {
 
 bool RosInterface::init() {
     _setpoint_pub = ros_node->advertise<sensor_msgs::Joy>("/uav/actuators_raw", 1);
+    _arm_pub = ros_node->advertise<std_msgs::Bool>("/uav/arm", 1);
 
     static auto _imu_sub = ros_node->subscribe("/uav/imu", 1, &RosInterface::_imu_cb, this);
     static auto _mag_sub = ros_node->subscribe("/uav/mag", 1, &RosInterface::_mag_cb, this);
@@ -43,6 +44,12 @@ bool RosInterface::send_setpoint(const Setpoint16& setpoint) {
     }
     _setpoint_pub.publish(ros_msg);
     return true;
+}
+
+void RosInterface::send_arming_status(bool arming_status) {
+    std_msgs::Bool ros_msg;
+    ros_msg.data = arming_status;
+    _arm_pub.publish(ros_msg);
 }
 
 void RosInterface::_imu_cb(const sensor_msgs::Imu& msg) {
