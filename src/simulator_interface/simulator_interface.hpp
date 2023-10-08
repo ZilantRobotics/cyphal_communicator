@@ -22,7 +22,7 @@ typedef std::function<void(Vector3&, Vector3&)> ImuCallback;
 typedef std::function<void(Vector3&)> MagCallback;
 
 typedef std::function<void(float)> AirCallback;
-typedef std::function<void(float)> EscFeedbackCallback;
+typedef std::function<void(uint8_t, float, float, uint32_t)> EscFeedbackCallback;
 typedef std::function<void(float)> RangefinderCallback;
 
 
