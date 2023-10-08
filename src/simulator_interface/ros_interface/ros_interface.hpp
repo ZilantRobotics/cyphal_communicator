@@ -42,6 +42,8 @@ private:
     void _gps_point_cb(const sensor_msgs::NavSatFix& msg);
     void _gps_velocity_cb(const geometry_msgs::Twist& msg);
 
+    void _esc_feedback_cb(const mavros_msgs::ESCTelemetryItem& msg);
+
     ros::NodeHandle* ros_node;
     ros::Publisher _setpoint_pub;
     ros::Publisher _arm_pub;

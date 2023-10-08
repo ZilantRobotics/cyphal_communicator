@@ -13,9 +13,10 @@
 
 #ifdef ARDUPILOT_JSON_SIM_INTERFACE
 #include "simulator_interface/ap_json/ap_json.hpp"
-static std::unique_ptr<SimulatorBaseInterface> init_sim_interface(int argc, char** argv) {
+static std::unique_ptr<SimulatorBaseInterface> init_sim_interface(int argc, char** argv, CyphalHitlInterface& cyphal_hitl) {
     (void)argc;
     (void)argv;
+    (void)cyphal_hitl;
     std::unique_ptr<ArdupilotJsonInterface> sim(new ArdupilotJsonInterface(-35.3632621, +149.1652374, 584.19));
     if (sim == nullptr || !sim->init()) {
         std::cout << "ArduPilot Initialization Error." << std::endl;
@@ -29,9 +30,14 @@ static std::unique_ptr<SimulatorBaseInterface> init_sim_interface(int argc, char
 }
 #else
 #include "simulator_interface/ros_interface/ros_interface.hpp"
-static std::unique_ptr<SimulatorBaseInterface> init_sim_interface(int argc, char** argv) {
+static std::unique_ptr<SimulatorBaseInterface> init_sim_interface(int argc, char** argv, CyphalHitlInterface& cyphal_hitl) {
+    (void)cyphal_hitl;
     std::unique_ptr<RosInterface> sim(new RosInterface(argc, argv));
     sim->init();
+
+    sim->subscribe_esc_feedback([&cyphal_hitl](uint8_t esc_idx, float voltage, float curent, uint32_t rpm) {
+        cyphal_hitl.publish_esc_feedback(esc_idx, voltage, curent, rpm);
+    });
 
     return sim;
 }
@@ -47,7 +53,7 @@ int main(int argc, char** argv) {
     }
     std::cout << "Hello, Cyphal HITL." << std::endl;
 
-    std::unique_ptr<SimulatorBaseInterface> simulator = init_sim_interface(argc, argv);
+    std::unique_ptr<SimulatorBaseInterface> simulator = init_sim_interface(argc, argv, cyphal_hitl);
 
     simulator->subscribe_baro([&cyphal_hitl](float pressure, float temperature) {
         cyphal_hitl.publish_barometer(pressure, temperature);

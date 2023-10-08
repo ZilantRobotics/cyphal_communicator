@@ -33,6 +33,9 @@ bool RosInterface::init() {
     static auto _gps_point_sub = ros_node->subscribe("/uav/gps_point", 1, &RosInterface::_gps_point_cb, this);
     static auto _gps_velocity_sub = ros_node->subscribe("/uav/velocity", 1, &RosInterface::_gps_velocity_cb, this);
 
+    static auto _esc_feedback_sub = ros_node->subscribe("/uav/esc_status", 1, &RosInterface::_esc_feedback_cb, this);
+
+
     return true;
 }
 
@@ -55,15 +58,15 @@ void RosInterface::send_arming_status(bool arming_status) {
 void RosInterface::_imu_cb(const sensor_msgs::Imu& msg) {
     Vector3 accel{msg.linear_acceleration.x, msg.linear_acceleration.y, msg.linear_acceleration.z};
     Vector3 gyro{msg.angular_velocity.x, msg.angular_velocity.y, msg.angular_velocity.z};
-    for (auto imu_cb : imu_callbacks) {
-        imu_cb(accel, gyro);
+    for (auto callback : imu_callbacks) {
+        callback(accel, gyro);
     }
 }
 
 void RosInterface::_mag_cb(const sensor_msgs::MagneticField& msg) {
     Vector3 magnetic_field_gauss{msg.magnetic_field.x, msg.magnetic_field.y, msg.magnetic_field.z};
-    for (auto mag_cb : magnetometer_callbacks) {
-        mag_cb(magnetic_field_gauss);
+    for (auto callback : magnetometer_callbacks) {
+        callback(magnetic_field_gauss);
     }
 }
 
@@ -72,15 +75,15 @@ void RosInterface::_baro_temp_cb(const std_msgs::Float32& msg) {
 }
 
 void RosInterface::_baro_pres_cb(const std_msgs::Float32& msg) {
-    for (auto baro_cb : baro_callbacks) {
-        baro_cb(msg.data, 312);
+    for (auto callback : baro_callbacks) {
+        callback(msg.data, 312);
     }
 }
 
 void RosInterface::_gps_point_cb(const sensor_msgs::NavSatFix& msg) {
     Vector3 global_pose{msg.latitude, msg.longitude, msg.altitude};
-    for (auto gnss_cb : gnss_callbacks) {
-        gnss_cb(global_pose, _velocity);
+    for (auto callback : gnss_callbacks) {
+        callback(global_pose, _velocity);
     }
 }
 
@@ -89,6 +92,13 @@ void RosInterface::_gps_velocity_cb(const geometry_msgs::Twist& msg) {
     _velocity[1] = msg.linear.y;
     _velocity[2] = msg.linear.z;
 }
+
+void RosInterface::_esc_feedback_cb(const mavros_msgs::ESCTelemetryItem& msg) {
+    for (auto callback : esc_feedback_callbacks) {
+        callback(msg.count, msg.voltage, msg.current, msg.rpm);
+    }
+}
+
 
 bool RosInterface::spin_once() {
     ros::spinOnce();

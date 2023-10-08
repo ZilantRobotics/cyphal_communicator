@@ -5,6 +5,7 @@
 #ifndef SRC_AUTOPILOT_INTERFACE_CYPHAL_HITL_HPP_
 #define SRC_AUTOPILOT_INTERFACE_CYPHAL_HITL_HPP_
 
+#include <array>
 #include "cyphal.hpp"
 #include "actuator.hpp"
 #include "gnss.hpp"
@@ -18,6 +19,11 @@ class CyphalHitlInterface {
 public:
     CyphalHitlInterface() : setpoint(&cyphal),
                             readiness(&cyphal),
+                            esc_feedback_0(&cyphal,     2500),
+                            esc_feedback_1(&cyphal,     2501),
+                            esc_feedback_2(&cyphal,     2502),
+                            esc_feedback_3(&cyphal,     2503),
+                            esc_feedback{{&esc_feedback_0, &esc_feedback_1, &esc_feedback_2, &esc_feedback_3}},
                             gps_point(&cyphal,          2406),
                             gps_sats(&cyphal,           2407),
                             gps_status(&cyphal,         2408),
@@ -34,6 +40,7 @@ public:
     void publish_imu(const Vector3 linear_accel, const Vector3 ang_vel);
     void publish_magnetometer(const Vector3 magnetic_field_gauss);
     void publish_gnss(const Vector3& global_pose, const Vector3& ned_velocity);
+    void publish_esc_feedback(uint8_t esc_idx, float voltage, float current, uint32_t rpm);
 
     bool get_setpoint(Setpoint16& setpoint);
     bool get_arming_status();
@@ -45,6 +52,11 @@ private:
 
     SetpointSubscriber setpoint;
     ReadinessSubscriber readiness;
+    ZubaxCompactFeedbackPublisher esc_feedback_0;
+    ZubaxCompactFeedbackPublisher esc_feedback_1;
+    ZubaxCompactFeedbackPublisher esc_feedback_2;
+    ZubaxCompactFeedbackPublisher esc_feedback_3;
+    std::array<ZubaxCompactFeedbackPublisher*, 4> esc_feedback;
 
     GpsPointPublisher gps_point;
     Int16Publisher gps_sats;
