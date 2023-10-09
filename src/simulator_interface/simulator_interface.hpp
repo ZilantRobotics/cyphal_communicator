@@ -22,6 +22,7 @@ typedef std::function<void(Vector3&, Vector3&)> ImuCallback;
 typedef std::function<void(Vector3&)> MagCallback;
 
 typedef std::function<void(float)> AirCallback;
+typedef std::function<void(float)> DiffPressureCallback;
 typedef std::function<void(uint8_t, float, float, uint32_t)> EscFeedbackCallback;
 typedef std::function<void(float)> RangefinderCallback;
 
@@ -51,6 +52,7 @@ public:
     void subscribe_mag(MagCallback lambda) { magnetometer_callbacks.push_back(lambda); }
 
     void subscribe_airspeed(AirCallback lambda) { airspeed_callbacks.push_back(lambda); }
+    void subscribe_diff_pressure(DiffPressureCallback lambda) { diff_pressure_callbacks.push_back(lambda); }
     void subscribe_esc_feedback(EscFeedbackCallback lambda) { esc_feedback_callbacks.push_back(lambda); }
     void subscribe_rangefidner(RangefinderCallback lambda) { rangefidner_callbacks.push_back(lambda); }
 
@@ -62,6 +64,7 @@ protected:
     std::vector<MagCallback> magnetometer_callbacks;
 
     std::vector<AirCallback>airspeed_callbacks;
+    std::vector<DiffPressureCallback>diff_pressure_callbacks;
     std::vector<EscFeedbackCallback>esc_feedback_callbacks;
     std::vector<RangefinderCallback>rangefidner_callbacks;
 

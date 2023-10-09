@@ -24,6 +24,8 @@ IntegerDesc_t integer_desc_pool[] = {
 
     {(uint8_t*)"uavcan.pub.imu.accel.id",   2400, 2400, 2400, false},
     {(uint8_t*)"uavcan.pub.imu.gyro.id",    2401, 2401, 2401, false},
+
+    {(uint8_t*)"uavcan.pub.aspd.dpres.id",  2600, 2600, 2600, false},
 };
 IntegerParamValue_t integer_values_pool[sizeof(integer_desc_pool) / sizeof(IntegerDesc_t)];
 
@@ -45,5 +47,7 @@ StringDesc_t string_desc_pool[NUM_OF_STR_PARAMS] = {
 
     {(uint8_t*)"uavcan.pub.imu.accel.type",     "uavcan.si.sample.acceleration.Vector3", true},
     {(uint8_t*)"uavcan.pub.imu.gyro.type",      "uavcan.si.sample.angular_velocity.Vector3", true},
+
+    {(uint8_t*)"uavcan.pub.aspd.dpres.type",    "uavcan.si.sample.pressure.Scalar", true},
 };
 StringParamValue_t string_values_pool[sizeof(string_desc_pool) / sizeof(StringDesc_t)];

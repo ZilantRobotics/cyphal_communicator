@@ -34,6 +34,7 @@ bool RosInterface::init() {
     static auto _gps_velocity_sub = ros_node->subscribe("/uav/velocity", 1, &RosInterface::_gps_velocity_cb, this);
 
     static auto _esc_feedback_sub = ros_node->subscribe("/uav/esc_status", 1, &RosInterface::_esc_feedback_cb, this);
+    static auto _diff_pressure_sub = ros_node->subscribe("/uav/raw_air_data", 1, &RosInterface::_diff_pressure_cb, this);
 
 
     return true;
@@ -99,6 +100,11 @@ void RosInterface::_esc_feedback_cb(const mavros_msgs::ESCTelemetryItem& msg) {
     }
 }
 
+void RosInterface::_diff_pressure_cb(const std_msgs::Float32& msg) {
+    for (auto callback : diff_pressure_callbacks) {
+        callback(msg.data);
+    }
+}
 
 bool RosInterface::spin_once() {
     ros::spinOnce();

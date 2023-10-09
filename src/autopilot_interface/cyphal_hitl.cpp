@@ -105,6 +105,10 @@ void CyphalHitlInterface::publish_esc_feedback(uint8_t esc_idx, float voltage, f
     esc_feedback[esc_idx]->publish(feedback);
 }
 
+void CyphalHitlInterface::publish_diff_pressure(float pressure) {
+    diff_pressure.publish(pressure);
+}
+
 
 bool CyphalHitlInterface::get_setpoint(Setpoint16& out_setpoint) {
     static uint32_t prev_setpoint_recv_counter = 0;
@@ -115,9 +119,11 @@ bool CyphalHitlInterface::get_setpoint(Setpoint16& out_setpoint) {
     prev_setpoint_recv_counter = crnt_setpoint_recv_counter;
 
     auto sp = setpoint.get_setpoint();
-    for (size_t sp_idx = 0; sp_idx < 4; sp_idx++) {
+    uint8_t setpoint_size = std::min(setpoint.get_setpoint_size(), (uint8_t)out_setpoint.size());
+    for (size_t sp_idx = 0; sp_idx < setpoint_size; sp_idx++) {
         out_setpoint[sp_idx] = sp.value[sp_idx];
     }
+
     return true;
 }
 

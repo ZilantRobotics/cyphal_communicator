@@ -33,6 +33,7 @@ include_directories(src)
 
 add_executable(${PROJECT_NAME}
   ${CYPHAL_REPO_DIR}/Udral/actuator.cpp
+  ${CYPHAL_REPO_DIR}/Udral/airspeed.cpp
   ${CYPHAL_REPO_DIR}/Udral/barometer.cpp
   ${CYPHAL_REPO_DIR}/Udral/gnss.cpp
   ${CYPHAL_REPO_DIR}/Udral/magnetometer.cpp
