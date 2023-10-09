@@ -24,6 +24,8 @@ enum IntParamsIndexes : ParamIndex_t {
     IMU_ACCEL_ID,
     IMU_GYRO_ID,
 
+    ASPD_DIFF_PRESSURE_ID,
+
     INTEGER_PARAMS_AMOUNT
 };
 

@@ -43,6 +43,7 @@ private:
     void _gps_velocity_cb(const geometry_msgs::Twist& msg);
 
     void _esc_feedback_cb(const mavros_msgs::ESCTelemetryItem& msg);
+    void _diff_pressure_cb(const std_msgs::Float32& msg);
 
     ros::NodeHandle* ros_node;
     ros::Publisher _setpoint_pub;

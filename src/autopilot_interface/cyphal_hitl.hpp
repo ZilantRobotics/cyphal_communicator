@@ -8,6 +8,7 @@
 #include <array>
 #include "cyphal.hpp"
 #include "actuator.hpp"
+#include "airspeed.hpp"
 #include "gnss.hpp"
 #include "barometer.hpp"
 #include "magnetometer.hpp"
@@ -32,7 +33,8 @@ public:
                             baro_temperature(&cyphal,   2403),
                             magnetometer(&cyphal,       2402),
                             accel(&cyphal,              2400),
-                            gyro(&cyphal,               2401) {}
+                            gyro(&cyphal,               2401),
+                            diff_pressure(&cyphal,      2600) {}
     int init();
     void process();
 
@@ -41,6 +43,7 @@ public:
     void publish_magnetometer(const Vector3 magnetic_field_gauss);
     void publish_gnss(const Vector3& global_pose, const Vector3& ned_velocity);
     void publish_esc_feedback(uint8_t esc_idx, float voltage, float current, uint32_t rpm);
+    void publish_diff_pressure(float pressure);
 
     bool get_setpoint(Setpoint16& setpoint);
     bool get_arming_status();
@@ -70,6 +73,8 @@ private:
 
     ImuAccelPublisher accel;
     ImuGyroPublisher gyro;
+
+    DiffPressurePublisher diff_pressure;
 
     double _time_factor{1.0};
 };
