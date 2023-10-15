@@ -30,10 +30,10 @@ The following Cyphal interface is supported for a minimal quadrotor application:
 
 [todo] It would be nice also to have:
 
-| № | Interface | Port | Message |
-| - | --------- | ---- | ------- |
-| 1 | Rangefinder | pub.range | distance |
-| 2 | Battery | ... | ... |
+| № | Interface | Port | Message | Rate |
+| - | --------- | ---- | ------- | ---- |
+| 1 | Rangefinder | pub.range | distance | |
+| 2 | [Battery](https://nunaweb.opencyphal.org/api/storage/docs/docs/reg/index.html#reg_drone_service_battery) | pub.energy_source </br> pub.battery_status </br> pub.battery_parameters | [electricity.SourceTs](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/physics/electricity/SourceTs.0.1.dsdl) </br> [battery.Status](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/battery/Status.0.2.dsdl) </br> [battery.Parameters](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/battery/Parameters.0.3.dsdl) | 1...100 </br> ~1 </br> ~0.2 |
 
 
 ## 1. ROS-interface
