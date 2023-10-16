@@ -116,6 +116,17 @@ EscStatusRosToCyphal --> esc_feedback_7[ esc_feedback_7, zubax.telega.CompactFee
 
 > On PX4 side GNSS logic is implemented within [UavcanEscFeedbackSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Actuators/EscClient.hpp) driver.
 
+**6. Battery**
+
+```mermaid
+flowchart LR
+esc_status[ /uav/battery, sensor_msgs/BatteryState] --> BatteryRosToCyphal(BatteryRosToCyphal)
+BatteryRosToCyphal --> energy_source[ energy_source, reg.udral.physics.electricity.SourceTs]
+BatteryRosToCyphal --> battery_status[ battery_status, reg.udral.service.battery.Status]
+BatteryRosToCyphal --> battery_parameters[ battery_parameters, reg.udral.service.battery.Parameters]
+```
+
+> On PX4 side GNSS logic is implemented within [UavcanBmsSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Battery.hpp) driver.
 
 ## 3. Installation
 
