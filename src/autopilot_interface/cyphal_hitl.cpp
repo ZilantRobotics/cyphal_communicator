@@ -30,6 +30,8 @@ int CyphalHitlInterface::init() {
     setpoint.init();
     readiness.init();
 
+    battery.set_nominal_data(5.0f, 42, 14.8f);
+
     return 0;
 }
 
@@ -103,6 +105,10 @@ void CyphalHitlInterface::publish_esc_feedback(uint8_t esc_idx, float voltage, f
     feedback.velocity = rpm * ZubaxCompactFeedbackPublisher::RPM_TO_RAD_PER_SEC;
 
     esc_feedback[esc_idx]->publish(feedback);
+}
+
+void CyphalHitlInterface::publish_battery(float voltage, float current, float temperature_kelvin, float full_capacity_ah, float remaining_capacity_ah) {
+    battery.publish(voltage, current, temperature_kelvin, full_capacity_ah, remaining_capacity_ah);
 }
 
 void CyphalHitlInterface::publish_diff_pressure(float pressure) {

@@ -34,6 +34,7 @@ bool RosInterface::init() {
     static auto _gps_velocity_sub = ros_node->subscribe("/uav/velocity", 1, &RosInterface::_gps_velocity_cb, this);
 
     static auto _esc_feedback_sub = ros_node->subscribe("/uav/esc_status", 1, &RosInterface::_esc_feedback_cb, this);
+    static auto _battery_sub = ros_node->subscribe("/uav/battery", 1, &RosInterface::_battery_cb, this);
     static auto _diff_pressure_sub = ros_node->subscribe("/uav/raw_air_data", 1, &RosInterface::_diff_pressure_cb, this);
 
 
@@ -99,6 +100,20 @@ void RosInterface::_esc_feedback_cb(const mavros_msgs::ESCTelemetryItem& msg) {
         callback(msg.count, msg.voltage, msg.current, msg.rpm);
     }
 }
+
+void RosInterface::_battery_cb(const sensor_msgs::BatteryState& msg) {
+    for (auto callback : battery_callbacks) {
+        BatteryStatus battery;
+        battery.voltage = msg.voltage;
+        battery.current = msg.current;
+        battery.soc = msg.percentage;
+        battery.temperature_kelvin = msg.temperature;
+        battery.full_capacity_ah = msg.capacity;
+        battery.remaining_capacity_ah = msg.charge;
+        callback(battery);
+    }
+}
+
 
 void RosInterface::_diff_pressure_cb(const std_msgs::Float32& msg) {
     for (auto callback : diff_pressure_callbacks) {
