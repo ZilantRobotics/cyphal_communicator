@@ -39,6 +39,10 @@ static std::unique_ptr<SimulatorBaseInterface> init_sim_interface(int argc, char
         cyphal_hitl.publish_esc_feedback(esc_idx, voltage, curent, rpm);
     });
 
+    sim->subscribe_battery([&cyphal_hitl](const BatteryStatus& b) {
+        cyphal_hitl.publish_battery(b.voltage, b.current, b.temperature_kelvin, b.full_capacity_ah, b.remaining_capacity_ah);
+    });
+
     sim->subscribe_diff_pressure([&cyphal_hitl](float diff_pressure) {
         cyphal_hitl.publish_diff_pressure(diff_pressure);
     });

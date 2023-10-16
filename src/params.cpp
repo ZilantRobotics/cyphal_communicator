@@ -26,6 +26,10 @@ IntegerDesc_t integer_desc_pool[] = {
     {(uint8_t*)"uavcan.pub.imu.gyro.id",    2401, 2401, 2401, false},
 
     {(uint8_t*)"uavcan.pub.aspd.dpres.id",  2600, 2600, 2600, false},
+
+    {(uint8_t*)"uavcan.pub.energy_source.id",  2700, 2700, 2700, false},
+    {(uint8_t*)"uavcan.pub.battery_status.id",  2701, 2701, 2701, false},
+    {(uint8_t*)"uavcan.pub.battery_parameters.id",  2702, 2702, 2702, false},
 };
 IntegerParamValue_t integer_values_pool[sizeof(integer_desc_pool) / sizeof(IntegerDesc_t)];
 
@@ -49,5 +53,9 @@ StringDesc_t string_desc_pool[NUM_OF_STR_PARAMS] = {
     {(uint8_t*)"uavcan.pub.imu.gyro.type",      "uavcan.si.sample.angular_velocity.Vector3", true},
 
     {(uint8_t*)"uavcan.pub.aspd.dpres.type",    "uavcan.si.sample.pressure.Scalar", true},
+
+    {(uint8_t*)"uavcan.pub.energy_source.type",         "reg.udral.physics.electricity.SourceTs", true},
+    {(uint8_t*)"uavcan.pub.battery_status.type",        "reg.udral.service.battery.Status", true},
+    {(uint8_t*)"uavcan.pub.battery_parameters.type",    "reg.udral.service.battery.Parameters", true},
 };
 StringParamValue_t string_values_pool[sizeof(string_desc_pool) / sizeof(StringDesc_t)];
