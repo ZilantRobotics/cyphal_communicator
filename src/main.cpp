@@ -47,6 +47,10 @@ static std::unique_ptr<SimulatorBaseInterface> init_sim_interface(int argc, char
         cyphal_hitl.publish_diff_pressure(diff_pressure);
     });
 
+    sim->subscribe_rangefidner([&cyphal_hitl](float range) {
+        cyphal_hitl.publish_rangefinder(range);
+    });
+
     return sim;
 }
 #endif

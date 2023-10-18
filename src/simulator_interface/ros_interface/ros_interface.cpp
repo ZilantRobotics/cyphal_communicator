@@ -36,6 +36,7 @@ bool RosInterface::init() {
     static auto _esc_feedback_sub = ros_node->subscribe("/uav/esc_status", 1, &RosInterface::_esc_feedback_cb, this);
     static auto _battery_sub = ros_node->subscribe("/uav/battery", 1, &RosInterface::_battery_cb, this);
     static auto _diff_pressure_sub = ros_node->subscribe("/uav/raw_air_data", 1, &RosInterface::_diff_pressure_cb, this);
+    static auto _rangefinder_sub = ros_node->subscribe("/uav/range", 1, &RosInterface::_rangefinder_cb, this);
 
 
     return true;
@@ -117,6 +118,12 @@ void RosInterface::_battery_cb(const sensor_msgs::BatteryState& msg) {
 
 void RosInterface::_diff_pressure_cb(const std_msgs::Float32& msg) {
     for (auto callback : diff_pressure_callbacks) {
+        callback(msg.data);
+    }
+}
+
+void RosInterface::_rangefinder_cb(const std_msgs::Float32& msg) {
+    for (auto callback : rangefinder_callbacks) {
         callback(msg.data);
     }
 }

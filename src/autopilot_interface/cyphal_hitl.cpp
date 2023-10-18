@@ -116,6 +116,9 @@ void CyphalHitlInterface::publish_diff_pressure(float pressure) {
     diff_pressure.publish(pressure);
 }
 
+void CyphalHitlInterface::publish_rangefinder(float range) {
+    rangefinder.publish(range);
+}
 
 bool CyphalHitlInterface::get_setpoint(Setpoint16& out_setpoint) {
     static uint32_t prev_setpoint_recv_counter = 0;

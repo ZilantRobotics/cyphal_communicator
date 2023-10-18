@@ -39,6 +39,7 @@ add_executable(${PROJECT_NAME}
   ${CYPHAL_REPO_DIR}/Udral/gnss.cpp
   ${CYPHAL_REPO_DIR}/Udral/magnetometer.cpp
   ${CYPHAL_REPO_DIR}/Udral/imu.cpp
+  ${CYPHAL_REPO_DIR}/Udral/rangefinder.cpp
   ${CYPHAL_REPO_DIR}/Udral/rgbled.cpp
 
   src/main.cpp

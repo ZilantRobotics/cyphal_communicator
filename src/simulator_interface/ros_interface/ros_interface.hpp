@@ -45,6 +45,7 @@ private:
     void _esc_feedback_cb(const mavros_msgs::ESCTelemetryItem& msg);
     void _battery_cb(const sensor_msgs::BatteryState& msg);
     void _diff_pressure_cb(const std_msgs::Float32& msg);
+    void _rangefinder_cb(const std_msgs::Float32& msg);
 
     ros::NodeHandle* ros_node;
     ros::Publisher _setpoint_pub;
