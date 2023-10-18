@@ -30,6 +30,8 @@ enum IntParamsIndexes : ParamIndex_t {
     BMS_BATTERY_STATUS_ID,
     BMS_BATTERY_PARAMETERS_ID,
 
+    RANGEFINDER_ID,
+
     INTEGER_PARAMS_AMOUNT
 };
 

@@ -15,6 +15,7 @@
 #include "gnss.hpp"
 #include "imu.hpp"
 #include "magnetometer.hpp"
+#include "rangefinder.hpp"
 #include "rgbled.hpp"
 
 #include "math.hpp"
@@ -40,17 +41,19 @@ public:
                             accel(&cyphal,              2400),
                             gyro(&cyphal,               2401),
                             diff_pressure(&cyphal,      2600),
+                            rangefinder(&cyphal,        2800),
                             battery(&cyphal,            2700, 2701, 2702) {}
     int init();
     void process();
 
     void publish_barometer(float pressure, float temperature);
-    void publish_imu(const Vector3 linear_accel, const Vector3 ang_vel);
-    void publish_magnetometer(const Vector3 magnetic_field_gauss);
-    void publish_gnss(const Vector3& global_pose, const Vector3& ned_velocity);
-    void publish_esc_feedback(uint8_t esc_idx, float voltage, float current, uint32_t rpm);
-    void publish_diff_pressure(float pressure);
     void publish_battery(float voltage, float current, float temperature_kelvin, float full_capacity_ah, float remaining_capacity_ah);
+    void publish_diff_pressure(float pressure);
+    void publish_esc_feedback(uint8_t esc_idx, float voltage, float current, uint32_t rpm);
+    void publish_imu(const Vector3 linear_accel, const Vector3 ang_vel);
+    void publish_gnss(const Vector3& global_pose, const Vector3& ned_velocity);
+    void publish_magnetometer(const Vector3 magnetic_field_gauss);
+    void publish_rangefinder(float range);
 
     bool get_setpoint(Setpoint16& setpoint);
     bool get_arming_status();
@@ -83,6 +86,7 @@ private:
     ImuGyroPublisher gyro;
 
     DiffPressurePublisher diff_pressure;
+    RangefinderRangePublisher rangefinder;
     UdralBatteryPublisher battery;
 
     double _time_factor{1.0};

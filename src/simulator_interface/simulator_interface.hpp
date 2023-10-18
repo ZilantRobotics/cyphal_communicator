@@ -64,7 +64,7 @@ public:
     void subscribe_battery(BatteryCallback lambda) { battery_callbacks.push_back(lambda); }
     void subscribe_diff_pressure(DiffPressureCallback lambda) { diff_pressure_callbacks.push_back(lambda); }
     void subscribe_esc_feedback(EscFeedbackCallback lambda) { esc_feedback_callbacks.push_back(lambda); }
-    void subscribe_rangefidner(RangefinderCallback lambda) { rangefidner_callbacks.push_back(lambda); }
+    void subscribe_rangefidner(RangefinderCallback lambda) { rangefinder_callbacks.push_back(lambda); }
 
     double get_last_recv_timestamp() {return _last_recv_timestamp; }
 protected:
@@ -77,7 +77,7 @@ protected:
     std::vector<BatteryCallback>battery_callbacks;
     std::vector<DiffPressureCallback>diff_pressure_callbacks;
     std::vector<EscFeedbackCallback>esc_feedback_callbacks;
-    std::vector<RangefinderCallback>rangefidner_callbacks;
+    std::vector<RangefinderCallback>rangefinder_callbacks;
 
     double _last_recv_timestamp{0.0};
 };

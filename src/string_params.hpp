@@ -2,4 +2,4 @@
 /// Copyright (c) 2023 Dmitry Ponomarev.
 /// Author: Dmitry Ponomarev <ponomarevda96@gmail.com>
 #pragma once
-#define NUM_OF_STR_PARAMS 17
+#define NUM_OF_STR_PARAMS 18
