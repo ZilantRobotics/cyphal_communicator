@@ -7,13 +7,16 @@
 
 #include <array>
 #include "cyphal.hpp"
+
 #include "actuator.hpp"
 #include "airspeed.hpp"
 #include "battery.hpp"
-#include "gnss.hpp"
 #include "barometer.hpp"
-#include "magnetometer.hpp"
+#include "gnss.hpp"
 #include "imu.hpp"
+#include "magnetometer.hpp"
+#include "rgbled.hpp"
+
 #include "math.hpp"
 #include "simulator_interface/simulator_interface.hpp"
 
@@ -21,6 +24,7 @@ class CyphalHitlInterface {
 public:
     CyphalHitlInterface() : setpoint(&cyphal),
                             readiness(&cyphal),
+                            rgbled(&cyphal),
                             esc_feedback_0(&cyphal,     2500),
                             esc_feedback_1(&cyphal,     2501),
                             esc_feedback_2(&cyphal,     2502),
@@ -58,6 +62,7 @@ private:
 
     SetpointSubscriber setpoint;
     ReadinessSubscriber readiness;
+    HighColorSubscriber rgbled;
     ZubaxCompactFeedbackPublisher esc_feedback_0;
     ZubaxCompactFeedbackPublisher esc_feedback_1;
     ZubaxCompactFeedbackPublisher esc_feedback_2;

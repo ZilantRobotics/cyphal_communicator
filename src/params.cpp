@@ -11,6 +11,7 @@ IntegerDesc_t integer_desc_pool[] = {
 
     {(uint8_t*)"uavcan.sub.setpoint.id",    2342, 2342, 2342, false},
     {(uint8_t*)"uavcan.sub.readiness.id",   2343, 2343, 2343, false},
+    {(uint8_t*)"uavcan.sub.rgbled.id",      2344, 2344, 2344, false},
 
     {(uint8_t*)"uavcan.pub.baro.press.id",  2404, 2404, 2404, false},
     {(uint8_t*)"uavcan.pub.baro.temp.id",   2403, 2403, 2403, false},
@@ -38,6 +39,7 @@ StringDesc_t string_desc_pool[NUM_OF_STR_PARAMS] = {
 
     {(uint8_t*)"uavcan.sub.setpoint.type",      "reg.udral.service.actuator.common.sp.Vector4", true},
     {(uint8_t*)"uavcan.sub.readiness.type",     "reg.udral.service.common.Readiness", true},
+    {(uint8_t*)"uavcan.sub.rgbled.type",        "reg.udral.physics.optics.HighColor", true},
 
     {(uint8_t*)"uavcan.pub.baro.press.type",    "uavcan.si.sample.pressure.Scalar", true},
     {(uint8_t*)"uavcan.pub.baro.temp.type",     "uavcan.si.sample.temperature.Scalar", true},

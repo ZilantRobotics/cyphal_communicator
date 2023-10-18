@@ -29,6 +29,7 @@ int CyphalHitlInterface::init() {
 
     setpoint.init();
     readiness.init();
+    rgbled.init();
 
     battery.set_nominal_data(5.0f, 42, 14.8f);
 
