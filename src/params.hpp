@@ -10,6 +10,7 @@ enum IntParamsIndexes : ParamIndex_t {
 
     SETPOINT_ID,
     READINESS_ID,
+    RGBLED_ID,
 
     BAROMETER_PRESSURE_ID,
     BAROMETER_TEMPERATURE_ID,
