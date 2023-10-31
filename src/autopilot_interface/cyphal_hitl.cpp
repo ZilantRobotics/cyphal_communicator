@@ -52,18 +52,20 @@ void CyphalHitlInterface::publish_barometer(float pressure, float temperature) {
 }
 
 void CyphalHitlInterface::publish_imu(const Vector3 linear_accel, const Vector3 ang_vel) {
-    uavcan_si_unit_acceleration_Vector3_1_0 accel_msg;
+    // uavcan_si_unit_acceleration_Vector3_1_0 accel_msg;
 
-    accel_msg.meter_per_second_per_second[0] = linear_accel[0];
-    accel_msg.meter_per_second_per_second[1] = linear_accel[1];
-    accel_msg.meter_per_second_per_second[2] = linear_accel[2];
-    accel.publish(accel_msg);
+    // accel_msg.meter_per_second_per_second[0] = linear_accel[0];
+    // accel_msg.meter_per_second_per_second[1] = linear_accel[1];
+    // accel_msg.meter_per_second_per_second[2] = linear_accel[2];
+    // accel.publish(accel_msg);
 
-    uavcan_si_unit_angular_velocity_Vector3_1_0 gyro_msg;
-    gyro_msg.radian_per_second[0] = ang_vel[0] * _time_factor;
-    gyro_msg.radian_per_second[1] = ang_vel[1] * _time_factor;
-    gyro_msg.radian_per_second[2] = ang_vel[2] * _time_factor;
-    gyro.publish(gyro_msg);
+    // uavcan_si_unit_angular_velocity_Vector3_1_0 gyro_msg;
+    // gyro_msg.radian_per_second[0] = ang_vel[0] * _time_factor;
+    // gyro_msg.radian_per_second[1] = ang_vel[1] * _time_factor;
+    // gyro_msg.radian_per_second[2] = ang_vel[2] * _time_factor;
+    // gyro.publish(gyro_msg);
+
+    imu.publish(linear_accel, ang_vel);
 }
 
 void CyphalHitlInterface::publish_magnetometer(const Vector3 magnetic_field_gauss) {
