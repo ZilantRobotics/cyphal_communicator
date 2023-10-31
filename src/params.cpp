@@ -25,6 +25,7 @@ IntegerDesc_t integer_desc_pool[] = {
 
     {(uint8_t*)"uavcan.pub.imu.accel.id",   2400, 2400, 2400, false},
     {(uint8_t*)"uavcan.pub.imu.gyro.id",    2401, 2401, 2401, false},
+    {(uint8_t*)"uavcan.pub.imu.imu.id",     2300, 2300, 2300, false},
 
     {(uint8_t*)"uavcan.pub.aspd.dpres.id",  2600, 2600, 2600, false},
 
@@ -55,6 +56,7 @@ StringDesc_t string_desc_pool[NUM_OF_STR_PARAMS] = {
 
     {(uint8_t*)"uavcan.pub.imu.accel.type",     "uavcan.si.sample.acceleration.Vector3", true},
     {(uint8_t*)"uavcan.pub.imu.gyro.type",      "uavcan.si.sample.angular_velocity.Vector3", true},
+    {(uint8_t*)"uavcan.pub.imu.imu.type",       "uavcan.primitive.array.Real16", true},
 
     {(uint8_t*)"uavcan.pub.aspd.dpres.type",    "uavcan.si.sample.pressure.Scalar", true},
 

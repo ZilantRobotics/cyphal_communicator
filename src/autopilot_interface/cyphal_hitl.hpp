@@ -20,6 +20,7 @@
 
 #include "math.hpp"
 #include "simulator_interface/simulator_interface.hpp"
+#include "params.hpp"
 
 class CyphalHitlInterface {
 public:
@@ -40,6 +41,7 @@ public:
                             magnetometer(&cyphal,       2402),
                             accel(&cyphal,              2400),
                             gyro(&cyphal,               2401),
+                            imu(&cyphal,                2300),
                             diff_pressure(&cyphal,      2600),
                             rangefinder(&cyphal,        2800),
                             battery(&cyphal,            2700, 2701, 2702) {}
@@ -84,6 +86,7 @@ private:
 
     ImuAccelPublisher accel;
     ImuGyroPublisher gyro;
+    RawImuPublisher imu;
 
     DiffPressurePublisher diff_pressure;
     RangefinderRangePublisher rangefinder;
