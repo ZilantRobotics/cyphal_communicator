@@ -32,7 +32,7 @@ typedef std::function<void(Vector3&)> MagCallback;
 typedef std::function<void(float)> AirCallback;
 typedef std::function<void(const BatteryStatus&)> BatteryCallback;
 typedef std::function<void(float)> DiffPressureCallback;
-typedef std::function<void(uint8_t, float, float, uint32_t)> EscFeedbackCallback;
+typedef std::function<void(uint8_t count, float voltage, float current, uint32_t rpm)> EscFeedbackCallback;
 typedef std::function<void(float)> RangefinderCallback;
 
 
