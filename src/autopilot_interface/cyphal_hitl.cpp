@@ -103,8 +103,8 @@ void CyphalHitlInterface::publish_esc_feedback(uint8_t esc_idx, float voltage, f
     }
 
     ZubaxCompactFeedback feedback;
-    feedback.dc_voltage = voltage * 5.0;
-    feedback.dc_current = current * 5.0;
+    feedback.dc_voltage = std::round(voltage * 5.0f);
+    feedback.dc_current = std::round(current * 5.0f);
     feedback.velocity = rpm * ZubaxCompactFeedbackPublisher::RPM_TO_RAD_PER_SEC;
 
     esc_feedback[esc_idx]->publish(feedback);
