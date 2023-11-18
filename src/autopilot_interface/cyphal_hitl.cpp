@@ -8,7 +8,6 @@
 #include <chrono>
 #include "main.h"
 #include "params.hpp"
-#include "string_params.hpp"
 
 uint32_t HAL_GetTick() {
     static auto time_start = std::chrono::steady_clock::now();
