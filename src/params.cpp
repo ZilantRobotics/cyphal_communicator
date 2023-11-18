@@ -3,67 +3,66 @@
 /// Author: Dmitry Ponomarev <ponomarevda96@gmail.com>
 
 #include "params.hpp"
-#include "string_params.hpp"
 #include "storage.h"
 
 IntegerDesc_t integer_desc_pool[] = {
-    {(uint8_t*)"id", 2, 2, 2, false},
+    {"id", 2, 2, 2, MUTABLE},
 
-    {(uint8_t*)"uavcan.sub.setpoint.id",    2342, 2342, 2342, false},
-    {(uint8_t*)"uavcan.sub.readiness.id",   2343, 2343, 2343, false},
-    {(uint8_t*)"uavcan.sub.rgbled.id",      2344, 2344, 2344, false},
+    {"uavcan.sub.setpoint.id",    2342, 2342, 2342, MUTABLE},
+    {"uavcan.sub.readiness.id",   2343, 2343, 2343, MUTABLE},
+    {"uavcan.sub.rgbled.id",      2344, 2344, 2344, MUTABLE},
 
-    {(uint8_t*)"uavcan.pub.baro.press.id",  2404, 2404, 2404, false},
-    {(uint8_t*)"uavcan.pub.baro.temp.id",   2403, 2403, 2403, false},
+    {"uavcan.pub.baro.press.id",  2404, 2404, 2404, MUTABLE},
+    {"uavcan.pub.baro.temp.id",   2403, 2403, 2403, MUTABLE},
 
-    {(uint8_t*)"uavcan.pub.gps.point.id",   2406, 2406, 2406, false},
-    {(uint8_t*)"uavcan.pub.gps.sats.id",    2407, 2407, 2407, false},
-    {(uint8_t*)"uavcan.pub.gps.status.id",  2408, 2408, 2408, false},
-    {(uint8_t*)"uavcan.pub.gps.pdop.id",    2409, 2409, 2409, false},
+    {"uavcan.pub.gps.point.id",   2406, 2406, 2406, MUTABLE},
+    {"uavcan.pub.gps.sats.id",    2407, 2407, 2407, MUTABLE},
+    {"uavcan.pub.gps.status.id",  2408, 2408, 2408, MUTABLE},
+    {"uavcan.pub.gps.pdop.id",    2409, 2409, 2409, MUTABLE},
 
-    {(uint8_t*)"uavcan.pub.mag.id",         2402, 2402, 2402, false},
+    {"uavcan.pub.mag.id",         2402, 2402, 2402, MUTABLE},
 
-    {(uint8_t*)"uavcan.pub.imu.accel.id",   2400, 2400, 2400, false},
-    {(uint8_t*)"uavcan.pub.imu.gyro.id",    2401, 2401, 2401, false},
-    {(uint8_t*)"uavcan.pub.imu.imu.id",     2300, 2300, 2300, false},
+    {"uavcan.pub.imu.accel.id",   2400, 2400, 2400, MUTABLE},
+    {"uavcan.pub.imu.gyro.id",    2401, 2401, 2401, MUTABLE},
+    {"uavcan.pub.imu.imu.id",     2300, 2300, 2300, MUTABLE},
 
-    {(uint8_t*)"uavcan.pub.aspd.dpres.id",  2600, 2600, 2600, false},
+    {"uavcan.pub.aspd.dpres.id",  2600, 2600, 2600, MUTABLE},
 
-    {(uint8_t*)"uavcan.pub.energy_source.id",  2700, 2700, 2700, false},
-    {(uint8_t*)"uavcan.pub.battery_status.id",  2701, 2701, 2701, false},
-    {(uint8_t*)"uavcan.pub.battery_parameters.id",  2702, 2702, 2702, false},
+    {"uavcan.pub.energy_source.id",  2700, 2700, 2700, MUTABLE},
+    {"uavcan.pub.battery_status.id",  2701, 2701, 2701, MUTABLE},
+    {"uavcan.pub.battery_parameters.id",  2702, 2702, 2702, MUTABLE},
 
-    {(uint8_t*)"uavcan.pub.range.id",       2800, 2800, 2800, false},
+    {"uavcan.pub.range.id",       2800, 2800, 2800, MUTABLE},
 };
 IntegerParamValue_t integer_values_pool[sizeof(integer_desc_pool) / sizeof(IntegerDesc_t)];
 
 StringDesc_t string_desc_pool[NUM_OF_STR_PARAMS] = {
-    {(uint8_t*)"name", "", false},
+    {"name",                            "co.racconlab.cyphal_communicator", MUTABLE},
 
-    {(uint8_t*)"uavcan.sub.setpoint.type",      "reg.udral.service.actuator.common.sp.Vector4", true},
-    {(uint8_t*)"uavcan.sub.readiness.type",     "reg.udral.service.common.Readiness", true},
-    {(uint8_t*)"uavcan.sub.rgbled.type",        "reg.udral.physics.optics.HighColor", true},
+    {"uavcan.sub.setpoint.type",        "reg.udral.service.actuator.common.sp.Vector4", IMMUTABLE},
+    {"uavcan.sub.readiness.type",       "reg.udral.service.common.Readiness", IMMUTABLE},
+    {"uavcan.sub.rgbled.type",          "reg.udral.physics.optics.HighColor", IMMUTABLE},
 
-    {(uint8_t*)"uavcan.pub.baro.press.type",    "uavcan.si.sample.pressure.Scalar", true},
-    {(uint8_t*)"uavcan.pub.baro.temp.type",     "uavcan.si.sample.temperature.Scalar", true},
+    {"uavcan.pub.baro.press.type",      "uavcan.si.sample.pressure.Scalar", IMMUTABLE},
+    {"uavcan.pub.baro.temp.type",       "uavcan.si.sample.temperature.Scalar", IMMUTABLE},
 
-    {(uint8_t*)"uavcan.pub.gps.point.type",     "reg.udral.physics.kinematics.geodetic.PointStateVarTs", true},
-    {(uint8_t*)"uavcan.pub.gps.sats.type",      "uavcan.primitive.scalar.Integer16", true},
-    {(uint8_t*)"uavcan.pub.gps.status.type",    "uavcan.primitive.scalar.Integer16", true},
-    {(uint8_t*)"uavcan.pub.gps.pdop.type",      "uavcan.primitive.scalar.Integer16", true},
+    {"uavcan.pub.gps.point.type",       "reg.udral.physics.kinematics.geodetic.PointStateVarTs", IMMUTABLE},
+    {"uavcan.pub.gps.sats.type",        "uavcan.primitive.scalar.Integer16", IMMUTABLE},
+    {"uavcan.pub.gps.status.type",      "uavcan.primitive.scalar.Integer16", IMMUTABLE},
+    {"uavcan.pub.gps.pdop.type",        "uavcan.primitive.scalar.Integer16", IMMUTABLE},
 
-    {(uint8_t*)"uavcan.pub.mag.type",           "uavcan.si.sample.magnetic_field_strength.Vector3", true},
+    {"uavcan.pub.mag.type",             "uavcan.si.sample.magnetic_field_strength.Vector3", IMMUTABLE},
 
-    {(uint8_t*)"uavcan.pub.imu.accel.type",     "uavcan.si.sample.acceleration.Vector3", true},
-    {(uint8_t*)"uavcan.pub.imu.gyro.type",      "uavcan.si.sample.angular_velocity.Vector3", true},
-    {(uint8_t*)"uavcan.pub.imu.imu.type",       "uavcan.primitive.array.Real16", true},
+    {"uavcan.pub.imu.accel.type",       "uavcan.si.sample.acceleration.Vector3", IMMUTABLE},
+    {"uavcan.pub.imu.gyro.type",        "uavcan.si.sample.angular_velocity.Vector3", IMMUTABLE},
+    {"uavcan.pub.imu.imu.type",         "uavcan.primitive.array.Real16", IMMUTABLE},
 
-    {(uint8_t*)"uavcan.pub.aspd.dpres.type",    "uavcan.si.sample.pressure.Scalar", true},
+    {"uavcan.pub.aspd.dpres.type",      "uavcan.si.sample.pressure.Scalar", IMMUTABLE},
 
-    {(uint8_t*)"uavcan.pub.energy_source.type",         "reg.udral.physics.electricity.SourceTs", true},
-    {(uint8_t*)"uavcan.pub.battery_status.type",        "reg.udral.service.battery.Status", true},
-    {(uint8_t*)"uavcan.pub.battery_parameters.type",    "reg.udral.service.battery.Parameters", true},
+    {"uavcan.pub.energy_source.type",   "reg.udral.physics.electricity.SourceTs", IMMUTABLE},
+    {"uavcan.pub.battery_status.type",  "reg.udral.service.battery.Status", IMMUTABLE},
+    {"uavcan.pub.battery_parameters.type",  "reg.udral.service.battery.Parameters", IMMUTABLE},
 
-    {(uint8_t*)"uavcan.pub.range.type",         "uavcan.si.sample.length.Scalar", true},
+    {"uavcan.pub.range.type",           "uavcan.si.sample.length.Scalar", IMMUTABLE},
 };
 StringParamValue_t string_values_pool[sizeof(string_desc_pool) / sizeof(StringDesc_t)];

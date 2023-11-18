@@ -36,4 +36,6 @@ enum IntParamsIndexes : ParamIndex_t {
     INTEGER_PARAMS_AMOUNT
 };
 
+#define NUM_OF_STR_PARAMS 19
+
 #endif  // PARAMS_HPP_
