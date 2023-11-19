@@ -36,6 +36,7 @@ int CyphalHitlInterface::init() {
 }
 
 void CyphalHitlInterface::process() {
+    _update_port_identifiers();
     cyphal.process();
     cyphal.process();
 }
@@ -114,7 +115,8 @@ void CyphalHitlInterface::publish_battery(float voltage, float current, float te
 }
 
 void CyphalHitlInterface::publish_diff_pressure(float pressure) {
-    diff_pressure.publish(pressure);
+    diff_pressure_0.publish(pressure);
+    diff_pressure_1.publish(pressure);
 }
 
 void CyphalHitlInterface::publish_rangefinder(float range) {
@@ -153,4 +155,30 @@ void CyphalHitlInterface::clear_servo_pwm_counter() {
 
 void CyphalHitlInterface::set_time_factor(double time_factor) {
     _time_factor = std::clamp(time_factor, 0.7, 1.0);
+}
+
+void CyphalHitlInterface::_update_port_identifiers() {
+    esc_feedback_0.setPortId(paramsGetIntegerValue(PARAM_ESC_FEEDBACK_0_ID));
+    esc_feedback_1.setPortId(paramsGetIntegerValue(PARAM_ESC_FEEDBACK_1_ID));
+    esc_feedback_2.setPortId(paramsGetIntegerValue(PARAM_ESC_FEEDBACK_2_ID));
+    esc_feedback_3.setPortId(paramsGetIntegerValue(PARAM_ESC_FEEDBACK_3_ID));
+
+    gps_point.setPortId(paramsGetIntegerValue(PARAM_GPS_POINT_ID));
+    gps_sats.setPortId(paramsGetIntegerValue(PARAM_GPS_SATS_ID));
+    gps_status.setPortId(paramsGetIntegerValue(PARAM_GPS_STATUS_ID));
+    gps_pdop.setPortId(paramsGetIntegerValue(PARAM_GPS_PDOP_ID));
+
+    baro_pressure.setPortId(paramsGetIntegerValue(BAROMETER_PRESSURE_ID));
+    baro_temperature.setPortId(paramsGetIntegerValue(BAROMETER_TEMPERATURE_ID));
+    magnetometer.setPortId(paramsGetIntegerValue(PARAM_MAGNETOMETER_ID));
+    accel.setPortId(paramsGetIntegerValue(IMU_ACCEL_ID));
+    gyro.setPortId(paramsGetIntegerValue(IMU_GYRO_ID));
+    imu.setPortId(paramsGetIntegerValue(PARAM_IMU_IMU_ID));
+    diff_pressure_0.setPortId(paramsGetIntegerValue(PARAM_ASPD_DIFF_PRESSURE_0_ID));
+    diff_pressure_1.setPortId(paramsGetIntegerValue(PARAM_ASPD_DIFF_PRESSURE_1_ID));
+    rangefinder.setPortId(paramsGetIntegerValue(PARAM_RANGEFINDER_ID));
+
+    battery.source_pub.setPortId(paramsGetIntegerValue(BMS_ENERGY_SOURCE_ID));
+    battery.status_pub.setPortId(paramsGetIntegerValue(BMS_BATTERY_STATUS_ID));
+    battery.parameters_pub.setPortId(paramsGetIntegerValue(BMS_BATTERY_PARAMETERS_ID));
 }

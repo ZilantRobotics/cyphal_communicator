@@ -17,6 +17,9 @@
 
 RosInterface::RosInterface(int argc, char** argv) {
     ros::init(argc, argv, "cyphal_communicator");
+    if( ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info) ) {
+        ros::console::notifyLoggerLevelsChanged();
+    }
     ros_node = new ros::NodeHandle;
 }
 

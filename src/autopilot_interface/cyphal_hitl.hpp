@@ -24,27 +24,29 @@
 
 class CyphalHitlInterface {
 public:
-    CyphalHitlInterface() : setpoint(&cyphal),
-                            readiness(&cyphal),
-                            rgbled(&cyphal),
-                            esc_feedback_0(&cyphal,     2500),
-                            esc_feedback_1(&cyphal,     2501),
-                            esc_feedback_2(&cyphal,     2502),
-                            esc_feedback_3(&cyphal,     2503),
-                            esc_feedback{{&esc_feedback_0, &esc_feedback_1, &esc_feedback_2, &esc_feedback_3}},
-                            gps_point(&cyphal,          2406),
-                            gps_sats(&cyphal,           2407),
-                            gps_status(&cyphal,         2408),
-                            gps_pdop(&cyphal,           2409),
-                            baro_pressure(&cyphal,      2404),
-                            baro_temperature(&cyphal,   2403),
-                            magnetometer(&cyphal,       2402),
-                            accel(&cyphal,              2400),
-                            gyro(&cyphal,               2401),
-                            imu(&cyphal,                2300),
-                            diff_pressure(&cyphal,      2600),
-                            rangefinder(&cyphal,        2800),
-                            battery(&cyphal,            2700, 2701, 2702) {}
+    CyphalHitlInterface() :
+            setpoint(&cyphal),
+            readiness(&cyphal),
+            rgbled(&cyphal),
+            esc_feedback_0(&cyphal, 0),
+            esc_feedback_1(&cyphal, 0),
+            esc_feedback_2(&cyphal, 0),
+            esc_feedback_3(&cyphal, 0),
+            esc_feedback{{&esc_feedback_0, &esc_feedback_1, &esc_feedback_2, &esc_feedback_3}},
+            gps_point(&cyphal, 0),
+            gps_sats(&cyphal, 0),
+            gps_status(&cyphal, 0),
+            gps_pdop(&cyphal, 0),
+            baro_pressure(&cyphal, 0),
+            baro_temperature(&cyphal, 0),
+            magnetometer(&cyphal, 0),
+            accel(&cyphal, 0),
+            gyro(&cyphal, 0),
+            imu(&cyphal, 0),
+            diff_pressure_0(&cyphal, 0),
+            diff_pressure_1(&cyphal, 0),
+            rangefinder(&cyphal, 0),
+            battery(&cyphal, 0, 0, 0) {}
     int init();
     void process();
 
@@ -63,6 +65,8 @@ public:
     void clear_servo_pwm_counter();
     void set_time_factor(double time_factor);
 private:
+    void _update_port_identifiers();
+
     Cyphal cyphal;
 
     SetpointSubscriber setpoint;
@@ -88,7 +92,8 @@ private:
     ImuGyroPublisher gyro;
     RawImuPublisher imu;
 
-    DiffPressurePublisher diff_pressure;
+    DiffPressurePublisher diff_pressure_0;
+    DiffPressurePublisher diff_pressure_1;
     RangefinderRangePublisher rangefinder;
     UdralBatteryPublisher battery;
 
