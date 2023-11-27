@@ -45,7 +45,7 @@ IntegerParamValue_t integer_values_pool[sizeof(integer_desc_pool) / sizeof(Integ
 StringDesc_t string_desc_pool[NUM_OF_STR_PARAMS] = {
     {"name",                            "co.racconlab.cyphal_communicator", IMMUTABLE},
 
-    {"uavcan.sub.setpoint.type",        "reg.udral.service.actuator.common.sp.Vector4", IMMUTABLE},
+    {"uavcan.sub.setpoint.type",        "reg.udral.service.actuator.common.sp.Vector31", IMMUTABLE},
     {"uavcan.sub.readiness.type",       "reg.udral.service.common.Readiness", IMMUTABLE},
     {"uavcan.sub.rgbled.type",          "reg.udral.physics.optics.HighColor", IMMUTABLE},
 

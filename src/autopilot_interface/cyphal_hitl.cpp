@@ -132,9 +132,11 @@ bool CyphalHitlInterface::get_setpoint(Setpoint16& out_setpoint) {
     prev_setpoint_recv_counter = crnt_setpoint_recv_counter;
 
     auto sp = setpoint.get_setpoint();
-    uint8_t setpoint_size = std::min(setpoint.get_setpoint_size(), (uint8_t)out_setpoint.size());
-    for (size_t sp_idx = 0; sp_idx < setpoint_size; sp_idx++) {
+    for (size_t sp_idx = 0; sp_idx < setpoint.get_setpoint_size(); sp_idx++) {
         out_setpoint[sp_idx] = sp.value[sp_idx];
+    }
+    for (size_t sp_idx = setpoint.get_setpoint_size(); sp_idx < out_setpoint.size(); sp_idx++) {
+        out_setpoint[sp_idx] = 0.0;
     }
 
     return true;
