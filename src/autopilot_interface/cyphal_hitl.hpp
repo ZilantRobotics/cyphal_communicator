@@ -67,35 +67,35 @@ public:
 private:
     void _update_port_identifiers();
 
-    Cyphal cyphal;
+    cyphal::Cyphal cyphal;
 
-    SetpointSubscriber setpoint;
-    ReadinessSubscriber readiness;
-    HighColorSubscriber rgbled;
-    ZubaxCompactFeedbackPublisher esc_feedback_0;
-    ZubaxCompactFeedbackPublisher esc_feedback_1;
-    ZubaxCompactFeedbackPublisher esc_feedback_2;
-    ZubaxCompactFeedbackPublisher esc_feedback_3;
-    std::array<ZubaxCompactFeedbackPublisher*, 4> esc_feedback;
+    cyphal::SetpointSubscriber setpoint;
+    cyphal::ReadinessSubscriber readiness;
+    cyphal::HighColorSubscriber rgbled;
+    cyphal::ZubaxCompactFeedbackPublisher esc_feedback_0;
+    cyphal::ZubaxCompactFeedbackPublisher esc_feedback_1;
+    cyphal::ZubaxCompactFeedbackPublisher esc_feedback_2;
+    cyphal::ZubaxCompactFeedbackPublisher esc_feedback_3;
+    std::array<cyphal::ZubaxCompactFeedbackPublisher*, 4> esc_feedback;
 
-    GpsPointPublisher gps_point;
-    Int16Publisher gps_sats;
-    Int16Publisher gps_status;
-    Int16Publisher gps_pdop;
+    cyphal::GpsPointPublisher gps_point;
+    cyphal::Int16Publisher gps_sats;
+    cyphal::Int16Publisher gps_status;
+    cyphal::Int16Publisher gps_pdop;
 
-    BaroPressurePublisher baro_pressure;
-    BaroTemperaturePublisher baro_temperature;
+    cyphal::BaroPressurePublisher baro_pressure;
+    cyphal::BaroTemperaturePublisher baro_temperature;
 
-    MagneticFieldPublisher magnetometer;
+    cyphal::MagneticFieldPublisher magnetometer;
 
-    ImuAccelPublisher accel;
-    ImuGyroPublisher gyro;
-    RawImuPublisher imu;
+    cyphal::ImuAccelPublisher accel;
+    cyphal::ImuGyroPublisher gyro;
+    cyphal::RawImuPublisher imu;
 
-    DiffPressurePublisher diff_pressure_0;
-    DiffPressurePublisher diff_pressure_1;
-    RangefinderRangePublisher rangefinder;
-    UdralBatteryPublisher battery;
+    cyphal::DiffPressurePublisher diff_pressure_0;
+    cyphal::DiffPressurePublisher diff_pressure_1;
+    cyphal::RangefinderRangePublisher rangefinder;
+    cyphal::UdralBatteryPublisher battery;
 
     double _time_factor{1.0};
 };

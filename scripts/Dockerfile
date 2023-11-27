@@ -23,6 +23,7 @@ COPY package.xml        package.xml
 COPY src/ src/
 COPY compile_dsdl.sh compile_dsdl.sh
 COPY Libs/ Libs/
+COPY .git/ .git/
 
 # 4. Build ROS
 RUN ./Libs/cyphal_application/scripts/nnvg_generate_c_headers.sh
