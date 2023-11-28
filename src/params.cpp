@@ -36,14 +36,14 @@ IntegerDesc_t integer_desc_pool[] = {
 
     {"uavcan.pub.energy_source.id",         1, 65535, 2700, MUTABLE},
     {"uavcan.pub.battery_status.id",        1, 65535, 2701, MUTABLE},
-    {"uavcan.pub.battery_parameters.id",    1, 65535, 2702, MUTABLE},
+    {"uavcan.pub.battery_params.id",        1, 65535, 2702, MUTABLE},
 
     {"uavcan.pub.range.id",                 1, 65535, 2800, MUTABLE},
 };
 IntegerParamValue_t integer_values_pool[sizeof(integer_desc_pool) / sizeof(IntegerDesc_t)];
 
 StringDesc_t string_desc_pool[NUM_OF_STR_PARAMS] = {
-    {"name",                            "co.racconlab.cyphal_communicator", IMMUTABLE},
+    {"system.name",                     "co.raccoonlab.communicator", IMMUTABLE},
 
     {"uavcan.sub.setpoint.type",        "reg.udral.service.actuator.common.sp.Vector31", IMMUTABLE},
     {"uavcan.sub.readiness.type",       "reg.udral.service.common.Readiness", IMMUTABLE},
@@ -68,12 +68,12 @@ StringDesc_t string_desc_pool[NUM_OF_STR_PARAMS] = {
     {"uavcan.pub.esc.fb.2.type",        "zubax.telega.CompactFeedback.0.1", IMMUTABLE},
     {"uavcan.pub.esc.fb.3.type",        "zubax.telega.CompactFeedback.0.1", IMMUTABLE},
 
-    {"uavcan.pub.aspd.dpres.type",      "uavcan.si.sample.pressure.Scalar", IMMUTABLE},
-    {"uavcan.pub.aspd.dpres.type",      "uavcan.si.sample.pressure.Scalar", IMMUTABLE},
+    {"uavcan.pub.aspd.dpres.0.type",    "uavcan.si.sample.pressure.Scalar", IMMUTABLE},
+    {"uavcan.pub.aspd.dpres.1.type",    "uavcan.si.sample.pressure.Scalar", IMMUTABLE},
 
     {"uavcan.pub.energy_source.type",   "reg.udral.physics.electricity.SourceTs", IMMUTABLE},
     {"uavcan.pub.battery_status.type",  "reg.udral.service.battery.Status", IMMUTABLE},
-    {"uavcan.pub.battery_parameters.type",  "reg.udral.service.battery.Parameters", IMMUTABLE},
+    {"uavcan.pub.battery_params.type",  "reg.udral.service.battery.Parameters", IMMUTABLE},
 
     {"uavcan.pub.range.type",           "uavcan.si.sample.length.Scalar", IMMUTABLE},
 };
