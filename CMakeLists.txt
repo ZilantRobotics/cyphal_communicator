@@ -79,11 +79,13 @@ add_custom_target(
   compile_dsdl ALL
   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/compile_dsdl.sh
   COMMENT "Compile DSDL"
+  OUTPUT_QUIET
 )
 add_custom_target(
   gen_headers ALL
   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/Libs/cyphal_application/scripts/nnvg_generate_c_headers.sh
   COMMENT "Generate C headers"
+  OUTPUT_QUIET
 )
 add_dependencies(${PROJECT_NAME} compile_dsdl)
 add_dependencies(${PROJECT_NAME} gen_headers)

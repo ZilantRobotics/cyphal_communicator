@@ -50,7 +50,9 @@ bool ArdupilotJsonInterface::init() {
     return true;
 }
 
-bool ArdupilotJsonInterface::send_setpoint(const Setpoint16& setpoint) {
+bool ArdupilotJsonInterface::send_setpoint(const Setpoint16& setpoint, size_t size) {
+    (void)size;
+
     std::array<uint16_t, 16> servo_pwm;
     for (size_t sp_idx = 0; sp_idx < 4; sp_idx++) {
         servo_pwm[sp_idx] = 1000 + 1000.0 * setpoint[sp_idx];

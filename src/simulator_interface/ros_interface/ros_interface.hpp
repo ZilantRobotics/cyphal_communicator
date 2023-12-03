@@ -31,7 +31,7 @@ class RosInterface : public SimulatorBaseInterface{
 public:
     RosInterface(int argc, char** argv);
     bool init() override;
-    bool send_setpoint(const Setpoint16& setpoint) override;
+    bool send_setpoint(const Setpoint16& setpoint, size_t size) override;
     void send_arming_status(bool arming_status) override;
     bool spin_once() override;
 private:
