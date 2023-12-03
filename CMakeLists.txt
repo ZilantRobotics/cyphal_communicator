@@ -21,6 +21,7 @@ else()
   )
 endif()
 
+# set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Werror -std=c++17")
 set(CYPHAL_REPO_DIR ${CMAKE_CURRENT_LIST_DIR}/Libs/cyphal_application)
 set(PLATFORM socketcan)
@@ -61,6 +62,17 @@ if(NOT DEFINED ARDUPILOT_JSON_SIM_INTERFACE)
   )
 endif()
 
+execute_process(
+  COMMAND git rev-parse --short=16 HEAD
+  COMMAND_ERROR_IS_FATAL ANY
+  OUTPUT_VARIABLE GIT_HASH_64_BIT
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+if("GIT_HASH_64_BIT" STREQUAL "")
+  set(GIT_HASH_64_BIT "BADC0FFEEFFF")
+endif()
+set(GIT_HASH "0x${GIT_HASH_64_BIT}")
+add_definitions(-DGIT_HASH=${GIT_HASH})
 
 # Generate DSDL when build
 add_custom_target(
