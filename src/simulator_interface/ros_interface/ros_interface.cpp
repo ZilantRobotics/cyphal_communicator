@@ -45,10 +45,10 @@ bool RosInterface::init() {
     return true;
 }
 
-bool RosInterface::send_setpoint(const Setpoint16& setpoint) {
+bool RosInterface::send_setpoint(const Setpoint16& setpoint, size_t size) {
     sensor_msgs::Joy ros_msg;
     ros_msg.header.stamp = ros::Time::now();
-    for (uint_fast8_t idx = 0; idx < 16; idx++) {
+    for (uint_fast8_t idx = 0; idx < size; idx++) {
         ros_msg.axes.push_back(std::clamp(setpoint[idx], -1.0f, +1.0f));
     }
     _setpoint_pub.publish(ros_msg);

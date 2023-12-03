@@ -22,7 +22,7 @@ static std::unique_ptr<SimulatorBaseInterface> init_sim_interface(int argc, char
         std::cout << "ArduPilot Initialization Error." << std::endl;
     }
     Setpoint16 setpoint;
-    sim->send_setpoint(setpoint);
+    sim->send_setpoint(setpoint, 16);
 
     std::cout << "Hello, ArduPilot JSON." << std::endl;
 
@@ -87,8 +87,9 @@ int main(int argc, char** argv) {
         cyphal_hitl.process();
 
         Setpoint16 setpoint;
-        if (cyphal_hitl.get_setpoint(setpoint)) {
-            simulator->send_setpoint(setpoint);
+        auto setpoint_size = cyphal_hitl.get_setpoint(setpoint);
+        if (setpoint_size) {
+            simulator->send_setpoint(setpoint, setpoint_size);
         }
 
         uint32_t crnt_time_ms = HAL_GetTick();

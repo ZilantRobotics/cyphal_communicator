@@ -44,7 +44,7 @@ public:
     /**
      * @note You send should send setpoint with at least 200 Hz frequency
      */
-    virtual bool send_setpoint(const Setpoint16& setpoint) = 0;
+    virtual bool send_setpoint(const Setpoint16& setpoint, size_t size) = 0;
 
     virtual void send_arming_status(bool armings_status) {(void)armings_status;}
 

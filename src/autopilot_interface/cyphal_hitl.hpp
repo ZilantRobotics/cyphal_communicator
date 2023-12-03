@@ -59,7 +59,7 @@ public:
     void publish_magnetometer(const Vector3 magnetic_field_gauss);
     void publish_rangefinder(float range);
 
-    bool get_setpoint(Setpoint16& setpoint);
+    size_t get_setpoint(Setpoint16& setpoint);
     bool get_arming_status();
     uint32_t get_setpoint_recv_counter();
     void clear_servo_pwm_counter();

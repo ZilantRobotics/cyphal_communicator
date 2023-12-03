@@ -24,7 +24,7 @@ class ArdupilotJsonInterface : public SimulatorBaseInterface{
 public:
     ArdupilotJsonInterface(double home_lat, double home_lon, double home_alt);
     bool init() override;
-    bool send_setpoint(const Setpoint16& setpoint) override;
+    bool send_setpoint(const Setpoint16& setpoint, size_t size) override;
     bool spin_once() override;
 
 private:

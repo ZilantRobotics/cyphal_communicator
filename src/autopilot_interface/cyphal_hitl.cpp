@@ -123,11 +123,11 @@ void CyphalHitlInterface::publish_rangefinder(float range) {
     rangefinder.publish(range);
 }
 
-bool CyphalHitlInterface::get_setpoint(Setpoint16& out_setpoint) {
+size_t CyphalHitlInterface::get_setpoint(Setpoint16& out_setpoint) {
     static uint32_t prev_setpoint_recv_counter = 0;
     uint32_t crnt_setpoint_recv_counter = setpoint.get_recv_counter();
     if (crnt_setpoint_recv_counter == prev_setpoint_recv_counter) {
-        return false;
+        return 0;
     }
     prev_setpoint_recv_counter = crnt_setpoint_recv_counter;
 
@@ -139,7 +139,7 @@ bool CyphalHitlInterface::get_setpoint(Setpoint16& out_setpoint) {
         out_setpoint[sp_idx] = 0.0;
     }
 
-    return true;
+    return setpoint.get_setpoint_size();
 }
 
 bool CyphalHitlInterface::get_arming_status() {
