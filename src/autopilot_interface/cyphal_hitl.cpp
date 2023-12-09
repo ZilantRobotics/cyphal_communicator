@@ -142,8 +142,22 @@ bool CyphalHitlInterface::get_setpoint(Setpoint16& out_setpoint) {
     return true;
 }
 
-bool CyphalHitlInterface::get_arming_status() {
-    return readiness.get_readiness() == reg_udral_service_common_Readiness_0_1_ENGAGED;
+ArmingStatus CyphalHitlInterface::get_arming_status() {
+    ArmingStatus arming_status;
+    switch (readiness.get_readiness()) {
+        case reg_udral_service_common_Readiness_0_1_ENGAGED:
+            arming_status = ArmingStatus::ENGAGED;
+            break;
+        case reg_udral_service_common_Readiness_0_1_STANDBY:
+            arming_status = ArmingStatus::STANDBY;
+            break;
+
+        default:
+            arming_status = ArmingStatus::UNKNOWN;
+            break;
+    }
+
+    return arming_status;
 }
 
 

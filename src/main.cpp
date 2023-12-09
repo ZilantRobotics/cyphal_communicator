@@ -95,7 +95,11 @@ int main(int argc, char** argv) {
         static uint32_t last_arm_send_time_ms = 0;
         if (crnt_time_ms > last_arm_send_time_ms + 100) {
             last_arm_send_time_ms = crnt_time_ms;
-            simulator->send_arming_status(cyphal_hitl.get_arming_status());
+            auto arming_status = cyphal_hitl.get_arming_status();
+            if (arming_status != ArmingStatus::UNKNOWN) {
+                simulator->send_arming_status(arming_status == ArmingStatus::ENGAGED);
+
+            }
         }
 
         simulator->spin_once();
