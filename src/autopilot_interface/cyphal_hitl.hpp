@@ -22,6 +22,12 @@
 #include "simulator_interface/simulator_interface.hpp"
 #include "params.hpp"
 
+enum class ArmingStatus {
+    UNKNOWN,
+    STANDBY,
+    ENGAGED,
+};
+
 class CyphalHitlInterface {
 public:
     CyphalHitlInterface() :
@@ -60,7 +66,7 @@ public:
     void publish_rangefinder(float range);
 
     bool get_setpoint(Setpoint16& setpoint);
-    bool get_arming_status();
+    ArmingStatus get_arming_status();
     uint32_t get_setpoint_recv_counter();
     void clear_servo_pwm_counter();
     void set_time_factor(double time_factor);
