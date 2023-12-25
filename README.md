@@ -68,16 +68,6 @@ F(ImuRosToCyphal) --> gyro[ gyro, uavcan.si.sample.angular_velocity.Vector3]
 F(ImuRosToCyphal) --> accel[ accel, uavcan.si.sample.acceleration.Vector3]
 ```
 
-Related PX4 parameters:
-
-| Name | Description |
-| ---- | ----------- |
-| UCAN1_IMU_SUB | Udral IMU 0 subscription port ID |
-| UCAN1_ACCEL_SUB | Udral Accelerometer 0 subscription port ID |
-| UCAN1_GYRO_SUB | Udral Gyroscope 0 subscription port ID |
-
-> On PX4 side IMU logic is implemented within [UavcanAccelerometerSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Accelerometer.hpp) and [UavcanGyroscopeSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Gyroscope.hpp) drivers.
-
 **3. Magnetometer**
 
 Cyphal interface:
@@ -93,15 +83,6 @@ flowchart LR
 
 imu[ /uav/mag, sensor_msgs/MagneticField] --> F(MagRosToCyphal) --> mag[ mag, uavcan.si.sample.magnetic_field_strength.Vector3]
 ```
-
-Related PX4 parameters:
-
-| Name | Description |
-| ---- | ----------- |
-| UCAN1_MAG_SUB | Udral Magnetometer 0 subscription port ID |
-
-
-> On PX4 side IMU logic is implemented within [UavcanMagnetometerSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Magnetometer.hpp) driver.
 
 **4. Barometer**
 
@@ -120,15 +101,6 @@ static_temperature[ /uav/static_temperature, std_msgs/Float32] --> BaroRosToCyph
 
 static_pressure[ /uav/static_pressure, std_msgs/Float32] --> BaroRosToCyphal --> baro_pressure[ baro_pressure, uavcan.si.sample.pressure.Scalar]
 ```
-
-Related PX4 parameters:
-
-| Name | Description |
-| ---- | ----------- |
-| UCAN1_BAROP0_SUB | Barometer 0 pressure subscription ID |
-| UCAN1_BAROT0_SUB | Barometer 0 temperature subscription ID |
-
-> On PX4 side IMU logic is implemented within [UavcanBarometerSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Barometer.hpp) driver.
 
 **5. GNSS**
 
@@ -153,17 +125,6 @@ velocity[ /uav/velocity, geometry_msgs/Twist] --> GpsRosToCyphal --> gps_point[ 
 GpsRosToCyphal --> gps_sats[ gps_sats, uavcan.primitive.scalar.Integer16]
 GpsRosToCyphal --> gps_pdop[ gps_pdop, uavcan.primitive.scalar.Integer16]
 ```
-
-Related PX4 parameters:
-
-| Name | Description |
-| ---- | ----------- |
-| UCAN1_GPS0_SUB | GPS 0 subscription port ID |
-| UCAN1_GPSPD0_SUB | GPS 0 pdop subscription port ID |
-| UCAN1_GPSSA0_SUB | GPS 0 sats subscription port ID |
-| UCAN1_GPSST0_SUB | GPS 0 status subscription port ID |
-
-> On PX4 side GNSS logic is implemented within [UavcanGnssSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Gnss.hpp) driver.
 
 ### 1.2. Extended interface
 
@@ -281,6 +242,8 @@ RangefinderRosToCyphal --> aspd_tas[ aspd.tas, uavcan.si.sample.length.Scalar]
 
 ## 2. PX4 Cyphal interface
 
+<img src="https://raw.githubusercontent.com/RaccoonlabDev/cyphal_communicator/docs/assets/yukon.png" alt="drawing"/>
+
 **1. Actuator**
 
 Cyphal interface:
@@ -301,6 +264,75 @@ Related PX4 parameters:
 
 > On PX4 side actuators logic is implemented within [UavcanEscController, ReadinessPublisher and UavcanEscFeedbackSubscriber drivers](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Actuators/EscClient.hpp).
 
+**2. IMU**
+
+Cyphal interface:
+
+| Interface | PX4's Port | Message |
+| --------- | ---- | ------- |
+| imu | sub.imu.accel </br> sub.imu.gyro | [uavcan.si.sample.acceleration.Vector3](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/acceleration/Vector3.1.0.dsdl) </br> [uavcan.si.sample.angular_velocity.Vector3](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/angular_velocity/Vector3.1.0.dsdl) |
+
+Related PX4 parameters:
+
+| Name | Description |
+| ---- | ----------- |
+| UCAN1_IMU_SUB | Udral IMU 0 subscription port ID |
+| UCAN1_ACCEL_SUB | Udral Accelerometer 0 subscription port ID |
+| UCAN1_GYRO_SUB | Udral Gyroscope 0 subscription port ID |
+
+> On PX4 side IMU logic is implemented within [UavcanAccelerometerSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Accelerometer.hpp) and [UavcanGyroscopeSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Gyroscope.hpp) drivers.
+
+**3. Magnetometer**
+
+Cyphal interface:
+
+| Interface | Communicator's Port | Message |
+| --------- | ---- | ------- |
+| Magnetometer | sub.udral.mag.0 | [uavcan.si.sample.magnetic_field_strength.Vector3](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/magnetic_field_strength/Vector3.1.0.dsdl) |
+
+Related PX4 parameters:
+
+| Name | Description |
+| ---- | ----------- |
+| UCAN1_MAG_SUB | Udral Magnetometer 0 subscription port ID |
+
+> On PX4 side IMU logic is implemented within [UavcanMagnetometerSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Magnetometer.hpp) driver.
+
+**4. Barometer**
+
+Cyphal interface:
+
+| Interface | Communicator's Port | Message |
+| --------- | ---- | ------- |
+| Barometer | sub.baro.pressure.0 </br> sub.baro.temperature.0 | [uavcan.si.sample.pressure.Scalar](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/pressure/Scalar.1.0.dsdl) </br> [uavcan.si.sample.temperature.Scalar](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/temperature/Scalar.1.0.dsdl) |
+
+Related PX4 parameters:
+
+| Name | Description |
+| ---- | ----------- |
+| UCAN1_BAROP0_SUB | Barometer 0 pressure subscription ID |
+| UCAN1_BAROT0_SUB | Barometer 0 temperature subscription ID |
+
+> On PX4 side IMU logic is implemented within [UavcanBarometerSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Barometer.hpp) driver.
+
+**5. GNSS**
+
+Cyphal interface:
+
+| Interface | Communicator's Port | Message |
+| --------- | ---- | ------- |
+| [udral/gnss](https://nunaweb.opencyphal.org/api/storage/docs/docs/reg/index.html#reg_drone_service_gnss) | sub.gps.point.0 </br> sub.gps.status.0 </br> sub.gps.sats.0 </br> sub.gps.pdop.0 | [reg.udral.physics.kinematics.geodetic.PointStateVarTs](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/physics/kinematics/geodetic/PointStateVarTs.0.1.dsdl) </br> [uavcan.primitive.scalar.Integer16](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/primitive/scalar/Integer16.1.0.dsdl) </br> [uavcan.primitive.scalar.Integer16](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/primitive/scalar/Integer16.1.0.dsdl) </br> [uavcan.primitive.scalar.Integer16](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/primitive/scalar/Integer16.1.0.dsdl) |
+
+Related PX4 parameters:
+
+| Name | Description |
+| ---- | ----------- |
+| UCAN1_GPS0_SUB | GPS 0 subscription port ID |
+| UCAN1_GPSPD0_SUB | GPS 0 pdop subscription port ID |
+| UCAN1_GPSSA0_SUB | GPS 0 sats subscription port ID |
+| UCAN1_GPSST0_SUB | GPS 0 status subscription port ID |
+
+> On PX4 side GNSS logic is implemented within [UavcanGnssSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Gnss.hpp) driver.
 
 ## 3. Redundancy
 
