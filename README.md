@@ -4,15 +4,16 @@ Cyphal communicator is a ROS package that connects the Cyphal HITL autopilot int
 
 ## Content
 
-  - [1. Interface](#1-interface)
+  - [1. Communicator Cyphal and ROS Interfaces](#1-communicator-cyphal-and-ros-interfaces)
     - [1.1. Minimal quadcopter interface](#11-minimal-quadcopter-interface)
     - [1.2. Extended interface](#12-extended-interface)
-  - [2. Redundancy](#2-redundancy)
-  - [3. Installation](#3-installation)
-  - [4. Running](#4-running)
-  - [5. Usage example](#5-usage-example)
+  - [2. PX4 Cyphal interface](#2-px4-cyphal-interface)
+  - [3. Redundancy](#3-redundancy)
+  - [4. Installation](#4-installation)
+  - [5. Running](#5-running)
+  - [6. Usage example](#6-usage-example)
 
-## 1. Interface
+## 1. Communicator Cyphal and ROS Interfaces
 
 The node has the following Cyphal interface:
 
@@ -39,15 +40,6 @@ setpoint[ setpoint, reg.udral.service.actuator.common.sp.Vector8] --> F(Setpoint
 readiness[ readiness, reg.udral.service.common.Readiness] --> R(ReadinessCyphalToRos) --> arm[ /uav/arm, std_msgs::Bool]
 ```
 
-Related PX4 parameters:
-
-| Name | Description |
-| ---- | ----------- |
-| UCAN1_ESC_PUB  | Cyphal ESC publication port ID |
-| UCAN1_READ_PUB | Cyphal ESC readiness publication port ID |
-
-> On PX4 side actuators logic is implemented within [UavcanEscController and ReadinessPublisher drivers](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Actuators/EscClient.hpp).
-
 ROS-interface for auxilliary ESC feedback:
 
 ```mermaid
@@ -57,16 +49,6 @@ EscStatusRosToCyphal --> esc_feedback_0[ esc_feedback_0, zubax.telega.CompactFee
 EscStatusRosToCyphal --> esc_feedback_n[ ...]
 EscStatusRosToCyphal --> esc_feedback_7[ esc_feedback_7, zubax.telega.CompactFeedback]
 ```
-
-Related PX4 parameters:
-
-| Name | Description |
-| ---- | ----------- |
-| UCAN1_FB0_SUB  | Cyphal ESC 0 zubax feedback port ID |
-| ...  | ... |
-| UCAN1_FB7_SUB  | Cyphal ESC 7 zubax feedback port ID |
-
-> On PX4 side ESC Feedback logic is implemented within [UavcanEscFeedbackSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Actuators/EscClient.hpp) driver.
 
 **2. IMU**
 
@@ -297,7 +279,30 @@ RangefinderRosToCyphal --> aspd_tas[ aspd.tas, uavcan.si.sample.length.Scalar]
 
 > On PX4 side Rangefinder logic is implemented within [RangefinderSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Rangefinder.hpp) driver.
 
-## 2. Redundancy
+## 2. PX4 Cyphal interface
+
+**1. Actuator**
+
+Cyphal interface:
+
+| Interface | PX4's Port | Message |
+| --------- | ---- | ------- |
+| [udral/actuator](https://github.com/OpenCyphal/public_regulated_data_types/tree/master/reg/udral/service/actuator) | pub.setpoint </br> pub.readiness </br> sub.feedback | [udral.service.actuator.common.sp.Vector31](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/actuator/common/sp/Vector31.0.1.dsdl) </br> [reg.udral.service.common.Readiness](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/common/Readiness.0.1.dsdl) </br> [zubax.telega.CompactFeedback](https://github.com/Zubax/zubax_dsdl/blob/master/zubax/telega/CompactFeedback.1.0.dsdl) |
+
+Related PX4 parameters:
+
+| Name | Description |
+| ---- | ----------- |
+| UCAN1_ESC_PUB  | Cyphal ESC publication port ID |
+| UCAN1_READ_PUB | Cyphal ESC readiness publication port ID |
+| UCAN1_FB0_SUB  | Cyphal ESC 0 zubax feedback port ID |
+| ...  | ... |
+| UCAN1_FB7_SUB  | Cyphal ESC 7 zubax feedback port ID |
+
+> On PX4 side actuators logic is implemented within [UavcanEscController, ReadinessPublisher and UavcanEscFeedbackSubscriber drivers](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Actuators/EscClient.hpp).
+
+
+## 3. Redundancy
 
 Cyphal/CAN communication allows to provide a few options of redundancy implementation.
 
@@ -315,7 +320,7 @@ As an example, HITL simulator supports octocopter airframe to demostrate this po
 
 The cyphal communicator allows to use multiple interfaces. By default it is based on vitual CAN-interface with name `slcan0`. You can specify another number of the interface and run an additional instance. PX4 capabilities are based on the specific hardware, but modern versions of the hardware typically have 2 CAN-buses.
 
-## 3. Installation
+## 4. Installation
 
 Build the package as usual ROS package with `catkin build`. It will automatically compile DSDL at the build time with [compile_dsdl.sh](compile_dsdl.sh) script.
 
@@ -325,7 +330,7 @@ Before running the communicator, you need to do 3 things:
 
 After these steps you are able to run the communicator.
 
-## 4. Running
+## 5. Running
 
 You should connect a CAN-sniffer to an autopilot as shown below:
 
@@ -339,14 +344,12 @@ Then run the communicator using the launch file:
 roslaunch cyphal_communicator cyphal_communicator.launch
 ```
 
-## 5. Usage example
+## 6. Usage example
 
 Below you can see an example of using the cyphal_communicator in conjunction with a VTOL dynamics simulator.
 
 [![vtol HITL dynamics simulator](https://img.youtube.com/vi/JmElAwgAoSc/0.jpg)](https://youtu.be/JmElAwgAoSc)
 
-## 6. LICENSE
+## 7. LICENSE
 
-The Cyphal Communicator project is licensed under the GNU General Public License, version 3.
-
-- [Text](LICENSE)
+The Cyphal Communicator project is licensed under the [GNU General Public License, version 3](LICENSE)
