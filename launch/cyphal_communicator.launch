@@ -1,3 +1,8 @@
+<!--
+This software is distributed under the terms of the GPL v3 License.
+Copyright (c) 2022-2023 Dmitry Ponomarev.
+Author: Dmitry Ponomarev <ponomarevda96@gmail.com>
+-->
 <launch>
     <node pkg="cyphal_communicator" type="cyphal_communicator" name="cyphal_communicator" output="screen" required="true" />
 </launch>
