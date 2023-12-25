@@ -1,6 +1,16 @@
 # Cyphal communicator
 
-Cyphal communicator is a ROS package that connects the Cyphal HITL autopilot interface and a simulator interface (based on ROS, ArduPilot JSON, etc). It is primailry intended for ArduPilot/PX4 Cyphal HITL simulation, but it can be used for other purposes as well.
+Cyphal communicator is a ROS package that connects the Cyphal HITL autopilot interface and a simulator interface (based on ROS, ArduPilot JSON, etc).
+
+**Purpose**
+
+The Cyphal communicator is primailry intended for ArduPilot/PX4 Cyphal HITL simulation, but it can be used for other purposes as well.
+
+**Minimal technical requirements**
+
+- Communicator node: ROS-noetic, ubuntu 20.04
+- Autopilot hardware: CUAV V5+
+- CAN-sniffer: handle at least 2500 CAN frames/sec
 
 ## Content
 
