@@ -138,18 +138,7 @@ Cyphal interface:
 | --------- | ---- | ------- |
 | Udral/rgbled | sub.rgbled | [reg.udral.physics.optics.HighColor](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/physics/optics/HighColor.0.1.dsdl) |
 
-ROS-interface:
-
-> not supported yet
-
-Related PX4 parameters:
-
-| Name | Description |
-| ---- | ----------- |
-| UCAN1_RGBLED_PUB | Cyphal RGB Controller port ID |
-
-On PX4 side RGB LED logic is implemented within [RGBControllerPublisher](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Publishers/udral/RGBController.hpp) driver.
-
+> ROS-interface not supported yet
 
 **7. Airspeed (including Differential Pressure)**
 
@@ -171,14 +160,6 @@ AirspeedRosToCyphal --> aspd_cas[ aspd.cas, uavcan.si.sample.velocity.Scalar]
 AirspeedRosToCyphal --> aspd_temp[ aspd.temp, uavcan.si.sample.temperature.Scalar]
 ```
 
-| Name | Description |
-| ---- | ----------- |
-| UCAN1_ATAS0_SUB | Udral Airspeed TAS 0 subscription port ID |
-| UCAN1_ACAS0_SUB | Udral Airspeed CAS 0 subscription port ID |
-| UCAN1_ATEM0_SUB | Udral Airspeed Temperature 0 subscription port ID |
-
-> On PX4 side Airspeed logic is implemented within [UavcanAirspeedSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Airspeed.hpp) driver.
-
 ROS-interface for Differential Pressure:
 
 ```mermaid
@@ -186,13 +167,6 @@ flowchart LR
 dpres[ /uav/raw_air_data, std_msgs/Float32] --> DiffPressureRosToCyphal(DiffPressureRosToCyphal)
 DiffPressureRosToCyphal --> aspd_dpres[ aspd.dpres, uavcan.si.sample.pressure.Scalar]
 ```
-
-| Name | Description |
-| ---- | ----------- |
-| UCAN1_DPRES0_SUB | UDRAL Differential pressure 0 subscription ID |
-| UCAN1_DPRES1_SUB | UDRAL Differential pressure 0  subscription ID |
-
-> On PX4 side Differential Pressure logic is implemented within [UavcanDiffPressureSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/DifferentialPressure.hpp) driver.
 
 **8. Battery**
 
@@ -212,16 +186,6 @@ BatteryRosToCyphal --> battery_status[ battery_status, reg.udral.service.battery
 BatteryRosToCyphal --> battery_parameters[ battery_parameters, reg.udral.service.battery.Parameters]
 ```
 
-Related PX4 parameters:
-
-| Name | Description |
-| ---- | ----------- |
-| UCAN1_BMS_BP_SUB | UDRAL battery paramteters source subscription ID |
-| UCAN1_BMS_BS_SUB | UDRAL battery status source subscription ID |
-| UCAN1_BMS_ESC_SUB | UDRAL battery energy source subscription ID |
-
-> On PX4 side Battery logic is implemented within [UavcanBmsSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Battery.hpp) driver.
-
 **9. Rangefinder**
 
 Cyphal interface:
@@ -238,8 +202,6 @@ tas[ /uav/height, std_msgs/Float32] --> RangefinderRosToCyphal(RangefinderRosToC
 RangefinderRosToCyphal --> aspd_tas[ aspd.tas, uavcan.si.sample.length.Scalar]
 ```
 
-> On PX4 side Rangefinder logic is implemented within [RangefinderSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Rangefinder.hpp) driver.
-
 ## 2. PX4 Cyphal interface
 
 <img src="https://raw.githubusercontent.com/RaccoonlabDev/cyphal_communicator/docs/assets/yukon.png" alt="drawing"/>
@@ -250,7 +212,7 @@ Cyphal interface:
 
 | Interface | PX4's Port | Message |
 | --------- | ---- | ------- |
-| [udral/actuator](https://github.com/OpenCyphal/public_regulated_data_types/tree/master/reg/udral/service/actuator) | pub.setpoint </br> pub.readiness </br> sub.feedback | [udral.service.actuator.common.sp.Vector31](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/actuator/common/sp/Vector31.0.1.dsdl) </br> [reg.udral.service.common.Readiness](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/common/Readiness.0.1.dsdl) </br> [zubax.telega.CompactFeedback](https://github.com/Zubax/zubax_dsdl/blob/master/zubax/telega/CompactFeedback.1.0.dsdl) |
+| [udral/actuator](https://github.com/OpenCyphal/public_regulated_data_types/tree/master/reg/udral/service/actuator) | pub.udral.esc.0 </br> pub.udral.readiness.0 </br> sub.udral.feedback.0 </br> ... </br> sub.udral.feedback.7 | [udral.service.actuator.common.sp.Vector31](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/actuator/common/sp/Vector31.0.1.dsdl) </br> [reg.udral.service.common.Readiness](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/common/Readiness.0.1.dsdl) </br> </br> [zubax.telega.CompactFeedback](https://github.com/Zubax/zubax_dsdl/blob/master/zubax/telega/CompactFeedback.1.0.dsdl) </br> . |
 
 Related PX4 parameters:
 
@@ -270,7 +232,7 @@ Cyphal interface:
 
 | Interface | PX4's Port | Message |
 | --------- | ---- | ------- |
-| imu | sub.imu.accel </br> sub.imu.gyro | [uavcan.si.sample.acceleration.Vector3](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/acceleration/Vector3.1.0.dsdl) </br> [uavcan.si.sample.angular_velocity.Vector3](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/angular_velocity/Vector3.1.0.dsdl) |
+| imu | sub.udral.imu.0 </br> sub.udral.imu.accel.0 </br> sub.udral.imu.gyro.0 | [uavcan.primitive.array.Real16.1.0](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/primitive/array/Real16.1.0.dsdl) </br> [uavcan.si.sample.acceleration.Vector3](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/acceleration/Vector3.1.0.dsdl) </br> [uavcan.si.sample.angular_velocity.Vector3](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/angular_velocity/Vector3.1.0.dsdl) |
 
 Related PX4 parameters:
 
@@ -333,6 +295,75 @@ Related PX4 parameters:
 | UCAN1_GPSST0_SUB | GPS 0 status subscription port ID |
 
 > On PX4 side GNSS logic is implemented within [UavcanGnssSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Gnss.hpp) driver.
+
+**6. RGB LED**
+
+Cyphal interface:
+
+| Interface | Communicator's Port | Message |
+| --------- | ---- | ------- |
+| Udral/rgbled | pub.udral.rgbled.0 | [reg.udral.physics.optics.HighColor](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/physics/optics/HighColor.0.1.dsdl) |
+
+Related PX4 parameters:
+
+| Name | Description |
+| ---- | ----------- |
+| UCAN1_RGBLED_PUB | Cyphal RGB Controller port ID |
+
+On PX4 side RGB LED logic is implemented within [RGBControllerPublisher](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Publishers/udral/RGBController.hpp) driver.
+
+**7. Airspeed (including Differential Pressure)**
+
+Cyphal interface:
+
+| Interface | Communicator's Port | Message |
+| --------- | ---- | ------- |
+| [udral/airspeed](https://nunaweb.opencyphal.org/api/storage/docs/docs/reg/index.html#reg_drone_service_air_data_computer) | sub.udral.aspd.cas.0 </br> sub.udral.aspd.tas.0 </br> sub.udral.aspd.dpres.0 </br> sub.udral.aspd.temperature.0 | [uavcan.si.sample.velocity.Scalar](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/velocity/Scalar.1.0.dsdl) </br> [uavcan.si.sample.velocity.Scalar](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/velocity/Scalar.1.0.dsdl) </br> [uavcan.si.sample.pressure.Scalar](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/pressure/Scalar.1.0.dsdl) </br> [uavcan.si.sample.temperature.Scalar](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/temperature/Scalar.1.0.dsdl) |
+
+| Name | Description |
+| ---- | ----------- |
+| UCAN1_ATAS0_SUB | Udral Airspeed TAS 0 subscription port ID |
+| UCAN1_ACAS0_SUB | Udral Airspeed CAS 0 subscription port ID |
+| UCAN1_ATEM0_SUB | Udral Airspeed Temperature 0 subscription port ID |
+
+> On PX4 side Airspeed logic is implemented within [UavcanAirspeedSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Airspeed.hpp) driver.
+
+
+| Name | Description |
+| ---- | ----------- |
+| UCAN1_DPRES0_SUB | UDRAL Differential pressure 0 subscription ID |
+| UCAN1_DPRES1_SUB | UDRAL Differential pressure 0  subscription ID |
+
+> On PX4 side Differential Pressure logic is implemented within [UavcanDiffPressureSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/DifferentialPressure.hpp) driver.
+
+**8. Battery**
+
+Cyphal interface:
+
+| Interface | Communicator's Port | Message | Rate |
+| --------- | ---- | ------- | ---- |
+| [Udral/Battery](https://nunaweb.opencyphal.org/api/storage/docs/docs/reg/index.html#reg_drone_service_battery) | sub.udral.energy_source.0 </br> sub.udral.battery_status.0 </br> sub.udral.battery_parameters.0 | [reg.udral.physics.electricity.SourceTs](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/physics/electricity/SourceTs.0.1.dsdl) </br> [reg.udral.service.battery.Status](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/battery/Status.0.2.dsdl) </br> [reg.udral.service.battery.Parameters](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/reg/udral/service/battery/Parameters.0.3.dsdl) | 1...100 </br> ~1 </br> ~0.2 |
+
+Related PX4 parameters:
+
+| Name | Description |
+| ---- | ----------- |
+| UCAN1_BMS_BP_SUB | UDRAL battery paramteters source subscription ID |
+| UCAN1_BMS_BS_SUB | UDRAL battery status source subscription ID |
+| UCAN1_BMS_ESC_SUB | UDRAL battery energy source subscription ID |
+
+> On PX4 side Battery logic is implemented within [UavcanBmsSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Battery.hpp) driver.
+
+**9. Rangefinder**
+
+Cyphal interface:
+
+| Interface | PX4's Port | Message |
+| --------- | ---------- | ------- |
+| Rangefinder | sub.udral.range.0 | [uavcan.si.sample.length.Scalar](https://github.com/OpenCyphal/public_regulated_data_types/blob/master/uavcan/si/sample/length/Scalar.1.0.dsdl) |
+
+> On PX4 side Rangefinder logic is implemented within [RangefinderSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Rangefinder.hpp) driver.
+
 
 ## 3. Redundancy
 
