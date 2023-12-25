@@ -1,6 +1,6 @@
 #!/bin/bash
 # https://github.com/PonomarevDA/tools/blob/main/can/create_slcan.sh
-# This software is distributed under the terms of the MIT License.
+# For license information, see the LICENSE file in the root directory of this source tree
 # Copyright (c) 2023 Dmitry Ponomarev.
 # Author: Dmitry Ponomarev <ponomarevda96@gmail.com>
 
