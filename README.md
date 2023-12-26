@@ -25,9 +25,11 @@ The Cyphal communicator is primailry intended for ArduPilot/PX4 Cyphal HITL simu
 
 ## 1. Communicator Cyphal and ROS Interfaces
 
-The node has the following Cyphal interface:
+Cyphal interface on the communicator node can be illustrated with Yukon gui tool as shown below:
 
 <img src="https://raw.githubusercontent.com/RaccoonlabDev/cyphal_communicator/docs/assets/yukon.png" alt="drawing"/>
+
+> Here green topics are publishers, red topics are subscribers, gray topics are RPC-services.
 
 ### 1.1. Minimal quadcopter interface
 
@@ -214,7 +216,11 @@ RangefinderRosToCyphal --> aspd_tas[ aspd.tas, uavcan.si.sample.length.Scalar]
 
 ## 2. PX4 Cyphal interface
 
+The actual Cyphal interface on the PX4 node configured in VTOL octoplane coaxial can be illustrated with Yukon gui tool:
+
 <img src="https://raw.githubusercontent.com/RaccoonlabDev/cyphal_communicator/docs/assets/px4_yukon.png" alt="drawing"/>
+
+> Here green topics are publishers, red topics are subscribers, gray topics are RPC-services. A few topics disabled topics are not shown to make an image more compact.
 
 **1. Actuator**
 
