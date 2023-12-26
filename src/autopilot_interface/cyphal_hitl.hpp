@@ -28,6 +28,10 @@ enum class ArmingStatus {
     ENGAGED,
 };
 
+/**
+ * @brief Cyphal HITL autopilot interface
+ * Tested only with PX4 on custom branch, but can be suitable for Ardupilot custom branch as well
+ */
 class CyphalHitlInterface {
 public:
     CyphalHitlInterface() :

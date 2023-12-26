@@ -25,7 +25,6 @@ else()
   )
 endif()
 
-# set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Werror -std=c++17")
 set(CYPHAL_REPO_DIR ${CMAKE_CURRENT_LIST_DIR}/Libs/cyphal_application)
 set(PLATFORM socketcan)
@@ -35,6 +34,7 @@ include(${CYPHAL_REPO_DIR}/CMakeLists.txt)
 include_directories(${CYPHAL_REPO_DIR})
 include_directories(${CYPHAL_REPO_DIR}/Udral)
 include_directories(src)
+include_directories(src/autopilot_interface)
 
 add_executable(${PROJECT_NAME}
   ${CYPHAL_REPO_DIR}/Udral/actuator.cpp
@@ -51,7 +51,7 @@ add_executable(${PROJECT_NAME}
   src/math.cpp
   ${SIM_INTERFACE_SRC}
   src/autopilot_interface/cyphal_hitl.cpp
-  src/params.cpp
+  src/autopilot_interface/params.cpp
   ${CYPHAL_SRC}
 )
 

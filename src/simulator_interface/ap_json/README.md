@@ -1,4 +1,6 @@
-# Ardupilot HITL
+# Ardupilot Gazebo HITL interface
+
+> This interface is not supported at the moment...
 
 ## 1. Prerequisites
 
