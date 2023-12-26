@@ -18,10 +18,11 @@ The Cyphal communicator is primailry intended for ArduPilot/PX4 Cyphal HITL simu
     - [1.1. Minimal quadcopter interface](#11-minimal-quadcopter-interface)
     - [1.2. Extended interface](#12-extended-interface)
   - [2. PX4 Cyphal interface](#2-px4-cyphal-interface)
-  - [3. Redundancy](#3-redundancy)
-  - [4. Installation](#4-installation)
-  - [5. Running](#5-running)
-  - [6. Usage example](#6-usage-example)
+  - [3. Disign](#3-design)
+  - [4. Redundancy](#4-redundancy)
+  - [5. Installation](#5-installation)
+  - [6. Running](#6-running)
+  - [7. Usage example](#7-usage-example)
 
 ## 1. Communicator Cyphal and ROS Interfaces
 
@@ -381,7 +382,40 @@ Cyphal interface:
 > On PX4 side Rangefinder logic is implemented within [RangefinderSubscriber](https://github.com/ZilantRobotics/PX4-Autopilot/blob/cyphal-hitl/src/drivers/cyphal/Subscribers/udral/Rangefinder.hpp) driver.
 
 
-## 3. Redundancy
+## 3. Design
+
+The package is designed to support a new type of simulator or autopilot interface just in case.
+
+It has an autopilot interface that is represented with Cyphal HITL at the moment.
+It supports both PX4 and ArduPilot.
+
+It has ROS (noetic) interface for UAV HITL simulator. It is suitable for PX4 (mainly mainteined) and ArduPilot (not well tested though).
+
+In the main file, the application converts data from one interface to another and vice versa.
+
+The structural relationship between the interfaces is shown in the figure below:
+
+```
++-------+-------+-------+-------+-------+-------+-------+------+------+
+|          Application entry point (src/main.c) .cfile                |
++-------+-------+-------+-------+-------+-------+-------+------+------+
+           |                                    |
++------+-------+------+   +------+-------+------+-------+-------+-----+
+| Autopilot interface |   |            Simulator interface            |
++------+-------+------+   +------+-------+------+-------+-------+-----+
+           |                         |                      |
++------+-------+------+   +------+------+------+   +--------+---------+
+|     Cyphal HITL     |   |   ROS interface    |   |    AP_JSON       |
+| autopilot interface |   | UAV HITL simulator |   |     Gazebo       |
+| (PX4 and ArduPilot) |   |  (PX4/ArduPilot)   |   | (ArduPilot only) |
++------+-------+------+   +------+------+------+   +--------+---------+
+```
+
+> AP_JSON interface is not supported at the moment.
+
+> It is considered to migrate on ROS 2 later, so a new simulator interface may appear.
+
+## 4. Redundancy
 
 Cyphal/CAN communication allows to provide a few options of redundancy implementation.
 
@@ -399,7 +433,7 @@ As an example, HITL simulator supports octocopter airframe to demostrate this po
 
 The cyphal communicator allows to use multiple interfaces. By default it is based on vitual CAN-interface with name `slcan0`. You can specify another number of the interface and run an additional instance. PX4 capabilities are based on the specific hardware, but modern versions of the hardware typically have 2 CAN-buses.
 
-## 4. Installation
+## 5. Installation
 
 Build the package as usual ROS package with `catkin build`. It will automatically compile DSDL at the build time with [compile_dsdl.sh](compile_dsdl.sh) script.
 
@@ -409,7 +443,7 @@ Before running the communicator, you need to do 3 things:
 
 After these steps you are able to run the communicator.
 
-## 5. Running
+## 6. Running
 
 You should connect a CAN-sniffer to an autopilot as shown below:
 
@@ -423,12 +457,12 @@ Then run the communicator using the launch file:
 roslaunch cyphal_communicator cyphal_communicator.launch
 ```
 
-## 6. Usage example
+## 7. Usage example
 
 Below you can see an example of using the cyphal_communicator in conjunction with a VTOL dynamics simulator.
 
 [![vtol HITL dynamics simulator](https://img.youtube.com/vi/JmElAwgAoSc/0.jpg)](https://youtu.be/JmElAwgAoSc)
 
-## 7. LICENSE
+## 8. LICENSE
 
 The Cyphal Communicator project is licensed under the [GNU General Public License, version 3](LICENSE)
