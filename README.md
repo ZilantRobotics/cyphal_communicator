@@ -214,7 +214,7 @@ RangefinderRosToCyphal --> aspd_tas[ aspd.tas, uavcan.si.sample.length.Scalar]
 
 ## 2. PX4 Cyphal interface
 
-<img src="https://raw.githubusercontent.com/RaccoonlabDev/cyphal_communicator/docs/assets/yukon.png" alt="drawing"/>
+<img src="https://raw.githubusercontent.com/RaccoonlabDev/cyphal_communicator/docs/assets/px4_yukon.png" alt="drawing"/>
 
 **1. Actuator**
 
