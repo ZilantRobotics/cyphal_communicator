@@ -1,6 +1,6 @@
-/// This software is distributed under the terms of the MIT License.
-/// Copyright (c) 2022-2023 Dmitry Ponomarev.
-/// Author: Dmitry Ponomarev <ponomarevda96@gmail.com>
+// This software is distributed under the terms of the GPL v3 License.
+// Copyright (c) 2023 Dmitry Ponomarev.
+// Author: Dmitry Ponomarev <ponomarevda96@gmail.com>
 
 #ifndef SRC_AUTOPILOT_INTERFACE_CYPHAL_HITL_HPP_
 #define SRC_AUTOPILOT_INTERFACE_CYPHAL_HITL_HPP_

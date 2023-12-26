@@ -1,6 +1,6 @@
-/// This software is distributed under the terms of the MIT License.
-/// Copyright (c) 2023 Dmitry Ponomarev.
-/// Author: Dmitry Ponomarev <ponomarevda96@gmail.com>
+// This software is distributed under the terms of the GPL v3 License.
+// Copyright (c) 2023 Dmitry Ponomarev.
+// Author: Dmitry Ponomarev <ponomarevda96@gmail.com>
 
 #ifndef HITL_MATH_HPP_
 #define HITL_MATH_HPP_

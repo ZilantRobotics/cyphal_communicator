@@ -1,6 +1,6 @@
-/// This software is distributed under the terms of the MIT License.
-/// Copyright (c) 2023 Dmitry Ponomarev.
-/// Author: Dmitry Ponomarev <ponomarevda96@gmail.com>
+// This software is distributed under the terms of the GPL v3 License.
+// Copyright (c) 2023 Dmitry Ponomarev.
+// Author: Dmitry Ponomarev <ponomarevda96@gmail.com>
 
 #include "ap_json.hpp"
 #include <algorithm>

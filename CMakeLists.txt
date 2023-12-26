@@ -1,6 +1,10 @@
+#!/bin/bash
+# This software is distributed under the terms of the GPL v3 License.
+# Copyright (c) 2022-2023 Dmitry Ponomarev.
+# Author: Dmitry Ponomarev <ponomarevda96@gmail.com>
+
 cmake_minimum_required(VERSION 3.0.2)
 project(cyphal_communicator)
-
 
 # By default build as ROS-package. If SIM_INTERFACE is specified, build as not ROS-package
 if(DEFINED ARDUPILOT_JSON_SIM_INTERFACE)
