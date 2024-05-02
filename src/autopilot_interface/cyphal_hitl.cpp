@@ -80,6 +80,31 @@ void CyphalHitlInterface::publish_magnetometer(const Vector3 magnetic_field_gaus
 }
 
 void CyphalHitlInterface::publish_gnss(const Vector3& global_pose, const Vector3& ned_velocity) {
+    uint32_t crnt_time = HAL_GetTick() % 60000;
+    float time_multiplier;
+    if (crnt_time < 30000) {
+        time_multiplier = 1.0 + crnt_time / 60000.0f;
+    } else {
+        time_multiplier = 2.0 - crnt_time / 60000.0f;
+    }
+    static float random_multiplier = 1.0;
+    float random_offset = (std::rand() % 100 - 50) * 0.0002;
+    random_multiplier = std::clamp(random_multiplier + random_offset, 0.85f, 1.15f);
+
+    gps_gnss.msg.point.latitude = global_pose[0] * RAD_TO_DEGREE;
+    gps_gnss.msg.point.longitude = global_pose[1] * RAD_TO_DEGREE;
+    gps_gnss.msg.point.altitude.meter = global_pose[2];
+    gps_gnss.msg.velocity.meter_per_second[0] = ned_velocity[0] * _time_factor;
+    gps_gnss.msg.velocity.meter_per_second[1] = ned_velocity[1] * _time_factor;
+    gps_gnss.msg.velocity.meter_per_second[2] = ned_velocity[2] * _time_factor;
+    gps_gnss.msg.num_sats = 10 * time_multiplier * random_multiplier;
+    gps_gnss.msg.status.status = 3;
+    gps_gnss.msg.hdop = 1.0f / time_multiplier / random_multiplier;
+    gps_gnss.msg.vdop = 1.0f / time_multiplier / random_multiplier;
+    gps_gnss.msg.horizontal_accuracy = 1.0f / time_multiplier / random_multiplier;
+    gps_gnss.msg.vertical_accuracy = 1.0f / time_multiplier / random_multiplier;
+    gps_gnss.publish();
+
     reg_udral_physics_kinematics_geodetic_PointStateVarTs_0_1 gps_point_msg;
     gps_point_msg.value.position.value.latitude =  global_pose[0] * RAD_TO_DEGREE;
     gps_point_msg.value.position.value.longitude = global_pose[1] * RAD_TO_DEGREE;
@@ -89,18 +114,6 @@ void CyphalHitlInterface::publish_gnss(const Vector3& global_pose, const Vector3
     gps_point_msg.value.velocity.value.meter_per_second[1] = ned_velocity[1] * _time_factor;
     gps_point_msg.value.velocity.value.meter_per_second[2] = ned_velocity[2] * _time_factor;
     gps_point.publish(gps_point_msg);
-
-    uint32_t crnt_time = HAL_GetTick() % 60000;
-    float time_multiplier;
-    if (crnt_time < 30000) {
-        time_multiplier = 1.0 + crnt_time / 60000.0f;
-    } else {
-        time_multiplier = 2.0 - crnt_time / 60000.0f;
-    }
-
-    static float random_multiplier = 1.0;
-    float random_offset = (std::rand() % 100 - 50) * 0.0002;
-    random_multiplier = std::clamp(random_multiplier + random_offset, 0.85f, 1.15f);
 
     gps_sats.msg.value = 10 * time_multiplier * random_multiplier;
     gps_sats.publish();
@@ -194,6 +207,7 @@ void CyphalHitlInterface::_update_port_identifiers() {
     esc_feedback_2.setPortId(paramsGetIntegerValue(PARAM_ESC_FEEDBACK_2_ID));
     esc_feedback_3.setPortId(paramsGetIntegerValue(PARAM_ESC_FEEDBACK_3_ID));
 
+    gps_gnss.setPortId(paramsGetIntegerValue(PARAM_DS015_GPS_GNSS_ID));
     gps_point.setPortId(paramsGetIntegerValue(PARAM_GPS_POINT_ID));
     gps_sats.setPortId(paramsGetIntegerValue(PARAM_GPS_SATS_ID));
     gps_status.setPortId(paramsGetIntegerValue(PARAM_GPS_STATUS_ID));

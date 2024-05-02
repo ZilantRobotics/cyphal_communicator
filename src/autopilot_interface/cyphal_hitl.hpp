@@ -13,6 +13,7 @@
 #include "battery.hpp"
 #include "barometer.hpp"
 #include "gnss.hpp"
+#include "ds015/gnss.hpp"
 #include "imu.hpp"
 #include "magnetometer.hpp"
 #include "rangefinder.hpp"
@@ -43,6 +44,7 @@ public:
             esc_feedback_2(&cyphal, 0),
             esc_feedback_3(&cyphal, 0),
             esc_feedback{{&esc_feedback_0, &esc_feedback_1, &esc_feedback_2, &esc_feedback_3}},
+            gps_gnss(&cyphal, 0),
             gps_point(&cyphal, 0),
             gps_sats(&cyphal, 0),
             gps_status(&cyphal, 0),
@@ -85,6 +87,7 @@ private:
     cyphal::ZubaxCompactFeedbackPublisher esc_feedback_3;
     std::array<cyphal::ZubaxCompactFeedbackPublisher*, 4> esc_feedback;
 
+    cyphal::Ds015GnssGnssPublisher gps_gnss;
     cyphal::GpsPointPublisher gps_point;
     cyphal::Int16Publisher gps_sats;
     cyphal::Int16Publisher gps_status;
