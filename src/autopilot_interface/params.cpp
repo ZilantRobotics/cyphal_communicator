@@ -18,10 +18,6 @@ IntegerDesc_t integer_desc_pool[] = {
     {"uavcan.pub.baro.press.id",            1, 65535, 2404, MUTABLE, true},
 
     {"uavcan.pub.ds015.gps.gnss.id",        1, 65535, 2005, MUTABLE, true},
-    {"uavcan.pub.gps.point.id",             1, 65535, 2406, MUTABLE, true},
-    {"uavcan.pub.gps.sats.id",              1, 65535, 2407, MUTABLE, true},
-    {"uavcan.pub.gps.status.id",            1, 65535, 2408, MUTABLE, true},
-    {"uavcan.pub.gps.pdop.id",              1, 65535, 2409, MUTABLE, true},
 
     {"uavcan.pub.imu.accel.id",             1, 65535, 2400, MUTABLE, true},
     {"uavcan.pub.imu.gyro.id",              1, 65535, 2401, MUTABLE, true},
@@ -56,10 +52,6 @@ StringDesc_t string_desc_pool[NUM_OF_STR_PARAMS] = {
     {"uavcan.pub.baro.press.type",      "uavcan.si.sample.pressure.Scalar", IMMUTABLE},
 
     {"uavcan.pub.ds015.gps.gnss.type",  "ds015.service.gnss.Gnss.0.1", IMMUTABLE},
-    {"uavcan.pub.gps.point.type",       "reg.udral.physics.kinematics.geodetic.PointStateVarTs", IMMUTABLE},
-    {"uavcan.pub.gps.sats.type",        "uavcan.primitive.scalar.Integer16", IMMUTABLE},
-    {"uavcan.pub.gps.status.type",      "uavcan.primitive.scalar.Integer16", IMMUTABLE},
-    {"uavcan.pub.gps.pdop.type",        "uavcan.primitive.scalar.Integer16", IMMUTABLE},
 
     {"uavcan.pub.imu.accel.type",       "uavcan.si.sample.acceleration.Vector3", IMMUTABLE},
     {"uavcan.pub.imu.gyro.type",        "uavcan.si.sample.angular_velocity.Vector3", IMMUTABLE},
