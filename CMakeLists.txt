@@ -27,7 +27,7 @@ endif()
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Werror -std=c++17")
 set(CYPHAL_REPO_DIR ${CMAKE_CURRENT_LIST_DIR}/Libs/cyphal_application)
-set(PLATFORM socketcan)
+set(CAN_PLATFORM socketcan)
 set(libparamsPath ${CMAKE_CURRENT_LIST_DIR}/Libs/libparams)
 include(${CYPHAL_REPO_DIR}/CMakeLists.txt)
 
@@ -77,6 +77,8 @@ if("GIT_HASH_64_BIT" STREQUAL "")
 endif()
 set(GIT_HASH "0x${GIT_HASH_64_BIT}")
 add_definitions(-DGIT_HASH=${GIT_HASH})
+add_definitions(-DAPP_VERSION_MAJOR=0)
+add_definitions(-DAPP_VERSION_MINOR=8)
 
 # Generate DSDL when build
 add_custom_target(
