@@ -45,10 +45,6 @@ public:
             esc_feedback_3(&cyphal, 0),
             esc_feedback{{&esc_feedback_0, &esc_feedback_1, &esc_feedback_2, &esc_feedback_3}},
             gps_gnss(&cyphal, 0),
-            gps_point(&cyphal, 0),
-            gps_sats(&cyphal, 0),
-            gps_status(&cyphal, 0),
-            gps_pdop(&cyphal, 0),
             accel(&cyphal, 0),
             gyro(&cyphal, 0),
             imu(&cyphal, 0),
@@ -88,10 +84,6 @@ private:
     std::array<cyphal::ZubaxCompactFeedbackPublisher*, 4> esc_feedback;
 
     cyphal::Ds015GnssGnssPublisher gps_gnss;
-    cyphal::GpsPointPublisher gps_point;
-    cyphal::Int16Publisher gps_sats;
-    cyphal::Int16Publisher gps_status;
-    cyphal::Int16Publisher gps_pdop;
 
     cyphal::BaroPressurePublisher baro_pressure;
     cyphal::BaroTemperaturePublisher baro_temperature;

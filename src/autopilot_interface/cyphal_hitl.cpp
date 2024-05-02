@@ -104,25 +104,6 @@ void CyphalHitlInterface::publish_gnss(const Vector3& global_pose, const Vector3
     gps_gnss.msg.horizontal_accuracy = 1.0f / time_multiplier / random_multiplier;
     gps_gnss.msg.vertical_accuracy = 1.0f / time_multiplier / random_multiplier;
     gps_gnss.publish();
-
-    reg_udral_physics_kinematics_geodetic_PointStateVarTs_0_1 gps_point_msg;
-    gps_point_msg.value.position.value.latitude =  global_pose[0] * RAD_TO_DEGREE;
-    gps_point_msg.value.position.value.longitude = global_pose[1] * RAD_TO_DEGREE;
-    gps_point_msg.value.position.value.altitude.meter = global_pose[2];
-
-    gps_point_msg.value.velocity.value.meter_per_second[0] = ned_velocity[0] * _time_factor;
-    gps_point_msg.value.velocity.value.meter_per_second[1] = ned_velocity[1] * _time_factor;
-    gps_point_msg.value.velocity.value.meter_per_second[2] = ned_velocity[2] * _time_factor;
-    gps_point.publish(gps_point_msg);
-
-    gps_sats.msg.value = 10 * time_multiplier * random_multiplier;
-    gps_sats.publish();
-
-    gps_status.msg.value = 3;
-    gps_status.publish();
-
-    gps_pdop.msg.value = 1;
-    gps_pdop.publish();
 }
 
 void CyphalHitlInterface::publish_esc_feedback(uint8_t esc_idx, float voltage, float current, uint32_t rpm) {
@@ -208,11 +189,6 @@ void CyphalHitlInterface::_update_port_identifiers() {
     esc_feedback_3.setPortId(paramsGetIntegerValue(PARAM_ESC_FEEDBACK_3_ID));
 
     gps_gnss.setPortId(paramsGetIntegerValue(PARAM_DS015_GPS_GNSS_ID));
-    gps_point.setPortId(paramsGetIntegerValue(PARAM_GPS_POINT_ID));
-    gps_sats.setPortId(paramsGetIntegerValue(PARAM_GPS_SATS_ID));
-    gps_status.setPortId(paramsGetIntegerValue(PARAM_GPS_STATUS_ID));
-    gps_pdop.setPortId(paramsGetIntegerValue(PARAM_GPS_PDOP_ID));
-
     baro_pressure.setPortId(paramsGetIntegerValue(BAROMETER_PRESSURE_ID));
     baro_temperature.setPortId(paramsGetIntegerValue(BAROMETER_TEMPERATURE_ID));
     magnetometer.setPortId(paramsGetIntegerValue(PARAM_MAGNETOMETER_ID));
