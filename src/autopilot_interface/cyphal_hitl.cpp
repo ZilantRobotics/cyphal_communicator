@@ -10,6 +10,8 @@
 #include "main.h"
 #include "params.hpp"
 
+#define GAUSS_TO_AMPERE_PER_METER 79.577471545947673925
+
 uint32_t HAL_GetTick() {
     static auto time_start = std::chrono::steady_clock::now();
     auto time_now = std::chrono::steady_clock::now();
@@ -70,10 +72,10 @@ void CyphalHitlInterface::publish_imu(const Vector3 linear_accel, const Vector3 
 }
 
 void CyphalHitlInterface::publish_magnetometer(const Vector3 magnetic_field_gauss) {
-    uavcan_si_sample_magnetic_field_strength_Vector3_1_0 magnetic_field;
-    magnetic_field.tesla[0] = 1e-04 * magnetic_field_gauss[0];
-    magnetic_field.tesla[1] = 1e-04 * magnetic_field_gauss[1];
-    magnetic_field.tesla[2] = 1e-04 * magnetic_field_gauss[2];
+    uavcan_si_sample_magnetic_field_strength_Vector3_1_1 magnetic_field;
+    magnetic_field.ampere_per_meter[0] = GAUSS_TO_AMPERE_PER_METER * magnetic_field_gauss[0];
+    magnetic_field.ampere_per_meter[1] = GAUSS_TO_AMPERE_PER_METER * magnetic_field_gauss[1];
+    magnetic_field.ampere_per_meter[2] = GAUSS_TO_AMPERE_PER_METER * magnetic_field_gauss[2];
     magnetometer.publish(magnetic_field);
 }
 

@@ -49,7 +49,7 @@ StringDesc_t string_desc_pool[NUM_OF_STR_PARAMS] = {
     {"uavcan.sub.readiness.type",       "reg.udral.service.common.Readiness", IMMUTABLE},
     {"uavcan.sub.rgbled.type",          "reg.udral.physics.optics.HighColor", IMMUTABLE},
 
-    {"uavcan.pub.mag.type",             "uavcan.si.sample.magnetic_field_strength.Vector3", IMMUTABLE},
+    {"uavcan.pub.mag.type",             "uavcan.si.sample.magnetic_field_strength.Vector3.1.1", IMMUTABLE},
 
     {"uavcan.pub.baro.temp.type",       "uavcan.si.sample.temperature.Scalar", IMMUTABLE},
     {"uavcan.pub.baro.press.type",      "uavcan.si.sample.pressure.Scalar", IMMUTABLE},
