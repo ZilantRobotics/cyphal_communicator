@@ -47,7 +47,6 @@ public:
             gps_sats(&cyphal, 0),
             gps_status(&cyphal, 0),
             gps_pdop(&cyphal, 0),
-            magnetometer(&cyphal, 0),
             accel(&cyphal, 0),
             gyro(&cyphal, 0),
             imu(&cyphal, 0),
@@ -94,7 +93,7 @@ private:
     cyphal::BaroPressurePublisher baro_pressure;
     cyphal::BaroTemperaturePublisher baro_temperature;
 
-    cyphal::MagneticFieldPublisher magnetometer;
+    cyphal::udral::MagneticFieldPublisher magnetometer;
 
     cyphal::ImuAccelPublisher accel;
     cyphal::ImuGyroPublisher gyro;
