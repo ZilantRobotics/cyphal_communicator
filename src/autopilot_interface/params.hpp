@@ -17,6 +17,7 @@ enum IntParamsIndexes : ParamIndex_t {
     BAROMETER_TEMPERATURE_ID,
     BAROMETER_PRESSURE_ID,
 
+    PARAM_DS015_GPS_GNSS_ID,
     PARAM_GPS_POINT_ID,
     PARAM_GPS_SATS_ID,
     PARAM_GPS_STATUS_ID,
@@ -43,6 +44,6 @@ enum IntParamsIndexes : ParamIndex_t {
     INTEGER_PARAMS_AMOUNT
 };
 
-#define NUM_OF_STR_PARAMS 24
+#define NUM_OF_STR_PARAMS 25
 
 #endif  // PARAMS_HPP_

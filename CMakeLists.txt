@@ -46,6 +46,7 @@ add_executable(${PROJECT_NAME}
   ${CYPHAL_REPO_DIR}/Udral/imu.cpp
   ${CYPHAL_REPO_DIR}/Udral/rangefinder.cpp
   ${CYPHAL_REPO_DIR}/Udral/rgbled.cpp
+  ${CYPHAL_REPO_DIR}/ds015/gnss.cpp
 
   src/main.cpp
   src/math.cpp
