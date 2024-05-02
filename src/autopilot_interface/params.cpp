@@ -6,39 +6,39 @@
 #include "storage.h"
 
 IntegerDesc_t integer_desc_pool[] = {
-    {"id", 2, 2, 2, MUTABLE},
+    {"id", 2, 2, 2, MUTABLE, true},
 
-    {"uavcan.sub.setpoint.id",              1, 65535, 2342, MUTABLE},
-    {"uavcan.sub.readiness.id",             1, 65535, 2343, MUTABLE},
-    {"uavcan.sub.rgbled.id",                1, 65535, 2344, MUTABLE},
+    {"uavcan.sub.setpoint.id",              1, 65535, 2342, MUTABLE, true},
+    {"uavcan.sub.readiness.id",             1, 65535, 2343, MUTABLE, true},
+    {"uavcan.sub.rgbled.id",                1, 65535, 2344, MUTABLE, true},
 
-    {"uavcan.pub.mag.id",                   1, 65535, 2402, MUTABLE},
+    {"uavcan.pub.mag.id",                   1, 65535, 2402, MUTABLE, true},
 
-    {"uavcan.pub.baro.temp.id",             1, 65535, 2403, MUTABLE},
-    {"uavcan.pub.baro.press.id",            1, 65535, 2404, MUTABLE},
+    {"uavcan.pub.baro.temp.id",             1, 65535, 2403, MUTABLE, true},
+    {"uavcan.pub.baro.press.id",            1, 65535, 2404, MUTABLE, true},
 
-    {"uavcan.pub.gps.point.id",             1, 65535, 2406, MUTABLE},
-    {"uavcan.pub.gps.sats.id",              1, 65535, 2407, MUTABLE},
-    {"uavcan.pub.gps.status.id",            1, 65535, 2408, MUTABLE},
-    {"uavcan.pub.gps.pdop.id",              1, 65535, 2409, MUTABLE},
+    {"uavcan.pub.gps.point.id",             1, 65535, 2406, MUTABLE, true},
+    {"uavcan.pub.gps.sats.id",              1, 65535, 2407, MUTABLE, true},
+    {"uavcan.pub.gps.status.id",            1, 65535, 2408, MUTABLE, true},
+    {"uavcan.pub.gps.pdop.id",              1, 65535, 2409, MUTABLE, true},
 
-    {"uavcan.pub.imu.accel.id",             1, 65535, 2400, MUTABLE},
-    {"uavcan.pub.imu.gyro.id",              1, 65535, 2401, MUTABLE},
-    {"uavcan.pub.imu.imu.id",               1, 65535, 2300, MUTABLE},
+    {"uavcan.pub.imu.accel.id",             1, 65535, 2400, MUTABLE, true},
+    {"uavcan.pub.imu.gyro.id",              1, 65535, 2401, MUTABLE, true},
+    {"uavcan.pub.imu.imu.id",               1, 65535, 2300, MUTABLE, true},
 
-    {"uavcan.pub.esc.fb.0.id",              1, 65535, 2500, MUTABLE},
-    {"uavcan.pub.esc.fb.1.id",              1, 65535, 2501, MUTABLE},
-    {"uavcan.pub.esc.fb.2.id",              1, 65535, 2502, MUTABLE},
-    {"uavcan.pub.esc.fb.3.id",              1, 65535, 2503, MUTABLE},
+    {"uavcan.pub.esc.fb.0.id",              1, 65535, 2500, MUTABLE, true},
+    {"uavcan.pub.esc.fb.1.id",              1, 65535, 2501, MUTABLE, true},
+    {"uavcan.pub.esc.fb.2.id",              1, 65535, 2502, MUTABLE, true},
+    {"uavcan.pub.esc.fb.3.id",              1, 65535, 2503, MUTABLE, true},
 
-    {"uavcan.pub.aspd.dpres.0.id",          1, 65535, 2600, MUTABLE},
-    {"uavcan.pub.aspd.dpres.1.id",          1, 65535, 2601, MUTABLE},
+    {"uavcan.pub.aspd.dpres.0.id",          1, 65535, 2600, MUTABLE, true},
+    {"uavcan.pub.aspd.dpres.1.id",          1, 65535, 2601, MUTABLE, true},
 
-    {"uavcan.pub.energy_source.id",         1, 65535, 2700, MUTABLE},
-    {"uavcan.pub.battery_status.id",        1, 65535, 2701, MUTABLE},
-    {"uavcan.pub.battery_params.id",        1, 65535, 2702, MUTABLE},
+    {"uavcan.pub.energy_source.id",         1, 65535, 2700, MUTABLE, true},
+    {"uavcan.pub.battery_status.id",        1, 65535, 2701, MUTABLE, true},
+    {"uavcan.pub.battery_params.id",        1, 65535, 2702, MUTABLE, true},
 
-    {"uavcan.pub.range.id",                 1, 65535, 2800, MUTABLE},
+    {"uavcan.pub.range.id",                 1, 65535, 2800, MUTABLE, true},
 };
 IntegerParamValue_t integer_values_pool[sizeof(integer_desc_pool) / sizeof(IntegerDesc_t)];
 

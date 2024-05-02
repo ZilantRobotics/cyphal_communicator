@@ -47,8 +47,6 @@ public:
             gps_sats(&cyphal, 0),
             gps_status(&cyphal, 0),
             gps_pdop(&cyphal, 0),
-            baro_pressure(&cyphal, 0),
-            baro_temperature(&cyphal, 0),
             magnetometer(&cyphal, 0),
             accel(&cyphal, 0),
             gyro(&cyphal, 0),

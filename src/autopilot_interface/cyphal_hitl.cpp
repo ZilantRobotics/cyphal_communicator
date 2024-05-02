@@ -5,6 +5,7 @@
 #include "cyphal_hitl.hpp"
 #include <algorithm>
 #include <iostream>
+#include <random>
 #include <chrono>
 #include "main.h"
 #include "params.hpp"
@@ -18,8 +19,8 @@ uint32_t HAL_GetTick() {
 
 int CyphalHitlInterface::init() {
     romInit(0, 1);
-    paramsInit(IntParamsIndexes::INTEGER_PARAMS_AMOUNT, NUM_OF_STR_PARAMS);
-    paramsLoadFromFlash();
+    paramsInit(IntParamsIndexes::INTEGER_PARAMS_AMOUNT, NUM_OF_STR_PARAMS, -1, 1);
+    paramsLoad();
     int init_res = cyphal.init();
     if (init_res < 0) {
         std::cout << "Cyphal Initialization Error: " << init_res << std::endl;
@@ -87,7 +88,19 @@ void CyphalHitlInterface::publish_gnss(const Vector3& global_pose, const Vector3
     gps_point_msg.value.velocity.value.meter_per_second[2] = ned_velocity[2] * _time_factor;
     gps_point.publish(gps_point_msg);
 
-    gps_sats.msg.value = 10;
+    uint32_t crnt_time = HAL_GetTick() % 60000;
+    float time_multiplier;
+    if (crnt_time < 30000) {
+        time_multiplier = 1.0 + crnt_time / 60000.0f;
+    } else {
+        time_multiplier = 2.0 - crnt_time / 60000.0f;
+    }
+
+    static float random_multiplier = 1.0;
+    float random_offset = (std::rand() % 100 - 50) * 0.0002;
+    random_multiplier = std::clamp(random_multiplier + random_offset, 0.85f, 1.15f);
+
+    gps_sats.msg.value = 10 * time_multiplier * random_multiplier;
     gps_sats.publish();
 
     gps_status.msg.value = 3;
