@@ -79,6 +79,16 @@ void CyphalHitlInterface::publish_magnetometer(const Vector3 magnetic_field_gaus
     magnetometer.publish(magnetic_field);
 }
 
+// Simulate GNSS timestamp by wrapping the time to align with a typical GNSS time reference (e.g., GPS epoch).
+// GPS epoch started on January 6, 1980, so we calculate the time since then.
+uint64_t simulate_gnss_utc_timestamp_usec() {
+    auto now = std::chrono::system_clock::now();
+    auto duration_since_epoch = std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch());
+    constexpr uint64_t gps_epoch_offset_usec = 315964800000000ULL;
+    uint64_t gnss_utc_timestamp_usec = duration_since_epoch.count() - gps_epoch_offset_usec;
+    return gnss_utc_timestamp_usec;
+}
+
 void CyphalHitlInterface::publish_gnss(const Vector3& global_pose, const Vector3& ned_velocity) {
     uint32_t crnt_time = HAL_GetTick() % 60000;
     float time_multiplier;
@@ -90,6 +100,11 @@ void CyphalHitlInterface::publish_gnss(const Vector3& global_pose, const Vector3
     static float random_multiplier = 1.0;
     float random_offset = (std::rand() % 100 - 50) * 0.0002;
     random_multiplier = std::clamp(random_multiplier + random_offset, 0.85f, 1.15f);
+
+    auto gnss_utc_timestamp_usec = simulate_gnss_utc_timestamp_usec();
+    uint64_t MICROSECONDS_IN_WEEK = 604800000000;  // 7*24*60*60*1e6;
+    gps_gnss.msg.time_week = static_cast<uint16_t>(gnss_utc_timestamp_usec / MICROSECONDS_IN_WEEK);
+    gps_gnss.msg.time_week_ms = static_cast<uint32_t>((gnss_utc_timestamp_usec % MICROSECONDS_IN_WEEK) / 1000);
 
     gps_gnss.msg.point.latitude = global_pose[0] * RAD_TO_DEGREE;
     gps_gnss.msg.point.longitude = global_pose[1] * RAD_TO_DEGREE;
