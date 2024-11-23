@@ -14,16 +14,16 @@ jobs:
     container:
       image: ros:noetic
     steps:
-      - run: apt-get update && apt-get install -y git
-      - run: if [[ "$ROS_DISTRO" = "noetic" ]] ;  then apt-get install -y python3-pip ros-noetic-catkin python3-catkin-tools ; fi
+      - name: Handle issue with actions/checkout when Git version is less than 2.18 
+        run: apt-get update && apt-get install -y git
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           path: catkin_ws/src/cyphal_communicator
           submodules: recursive
 
       - name: Install requirements
-        run: ./catkin_ws/src/cyphal_communicator/install_requirements.sh
+        run: ./catkin_ws/src/cyphal_communicator/scripts/install.sh --full
 
       - name: Catkin build
         run: source /opt/ros/noetic/setup.bash && cd catkin_ws && catkin build
@@ -33,18 +33,15 @@ jobs:
     container:
       image: ros:noetic
     steps:
-      - run: apt-get update && apt-get install -y git python3-pip
+      - name: Handle issue with actions/checkout when Git version is less than 2.18 
+        run: apt-get update && apt-get install -y git
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - name: Install requirements
-        run: ./install_requirements.sh
+        run: ./scripts/install.sh --full
 
       - name: Catkin build
-        run: |
-          mkdir build
-          cd build
-          cmake .. -DARDUPILOT_JSON_SIM_INTERFACE=1 .
-          make
+        run: mkdir build && cd build && cmake .. -DARDUPILOT_JSON_SIM_INTERFACE=1 . && make

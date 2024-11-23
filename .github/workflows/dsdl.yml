@@ -13,7 +13,7 @@ jobs:
           submodules: recursive
 
       - name: Install requirements
-        run: pip install yakut
+        run: ./scripts/install.sh --dsdl
 
       - name: Generate DSDL
         run: ./scripts/generate_${{ matrix.language }}_from_dsdl.sh

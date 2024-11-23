@@ -35,6 +35,7 @@ include_directories(${CYPHAL_REPO_DIR})
 include_directories(${CYPHAL_REPO_DIR}/Udral)
 include_directories(src)
 include_directories(src/autopilot_interface)
+include_directories(src/nunavut_out)
 
 add_executable(${PROJECT_NAME}
   ${CYPHAL_REPO_DIR}/Udral/actuator.cpp
@@ -80,17 +81,3 @@ set(GIT_HASH "0x${GIT_HASH_64_BIT}")
 add_definitions(-DGIT_HASH=${GIT_HASH})
 add_definitions(-DAPP_VERSION_MAJOR=0)
 add_definitions(-DAPP_VERSION_MINOR=8)
-
-# Generate DSDL when build
-add_custom_target(
-  compile_dsdl ALL
-  COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/compile_dsdl.sh
-  COMMENT "Compile DSDL"
-)
-add_custom_target(
-  gen_headers ALL
-  COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/Libs/cyphal_application/scripts/nnvg_generate_c_headers.sh
-  COMMENT "Generate C headers"
-)
-add_dependencies(${PROJECT_NAME} compile_dsdl)
-add_dependencies(${PROJECT_NAME} gen_headers)

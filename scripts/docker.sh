@@ -24,7 +24,7 @@ DOCKERFILE_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pw
 DOCKERFILE_PATH=$DOCKERFILE_DIR/Dockerfile
 
 setup_image_name_and_version() {
-    TAG_NAME=v0.2.0
+    TAG_NAME=v0.5.2
     DOCKERHUB_REPOSITOTY=ponomarevda/cyphal_communicator
 
     if uname -m | grep -q 'aarch64'; then
