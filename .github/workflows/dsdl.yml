@@ -1,0 +1,19 @@
+name: dsdl_generation
+on: [push]
+
+jobs:
+  generate:
+    strategy:
+      matrix:
+        language: [cpp, python]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install requirements
+        run: pip install yakut
+
+      - name: Generate DSDL
+        run: ./scripts/generate_${{ matrix.language }}_from_dsdl.sh
