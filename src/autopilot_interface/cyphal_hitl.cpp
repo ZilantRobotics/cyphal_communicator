@@ -103,6 +103,13 @@ void CyphalHitlInterface::publish_gnss(const Vector3& global_pose, const Vector3
 
     auto gnss_utc_timestamp_usec = simulate_gnss_utc_timestamp_usec();
     uint64_t MICROSECONDS_IN_WEEK = 604800000000;  // 7*24*60*60*1e6;
+
+    gps_gnss.msg.status.status = ds015_service_gnss_Status_0_1_STATUS_3D_FIX;
+    gps_gnss.msg.status.mode = ds015_service_gnss_Status_0_1_MODE_SINGLE;
+    gps_gnss.msg.status.sub_mode = ds015_service_gnss_Status_0_1_SUB_MODE_DGPS_OTHER;
+    gps_gnss.msg.status.jamming_state = ds015_service_gnss_Status_0_1_JAMMING_STATE_OK;
+    gps_gnss.msg.status.spoofing_state = ds015_service_gnss_Status_0_1_SPOOFING_STATE_NONE;
+
     gps_gnss.msg.time_week = static_cast<uint16_t>(gnss_utc_timestamp_usec / MICROSECONDS_IN_WEEK);
     gps_gnss.msg.time_week_ms = static_cast<uint32_t>((gnss_utc_timestamp_usec % MICROSECONDS_IN_WEEK) / 1000);
 
@@ -112,12 +119,16 @@ void CyphalHitlInterface::publish_gnss(const Vector3& global_pose, const Vector3
     gps_gnss.msg.velocity.meter_per_second[0] = ned_velocity[0] * _time_factor;
     gps_gnss.msg.velocity.meter_per_second[1] = ned_velocity[1] * _time_factor;
     gps_gnss.msg.velocity.meter_per_second[2] = ned_velocity[2] * _time_factor;
-    gps_gnss.msg.num_sats = 10 * time_multiplier * random_multiplier;
-    gps_gnss.msg.status.status = 3;
-    gps_gnss.msg.hdop = 1.0f / time_multiplier / random_multiplier;
-    gps_gnss.msg.vdop = 1.0f / time_multiplier / random_multiplier;
+
+    gps_gnss.msg.yaw.radian = 0.0;
+
     gps_gnss.msg.horizontal_accuracy = 1.0f / time_multiplier / random_multiplier;
     gps_gnss.msg.vertical_accuracy = 1.0f / time_multiplier / random_multiplier;
+    gps_gnss.msg.speed_accuracy = 1.0f / time_multiplier / random_multiplier;
+    gps_gnss.msg.yaw_accuracy.radian = -1.0F;
+    gps_gnss.msg.hdop = 1.0f / time_multiplier / random_multiplier;
+    gps_gnss.msg.vdop = 1.0f / time_multiplier / random_multiplier;
+    gps_gnss.msg.num_sats = 10 * time_multiplier * random_multiplier;
     gps_gnss.publish();
 }
 
